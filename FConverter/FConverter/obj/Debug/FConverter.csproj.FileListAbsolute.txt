@@ -1,0 +1,9 @@
+F:\Mehad C# Project\FConverter\FConverter\bin\Debug\FConverter.exe.config
+F:\Mehad C# Project\FConverter\FConverter\bin\Debug\FConverter.exe
+F:\Mehad C# Project\FConverter\FConverter\bin\Debug\FConverter.pdb
+F:\Mehad C# Project\FConverter\FConverter\obj\Debug\FConverter.csprojResolveAssemblyReference.cache
+F:\Mehad C# Project\FConverter\FConverter\obj\Debug\FConverter.Form1.resources
+F:\Mehad C# Project\FConverter\FConverter\obj\Debug\FConverter.Properties.Resources.resources
+F:\Mehad C# Project\FConverter\FConverter\obj\Debug\FConverter.csproj.GenerateResource.Cache
+F:\Mehad C# Project\FConverter\FConverter\obj\Debug\FConverter.exe
+F:\Mehad C# Project\FConverter\FConverter\obj\Debug\FConverter.pdb
