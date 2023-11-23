@@ -1,0 +1,55 @@
+***===Finished===***
+clear temp
+convert hex format to all
+convert ascii format to all
+convert binary format to all
+OBD2 info
+All ECU ID
+7f negative response
+initial pin
+
+
+***===To Do===***
+script frame to sim
+{
+	*read ALL frame from script
+	*save ALL frame original in file
+	
+	*clean frame
+	*check hex format
+	*save frame to byte array
+	*pickup address and baudrate
+	*make response for command
+	*write frame in file
+	
+}
+
+
+can frame to sim
+7F
+7F 78
+30 00 00
+long frame 1F FF
+DF
+old frame
+mp frame
+udiag frame
+.h frame
+
+
+
+
+
+wifi setting
+calculate mask filter
+pcbu
+
+kwp frame to sim
+download frame
+dtc or download dat
+
+find function smaple
+make sample script file
+startup maker
+
+
