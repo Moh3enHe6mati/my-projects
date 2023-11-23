@@ -9,22 +9,285 @@ using System.Text;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Mehad_Tools
 {
     public class functions
     {
         private Form1 mt;
-        string scpath = @"C:\", frmpath = @"C:\", initial = "";
+        string scpath = @"C:\", frmpath = @"C:\", initial = "", path = "";
 
 
         byte[] info;
         byte[] address = { 0x07, 0xE0, 0xFF, 0xFF, 0x07, 0xE8, 0xFF, 0xFF };
         byte[] kaddress = { 0xFF, 0xFF };
         byte[] baudrate = { 0x00, 0x00 };
+        byte[,] bcr = new byte[1000000 , 10];
+        string[,] scr = new string[1000000, 12];
         public functions(Form1 entry)
         {
             mt = entry;
+        }
+        //=========================================================================================
+        public void danacodes()
+        {
+            int i = 0, j = 0;
+            string str = "", line = "", S1 = "";
+            string[,] sarray = new string[100, 1000];
+            bool findflag = false;
+            try
+            {
+                str = mt.converttextBox.Text;
+                StringReader reader = new StringReader(str);
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (line == "جستجو: ")
+                    {
+                        line = reader.ReadLine();
+                        sarray[i, j] = line;
+                        reader.ReadLine();
+                        findflag = true;
+                    }
+                    else if (findflag == true)
+                    {
+                        Regex regfindcode = new Regex(@"\W.*----");//SCH98----
+                        if ((regfindcode != null) && (line != null))
+                        {
+                            Match match = regfindcode.Match(line);
+                            if (match.Success)
+                            {
+                                j = 0;
+                                i++;
+                                sarray[i, j] = match.ToString().Replace("\t", "");
+                                sarray[i, j] = sarray[i, j].Replace("----", "");
+                            }
+                            else
+                            {
+                                j++;
+                                sarray[i, j] = line;
+                            }
+                        }
+                    }
+                }
+                for (int u = 1; u < 100; u++)//dana code
+                {
+                    for (int k = 1; k < 1000; k++)//ecu list
+                    {
+                        if ((sarray[u, 0] == null) || (sarray[u, k] == null))
+                            break;
+                        if (sarray[0, 0] == sarray[u, k])
+                        {
+                            S1 = S1 + sarray[u, 0] + "-";
+                        }
+                    }
+                    if (sarray[u, 0] == null)
+                        break;
+                }
+                mt.converttextBox.Clear();
+                mt.converttextBox.Text = S1.Substring(0, S1.Length - 1);
+                Clipboard.SetText(mt.converttextBox.Text);
+                mt.resultlabel.BackColor = Color.LimeGreen;
+                mt.resultlabel.Text = "Find Code Complete.";
+            }
+            catch
+            {
+                mt.resultlabel.BackColor = Color.Red;
+                mt.resultlabel.Text = "App Error! Please Check ECU Name.";
+            }
+        }//get dana code
+        //=========================================================================================
+        public void convertlog()
+        {
+            byte[] brlog= { };
+            byte logprot = 0;
+
+            path = loadfile();
+            if(path != null)
+            {
+                logprot = pro_detector(path);
+                if (logprot == 1)//can11
+                {
+                    log_can11(path);
+                }
+                else if (logprot == 2)//can29
+                {
+                    log_can29(path);
+                }
+                else if (logprot == 3)//kwp
+                {
+                    log_kwp(path);
+                }
+                else
+                {
+                    mt.resultlabel.BackColor = Color.Red;
+                    mt.resultlabel.Text = "Protocol Not Detected!";
+                }
+            }
+        }
+        //=========================================================================================
+        public byte log_kwp(string path)
+        {
+            string line = "", S1 = "";
+            Int32 Noline = 0, k = 0, m = 0;
+            FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var sReader = new StreamReader(file, Encoding.UTF8);
+            //***read data and copy to string matrix****
+            while ((line = sReader.ReadLine()) != null)
+            {
+                Noline++;
+                if ((line == string.Empty) || (line.Substring(0, 1) == "*") || (line.Substring(0, 1) == "-"))
+                    continue;
+                if ((line.Length < 9)||(line.Substring(0,1) != "8"))
+                {
+                    mt.resultlabel.BackColor = Color.Red;
+                    mt.resultlabel.Text = "Line " + Noline.ToString() + " Error!";
+                    return 0;
+                }
+                for (int j = 0; j < 769; j++)
+                {
+                    if (line.Substring(j, 1) == "-")
+                        break;
+                    S1 = S1 + line.Substring(j, 1);
+                    if ((line.Substring(j, 1) == " ") || (j == 45))
+                    {
+                        S1.Replace("-","");
+                        scr[m, k] = S1;
+                        S1 = "";
+                        k++;
+                    }
+                }
+                k = 0;
+                m++;
+            }
+            //***copy string to byte matrix****
+            for (int n = 0; n < m; n++)
+            {
+                for (int d = 2; d < 12; d++)
+                {
+                    bcr[n, d - 2] = byte.Parse(scr[n, d], NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                }
+            }
+            mt.resultlabel.BackColor = Color.GreenYellow;
+            mt.resultlabel.Text = "Convert Log CAN29 Complete";
+
+            return 1;
+        }
+        //=========================================================================================
+        public byte log_can29(string path)
+        {
+            string line = "", S1 = "";
+            Int32 Noline = 0, k = 0, m = 0;
+            FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var sReader = new StreamReader(file, Encoding.UTF8);
+            //***read data and copy to string matrix****
+            while ((line = sReader.ReadLine()) != null)
+            {
+                Noline++;
+                if (line == string.Empty)
+                    continue;
+                if (line.Length != 46)
+                {
+                    mt.resultlabel.BackColor = Color.Red;
+                    mt.resultlabel.Text = "Line " + Noline.ToString() + " Error!";
+                    return 0;
+                }
+                for (int j = 0; j < 46; j++)
+                {
+                    S1 = S1 + line.Substring(j, 1);
+                    if ((line.Substring(j, 1) == " ") || (j == 45))
+                    {
+                        scr[m, k] = S1;
+                        S1 = "";
+                        k++;
+                    }
+                }
+                k = 0;
+                m++;
+            }
+            //***copy string to byte matrix****
+            for (int n = 0; n < m; n++)
+            {
+                for (int d = 2; d < 12; d++)
+                {
+                    bcr[n, d - 2] = byte.Parse(scr[n, d], NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                }
+            }
+            mt.resultlabel.BackColor = Color.GreenYellow;
+            mt.resultlabel.Text = "Convert Log CAN29 Complete";
+
+            return 1;
+        }
+        //=========================================================================================
+        public byte log_can11(string path)
+        {
+            string line = "", S1 = "";
+            Int32 Noline = 0, k = 0, m = 0;
+            FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var sReader = new StreamReader(file, Encoding.UTF8);
+            //***read data and copy to string matrix****
+            while ((line = sReader.ReadLine()) != null)
+            {
+                Noline++;
+                if (line == string.Empty)
+                    continue;
+                if(line.Length != 40)
+                {
+                    mt.resultlabel.BackColor = Color.Red;
+                    mt.resultlabel.Text = "Line " + Noline.ToString() + " Error!";
+                    return 0;
+                }
+                for (int j = 0; j < 40; j++)
+                {
+                    S1 = S1 + line.Substring(j, 1);
+                    if((line.Substring(j, 1) == " ")||(j == 39))
+                    {
+                        scr[m,k] = S1;
+                        S1 = "";
+                        k++;
+                    }
+                }
+                k = 0;
+                m++;
+            }
+            //***copy string to byte matrix****
+            for (int n = 0; n < m; n++)
+            {
+                for (int d = 2; d < 10; d++)
+                {
+                    bcr[n, d - 2] = byte.Parse(scr[n, d], NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                }
+            }
+            mt.resultlabel.BackColor = Color.GreenYellow;
+            mt.resultlabel.Text = "Convert Log CAN11 Complete";
+
+            return 1;
+        }
+        //=========================================================================================
+        public byte pro_detector(string path)
+        {
+            string line = "";
+            FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read);
+            var sReader = new StreamReader(file, Encoding.UTF8);
+            //***read data and copy to string matrix****
+            while ((line = sReader.ReadLine()) != null)
+            {
+                if (line == string.Empty)
+                    continue;
+                if (line.Length == 40)
+                {
+                    return 1;
+                }
+                else if (line.Length == 46)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 3;
+                }
+            }
+                return 0;
         }
         //=========================================================================================
         public void cleartemp()
@@ -60,6 +323,44 @@ namespace Mehad_Tools
                 mt.resultlabel.Text = "Could Not Find File Path";
             }
         }//clear temp content
+        //=========================================================================================
+        public void changedics()
+        {
+            try
+            {
+                if ((Directory.Exists(@"C:\\MehadCo\\DiagLab\\DicsFull")) && (Directory.Exists(@"C:\\MehadCo\\DiagLab\\DicsKavo")))
+                {
+                    Directory.Move(@"C:\\MehadCo\\DiagLab\\Dics", @"C:\\MehadCo\\DiagLab\\DicsNull");
+                    Directory.Move(@"C:\\MehadCo\\DiagLab\\DicsFull", @"C:\\MehadCo\\DiagLab\\Dics");
+                    mt.resultlabel.BackColor = Color.GreenYellow;
+                    mt.resultlabel.Text = "Full Dics Selected";
+                }
+                else if ((Directory.Exists(@"C:\\MehadCo\\DiagLab\\DicsNull")) && (Directory.Exists(@"C:\\MehadCo\\DiagLab\\DicsKavo")))
+                {
+                    Directory.Move(@"C:\\MehadCo\\DiagLab\\Dics", @"C:\\MehadCo\\DiagLab\\DicsFull");
+                    Directory.Move(@"C:\\MehadCo\\DiagLab\\DicsKavo", @"C:\\MehadCo\\DiagLab\\Dics");
+                    mt.resultlabel.BackColor = Color.GreenYellow;
+                    mt.resultlabel.Text = "Kavosh Dics Selected";
+                }
+                else if ((Directory.Exists(@"C:\\MehadCo\\DiagLab\\DicsNull")) && (Directory.Exists(@"C:\\MehadCo\\DiagLab\\DicsFull")))
+                {
+                    Directory.Move(@"C:\\MehadCo\\DiagLab\\Dics", @"C:\\MehadCo\\DiagLab\\DicsKavo");
+                    Directory.Move(@"C:\\MehadCo\\DiagLab\\DicsNull", @"C:\\MehadCo\\DiagLab\\Dics");
+                    mt.resultlabel.BackColor = Color.GreenYellow;
+                    mt.resultlabel.Text = "Null Dics Selected";
+                }
+                else
+                {
+                    mt.resultlabel.BackColor = Color.Red;
+                    mt.resultlabel.Text = "Can Not Find Dics";
+                }
+            }
+            catch
+            {
+                mt.resultlabel.BackColor = Color.Red;
+                mt.resultlabel.Text = "App Error!";
+            }
+        }//change dictionary
         //=========================================================================================
         public void converthexasciibin()
         {
@@ -100,6 +401,7 @@ namespace Mehad_Tools
             if (scpath != null)
             {
                 frmpath = select_folderbroser("Select Output File Location");
+
                 //FileStream frmfile = null;
                 if (frmpath != null)
                 {
@@ -163,8 +465,6 @@ namespace Mehad_Tools
                 return;
             }
         }//main convert script to sim
-        //=========================================================================================
-        //=========================================================================================
         //=========================================================================================
         public string inputhex(string txtbox)
         {
@@ -1125,7 +1425,6 @@ namespace Mehad_Tools
             return s;
         }
         //=========================================================================================
-        //=========================================================================================
         public byte detect_protocol(byte[] ba)
         {
             byte[] b1 = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A };
@@ -1164,7 +1463,8 @@ namespace Mehad_Tools
             string path = "";
             //-----------------------------------
             jcfile.Description = s1;
-            jcfile.SelectedPath = path;
+            jcfile.SelectedPath = @"C:\MehadCo\DiagLab\Projects";
+            //jcfile.SelectedPath = path;
             if (jcfile.ShowDialog() == DialogResult.OK)
             {
                 path = jcfile.SelectedPath;
@@ -1186,7 +1486,6 @@ namespace Mehad_Tools
             mt.resultlabel.Text = s1;
             return true;
         }//show message at the bottom of the form
-        //=========================================================================================
         //=========================================================================================
         public string kwp1_response_lib(byte[] ba)
         {
@@ -1617,8 +1916,20 @@ namespace Mehad_Tools
             }
         }
         //=========================================================================================
-        //=========================================================================================
-        //=========================================================================================
+        public string loadfile()
+        {
+            OpenFileDialog openfile = new OpenFileDialog();
+            openfile.Title = "Browse bin Files";
+            openfile.Filter = "(*.log)|*.log|(*.dat)|*.dat|All files (*.*)|*.*";
+            openfile.InitialDirectory = "@" + path;
+            if (openfile.ShowDialog() == DialogResult.OK)
+            {
+                path = openfile.FileName.ToString();
+            }
+            else
+                return null;
+            return path;
+        }
         //=========================================================================================
     }
 }

@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>tools.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -81,6 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="obdconnector.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="2668_advanced_settings_setup_tools_icon.ico" />
+    <Content Include="tools.ico" />
+    <Content Include="tools_114406.ico" />
+    <Content Include="tools_21402.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

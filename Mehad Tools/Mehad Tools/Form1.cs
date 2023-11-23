@@ -32,6 +32,14 @@ namespace Mehad_Tools
             f.cleartemp();
         }//clear temp content
         //=========================================================================================
+        private void ChangeDics_Click_Click(object sender, EventArgs e)
+        {
+            resultlabel.Text = "Please Wait Change Dictionary ...";
+            resultlabel.BackColor = Color.Red;
+            this.Refresh();
+            f.changedics();
+        }
+        //=========================================================================================
         private void convertbutton_Click(object sender, EventArgs e)
         {
             resultlabel.BackColor = Color.Yellow;
@@ -86,7 +94,7 @@ namespace Mehad_Tools
             resultlabel.Text = "Processing...";
             f.main_sc_tosim();
 
-        }//
+        }//convert script to simulator
         //=========================================================================================
         private void frmlen_Click(object sender, EventArgs e)
         {
@@ -100,9 +108,41 @@ namespace Mehad_Tools
             }
             else
                 f.frm_len(converttextBox.Text);
-        }
+        }//find frame len
         //=========================================================================================
-        //test
+        private void logtoout_Click(object sender, EventArgs e)
+        {
+            resultlabel.BackColor = Color.Yellow;
+            resultlabel.Text = "Processing...";
+            this.Refresh();
+            if (tBoxcanid.Text != string.Empty)
+            {
+                resultlabel.BackColor = Color.Red;
+                resultlabel.Text = "Input Data Invalid";
+            }
+            else
+            {
+                f.convertlog();
+            }
+        }//convert log file to other file format
+        //=========================================================================================
+        private void getdanacode_Click(object sender, EventArgs e)
+        {
+            resultlabel.BackColor = Color.Yellow;
+            resultlabel.Text = "Processing...";
+            this.Refresh();
+            if (converttextBox.Text == string.Empty)
+            {
+                resultlabel.BackColor = Color.Red;
+                resultlabel.Text = "Input Data Invalid";
+            }
+            else
+            {
+                f.danacodes();
+            }
+        }
+
+
         //=========================================================================================
         //=========================================================================================
         //=========================================================================================
