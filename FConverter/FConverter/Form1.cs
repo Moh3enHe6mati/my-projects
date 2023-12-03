@@ -126,10 +126,7 @@ namespace FConverter
                         linedata[linecnt, i] = lineb[i];
                     }
                 }
-                else
-                {
-
-                }
+                else{}
                 s19line = null;
                 lineb = null;
                 linecnt++;
@@ -151,7 +148,7 @@ namespace FConverter
             byte[] data = new byte[1000];
 
             fpath = Path.GetDirectoryName(global_filepath);
-            FileStream outbin = new FileStream(fpath + "1.bin", FileMode.Create, FileAccess.Write);
+            FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Write);
             BinaryWriter binwriter = new BinaryWriter(outbin);
 
             for (long i = 1; i < linedata[i, 0]; i++)
@@ -187,7 +184,7 @@ namespace FConverter
                 endaddress = (((startindex[1] + startindex[2]) / flashblock) + 1) * flashblock;
             }
             fpath = Path.GetDirectoryName(global_filepath);
-            FileStream outbin = new FileStream(fpath + "1.bin", FileMode.Create, FileAccess.Write);
+            FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Create, FileAccess.Write);
             BinaryWriter binwriter = new BinaryWriter(outbin);
             while(i <= endaddress)
             {
