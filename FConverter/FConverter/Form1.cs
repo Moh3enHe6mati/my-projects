@@ -39,7 +39,7 @@ namespace FConverter
             //MessageBox.Show(Nccitt(frame1).ToString("X2"));
             load_file(file_path());
             write_txt_file();
-            write_bin_file();
+            create_bin_file();
             write_data_2bin();
         }
 
@@ -164,7 +164,7 @@ namespace FConverter
             return true;
         }
         //=================================================================
-        bool write_bin_file()
+        bool create_bin_file()
         {
             string fpath;
             byte[] free = { 0xFF };
@@ -224,8 +224,6 @@ namespace FConverter
                 S1 = "";
                 i++;
             }
-
-
             return 0;
         }
         //=================================================================
