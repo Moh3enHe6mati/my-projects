@@ -10,3 +10,11 @@ F:\Mehad C# Project\FConverter\FConverter\obj\Debug\FConverter.pdb
 C:\Users\m.heshmati\Documents\GitHub\my-projects\FConverter\FConverter\bin\Debug\FConverter.exe.config
 C:\Users\m.heshmati\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.exe
 C:\Users\m.heshmati\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.pdb
+C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\bin\Debug\FConverter.exe.config
+C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.exe
+C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.pdb
+C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\bin\Debug\FConverter.exe
+C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\bin\Debug\FConverter.pdb
+C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.Form1.resources
+C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.Properties.Resources.resources
+C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.csproj.GenerateResource.Cache

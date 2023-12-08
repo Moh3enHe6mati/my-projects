@@ -24,6 +24,7 @@ namespace FConverter
         string global_filepath;
         ulong[] difflen = new ulong[20000];
         ulong[] startindex = new ulong[10];
+        int linecnt = 0;
 
         public Form1()
         {
@@ -41,6 +42,7 @@ namespace FConverter
             write_txt_file();
             create_bin_file();
             write_data_2bin();
+            //read_bin_file();
         }
 
 
@@ -53,7 +55,7 @@ namespace FConverter
             string type = null;
             string s19line = null;
             byte[] lineb;
-            int linecnt = 0;
+            
             
 
             FileStream s19file = new FileStream(S1, FileMode.Open, FileAccess.Read);
@@ -146,19 +148,20 @@ namespace FConverter
         {
             string fpath;
             byte[] data = new byte[1000];
+            int k = 0;
 
             fpath = Path.GetDirectoryName(global_filepath);
             FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Write);
             BinaryWriter binwriter = new BinaryWriter(outbin);
-
-            for (long i = 1; i < linedata[i, 0]; i++)
+            for (long i = 1; i < linecnt; i++)
             {
-                for (int j = 0; j <= (long)datalen[i]; j++)
+                if (linetype[i]=="S1" || linetype[i] == "S2" || linetype[i] == "S3")
                 {
-                    data[j] = linedata[i, j];
+                    for (int j = 0; j <= (long)datalen[i]; j++)
+                    {
+                        binwriter.Write(linedata[i, j]);
+                    }
                 }
-                //binwriter.Write(data, (int)lineaddress[i], (int)datalen[i]);
-                binwriter.Write(data, (int)lineaddress[i], 15);
             }
             binwriter.Close();
             return true;
