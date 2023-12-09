@@ -31,6 +31,8 @@
             this.btnGo = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblframelen = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.lblBlocksize = new System.Windows.Forms.Label();
             this.lblEndadd = new System.Windows.Forms.Label();
             this.lblStartadd = new System.Windows.Forms.Label();
@@ -40,8 +42,8 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.lblframelen = new System.Windows.Forms.Label();
+            this.lbldownsid = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -63,6 +65,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBox5);
+            this.groupBox1.Controls.Add(this.lbldownsid);
             this.groupBox1.Controls.Add(this.lblframelen);
             this.groupBox1.Controls.Add(this.textBox4);
             this.groupBox1.Controls.Add(this.lblBlocksize);
@@ -73,37 +77,54 @@
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(196, 132);
+            this.groupBox1.Size = new System.Drawing.Size(194, 160);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "s19";
+            // 
+            // lblframelen
+            // 
+            this.lblframelen.AutoSize = true;
+            this.lblframelen.Location = new System.Drawing.Point(10, 106);
+            this.lblframelen.Name = "lblframelen";
+            this.lblframelen.Size = new System.Drawing.Size(57, 13);
+            this.lblframelen.TabIndex = 8;
+            this.lblframelen.Text = "Frame Len";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(83, 103);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(100, 20);
+            this.textBox4.TabIndex = 7;
+            this.textBox4.Text = "E3";
             // 
             // lblBlocksize
             // 
             this.lblBlocksize.AutoSize = true;
             this.lblBlocksize.Location = new System.Drawing.Point(10, 78);
             this.lblBlocksize.Name = "lblBlocksize";
-            this.lblBlocksize.Size = new System.Drawing.Size(53, 13);
+            this.lblBlocksize.Size = new System.Drawing.Size(55, 13);
             this.lblBlocksize.TabIndex = 6;
-            this.lblBlocksize.Text = "Bock size";
+            this.lblBlocksize.Text = "Bock Size";
             // 
             // lblEndadd
             // 
             this.lblEndadd.AutoSize = true;
             this.lblEndadd.Location = new System.Drawing.Point(10, 51);
             this.lblEndadd.Name = "lblEndadd";
-            this.lblEndadd.Size = new System.Drawing.Size(66, 13);
+            this.lblEndadd.Size = new System.Drawing.Size(67, 13);
             this.lblEndadd.TabIndex = 5;
-            this.lblEndadd.Text = "End address";
+            this.lblEndadd.Text = "End Address";
             // 
             // lblStartadd
             // 
             this.lblStartadd.AutoSize = true;
             this.lblStartadd.Location = new System.Drawing.Point(10, 25);
             this.lblStartadd.Name = "lblStartadd";
-            this.lblStartadd.Size = new System.Drawing.Size(69, 13);
+            this.lblStartadd.Size = new System.Drawing.Size(70, 13);
             this.lblStartadd.TabIndex = 4;
-            this.lblStartadd.Text = "Start address";
+            this.lblStartadd.Text = "Start Address";
             // 
             // textBox3
             // 
@@ -161,22 +182,22 @@
             this.tabPage2.Text = "2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // textBox4
+            // lbldownsid
             // 
-            this.textBox4.Location = new System.Drawing.Point(83, 103);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 7;
-            this.textBox4.Text = "E3";
+            this.lbldownsid.AutoSize = true;
+            this.lbldownsid.Location = new System.Drawing.Point(10, 134);
+            this.lbldownsid.Name = "lbldownsid";
+            this.lbldownsid.Size = new System.Drawing.Size(76, 13);
+            this.lbldownsid.TabIndex = 9;
+            this.lbldownsid.Text = "Download SID";
             // 
-            // lblframelen
+            // textBox5
             // 
-            this.lblframelen.AutoSize = true;
-            this.lblframelen.Location = new System.Drawing.Point(10, 106);
-            this.lblframelen.Name = "lblframelen";
-            this.lblframelen.Size = new System.Drawing.Size(57, 13);
-            this.lblframelen.TabIndex = 8;
-            this.lblframelen.Text = "Frame Len";
+            this.textBox5.Location = new System.Drawing.Point(83, 131);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(100, 20);
+            this.textBox5.TabIndex = 10;
+            this.textBox5.Text = "36";
             // 
             // Form1
             // 
@@ -210,6 +231,8 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label lblframelen;
         private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label lbldownsid;
     }
 }
 
