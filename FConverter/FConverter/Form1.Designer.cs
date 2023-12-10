@@ -31,6 +31,8 @@
             this.btnGo = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.lbldownsid = new System.Windows.Forms.Label();
             this.lblframelen = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.lblBlocksize = new System.Windows.Forms.Label();
@@ -42,8 +44,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.lbldownsid = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.lblshowresult = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -82,6 +83,23 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "s19";
             // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(83, 131);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(100, 20);
+            this.textBox5.TabIndex = 10;
+            this.textBox5.Text = "36";
+            // 
+            // lbldownsid
+            // 
+            this.lbldownsid.AutoSize = true;
+            this.lbldownsid.Location = new System.Drawing.Point(10, 134);
+            this.lbldownsid.Name = "lbldownsid";
+            this.lbldownsid.Size = new System.Drawing.Size(76, 13);
+            this.lbldownsid.TabIndex = 9;
+            this.lbldownsid.Text = "Download SID";
+            // 
             // lblframelen
             // 
             this.lblframelen.AutoSize = true;
@@ -97,7 +115,7 @@
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(100, 20);
             this.textBox4.TabIndex = 7;
-            this.textBox4.Text = "E3";
+            this.textBox4.Text = "F3";
             // 
             // lblBlocksize
             // 
@@ -140,7 +158,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 2;
-            this.textBox2.Text = "FFFFFFFF";
+            this.textBox2.Text = "FFFF";
             // 
             // textBox1
             // 
@@ -148,7 +166,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "0";
+            this.textBox1.Text = "1000";
             // 
             // tabControl1
             // 
@@ -182,28 +200,22 @@
             this.tabPage2.Text = "2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // lbldownsid
+            // lblshowresult
             // 
-            this.lbldownsid.AutoSize = true;
-            this.lbldownsid.Location = new System.Drawing.Point(10, 134);
-            this.lbldownsid.Name = "lbldownsid";
-            this.lbldownsid.Size = new System.Drawing.Size(76, 13);
-            this.lbldownsid.TabIndex = 9;
-            this.lbldownsid.Text = "Download SID";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(83, 131);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 20);
-            this.textBox5.TabIndex = 10;
-            this.textBox5.Text = "36";
+            this.lblshowresult.AutoSize = true;
+            this.lblshowresult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.lblshowresult.Location = new System.Drawing.Point(8, 270);
+            this.lblshowresult.Name = "lblshowresult";
+            this.lblshowresult.Size = new System.Drawing.Size(62, 13);
+            this.lblshowresult.TabIndex = 3;
+            this.lblshowresult.Text = "Show result";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 268);
+            this.ClientSize = new System.Drawing.Size(351, 291);
+            this.Controls.Add(this.lblshowresult);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "FConverter.v.1.00";
@@ -212,6 +224,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -233,6 +246,7 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label lbldownsid;
+        private System.Windows.Forms.Label lblshowresult;
     }
 }
 

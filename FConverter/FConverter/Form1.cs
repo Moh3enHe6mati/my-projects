@@ -18,14 +18,16 @@ namespace FConverter
         //byte[] frame1 = { 0x36, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x6A, 0x29, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x09, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x69, 0x6D, 0x0B, 0x06, 0x69, 0x3E, 0x0B, 0x06, 0x69, 0x9C, 0x0B, 0x06, 0x69, 0xCB, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x68, 0xB1, 0x0B, 0x06, 0x68, 0x82, 0x0B, 0x06, 0x68, 0xE0, 0x0B, 0x06, 0x69, 0x0F, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x69, 0xFA, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B, 0x06, 0x70, 0x08, 0x0B };
         //byte[] frame = { 0x36, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };//4DD4
         string[] linetype = new string[20000];
-        ulong[] linelen = new ulong[20000];
+        Int32[] linelen = new Int32[20000];
         ulong[] datalen = new ulong[30000];
-        ulong[] lineaddress = new ulong[2000000];
-        byte[,] linedata = new byte[20000, 300];
+        ulong[] lineaddress = new ulong[20000];
+        byte[,] linedata = new byte[20000, 50];
         string global_filepath;
         ulong[] difflen = new ulong[20000];
         ulong[] startindex = new ulong[10];
+        UInt32 lastlineaddres = 0;
         ulong linecnt = 0;
+        int lastlinelen = 0;
 
         public Form1()
         {
@@ -39,17 +41,33 @@ namespace FConverter
             //MessageBox.Show(CalcCRC16(0xE0, frame).ToString("X2"));
             //MessageBox.Show(CalcCRC32(0xE0, frame).ToString("X2"));
             //MessageBox.Show(Nccitt(frame).ToString("X2"));//this is true
-            load_file(file_path());
-            write_txt_file();
-            create_bin_file();
-            write_data_2bin();
-            read_bin_file();
+            lblshowresult.BackColor = Color.Yellow;
+            lblshowresult.Text = "Show result";
+            clear_allvalue();
+            string N = file_path();
+            if (N != null && N != string.Empty)
+            {
+                load_file(N);
+                creat_newbinfile();
+                new_write_data2bin();
+                //write_txt_file();
+                //create_FFbin();
+                //write_data_2bin();
+                read_bin_file();
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "Success";
+            }
+            else
+            {
+                lblshowresult.BackColor = Color.Yellow;
+                lblshowresult.Text = "Show result";
+            }
+
         }
         //=================================================================
         byte read_bin_file()
         {
             string fpath;
-            byte[] buffer = new byte[2000000];
             int siz = 0;
             byte len0 = 0, len1 = 0;
             byte crc1 = 0, crc2 = 0;
@@ -57,8 +75,8 @@ namespace FConverter
             int x = 0;
             string str = null, allcrc = null;
 
-            
-            x = Convert.ToInt32(textBox4.Text, 16)-3;
+
+            x = Convert.ToInt32(textBox4.Text, 16) - 3;
             siz = (int)(Convert.ToInt32(textBox2.Text, 16) - Convert.ToInt32(textBox1.Text, 16));
 
             fpath = Path.GetDirectoryName(global_filepath);
@@ -129,7 +147,7 @@ namespace FConverter
             {
                 //MessageBox.Show(s19line);
                 type = s19line.Substring(0, 2);
-                if (type == "S0")
+                /*if (type == "S0")
                 {
                     linetype[linecnt] = type;
                     linelen[linecnt] = ulong.Parse(s19line.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
@@ -141,12 +159,12 @@ namespace FConverter
                         linedata[linecnt, i] = lineb[i];
                     }
 
-                }
-                else if (type == "S1")
+                }*/
+                if (type == "S1")
                 {
                     linetype[linecnt] = type;
-                    linelen[linecnt] = ulong.Parse(s19line.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-                    datalen[linecnt] = linelen[linecnt] - 4;
+                    linelen[linecnt] = Int32.Parse(s19line.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+                    datalen[linecnt] = (ulong)linelen[linecnt] - 3;
                     lineaddress[linecnt] = ulong.Parse(s19line.Substring(4, 4), System.Globalization.NumberStyles.HexNumber);
                     lineb = strfrm2bytearray(s19line.Substring(8, (int)(2 * linelen[linecnt] - 4)));
                     for (int i = 0; i < lineb.Length; i++)
@@ -154,12 +172,15 @@ namespace FConverter
                         linedata[linecnt, i] = lineb[i];
                     }
                     difflen[linecnt] = 3;//all len - address+crc
+                    linecnt++;
                 }
                 else if (type == "S2")
                 {
                     linetype[linecnt] = type;
-                    linelen[linecnt] = ulong.Parse(s19line.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-                    datalen[linecnt] = linelen[linecnt] - 6;
+                    linelen[linecnt] = Int32.Parse(s19line.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+                    int kb = (int)linelen[linecnt];
+                    datalen[linecnt] = (ulong)linelen[linecnt] - 4;
+                    int kt = (int)datalen[linecnt];
                     lineaddress[linecnt] = ulong.Parse(s19line.Substring(4, 6), System.Globalization.NumberStyles.HexNumber);
                     lineb = strfrm2bytearray(s19line.Substring(10, (int)(2 * linelen[linecnt] - 6)));
                     for (int i = 0; i < lineb.Length; i++)
@@ -167,12 +188,13 @@ namespace FConverter
                         linedata[linecnt, i] = lineb[i];
                     }
                     difflen[linecnt] = 4;//all len - address+crc
+                    linecnt++;
                 }
                 else if (type == "S3")
                 {
                     linetype[linecnt] = type;
-                    linelen[linecnt] = ulong.Parse(s19line.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-                    datalen[linecnt] = linelen[linecnt] - 8;
+                    linelen[linecnt] = Int32.Parse(s19line.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+                    datalen[linecnt] = (ulong)linelen[linecnt] - 5;
                     lineaddress[linecnt] = ulong.Parse(s19line.Substring(4, 8), System.Globalization.NumberStyles.HexNumber);
                     lineb = strfrm2bytearray(s19line.Substring(12, (int)(2 * linelen[linecnt] - 8)));
                     for (int i = 0; i < lineb.Length; i++)
@@ -180,8 +202,9 @@ namespace FConverter
                         linedata[linecnt, i] = lineb[i];
                     }
                     difflen[linecnt] = 5;//all len - address+crc
+                    linecnt++;
                 }
-                else if (type == "S9")
+                /*else if (type == "S9")
                 {
                     linetype[linecnt] = type;
                     linelen[linecnt] = ulong.Parse(s19line.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
@@ -192,20 +215,18 @@ namespace FConverter
                     {
                         linedata[linecnt, i] = lineb[i];
                     }
-                }
+                }*/
                 else { }
                 s19line = null;
                 lineb = null;
-                linecnt++;
             }
-            startindex[0] = lineaddress[1];
-            startindex[1] = lineaddress[linecnt - 2];
+            lastlineaddres = (UInt32)lineaddress[linecnt - 1];
             if (linetype[linecnt - 2] == "S1")
-                startindex[2] = linelen[linecnt - 2] - 3;
+                lastlinelen = linelen[linecnt - 1] - 3;
             else if (linetype[linecnt - 2] == "S2")
-                startindex[2] = linelen[linecnt - 2] - 4;
+                lastlinelen = linelen[linecnt - 1] - 4;
             else if (linetype[linecnt - 2] == "S3")
-                startindex[2] = linelen[linecnt - 2] - 5;
+                lastlinelen = linelen[linecnt - 1] - 5;
             return 0;
         }
         //=================================================================
@@ -240,25 +261,12 @@ namespace FConverter
             return true;
         }
         //=================================================================
-        bool create_bin_file()
+        bool create_FFbin()
         {
             string fpath;
             byte[] free = { 0xFF };
             ulong i = 0, endaddress = 0;
-            ulong ul = 0;
-            uint flashblock = 0;
 
-            /*if (textBox3.Text != string.Empty)
-                flashblock = uint.Parse(textBox3.Text, System.Globalization.NumberStyles.HexNumber);
-            ul = (startindex[1] + startindex[2]) % flashblock;
-            if (ul == 0)
-            {
-                endaddress = startindex[1] + startindex[2];
-            }
-            else
-            {
-                endaddress = (((startindex[1] + startindex[2]) / flashblock) + 1) * flashblock;
-            }*/
             i = (ulong)(Convert.ToInt32(textBox1.Text, 16));
             fpath = Path.GetDirectoryName(global_filepath);
             FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Create, FileAccess.Write);
@@ -291,9 +299,11 @@ namespace FConverter
             int i = 0;
 
             fpath = Path.GetDirectoryName(global_filepath);
+            FileStream outfram = new FileStream(fpath + "\\1.txt", FileMode.Append, FileAccess.Write);
+            StreamWriter finaltxt = new StreamWriter(outfram);
             while (linelen[i] != 0)
             {
-                for (int j = 0; j < (int)(linelen[i] - difflen[i]); j++)
+                for (int j = 0; j < (Int32)(linelen[i] - (Int32)difflen[i]); j++)
                 {
                     if (linelen[i] == 0)
                         break;
@@ -304,11 +314,12 @@ namespace FConverter
                     if (lineaddress[i] > (ulong)(Convert.ToInt32(textBox2.Text, 16)))
                         break;
                     if ((lineaddress[i] >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
-                        File.AppendAllText(fpath + "\\1.txt", S1 + "\r\n");
+                        finaltxt.WriteLine(S1);
                 }
                 S1 = "";
                 i++;
             }
+            finaltxt.Close();
             return 0;
         }
         //=================================================================
@@ -344,19 +355,64 @@ namespace FConverter
         //=================================================================
         bool clear_allvalue()
         {
-            int a = 0, b = 0;
-            for (a = 0; a < 20000; a++)
-            {
-                for (b = 0; b < 300; b++)
-                    linedata[a, b] = 0;
-                linetype[a] = "";
-                linelen[a] = 0;
-                lineaddress[a] = 0;
-                difflen[a] = 0;
-            }
+            global_filepath = "";
+            linecnt = 0;
+            Array.Clear(linetype, 0, 20000);
+            Array.Clear(linelen, 0, 20000);
+            Array.Clear(datalen, 0, 30000);
+            Array.Clear(lineaddress, 0, 20000);
+            Array.Clear(linedata, 0, 20000);
+            Array.Clear(difflen, 0, 20000);
+            Array.Clear(startindex, 0, 10);
+
             return true;
         }
         //=================================================================
+        byte creat_newbinfile()
+        {
+
+            string fpath;
+            byte[] free = { 0xFF };
+            ulong i = 0;
+
+            i = (ulong)(Convert.ToInt32(textBox1.Text, 16));
+            fpath = Path.GetDirectoryName(global_filepath);
+            FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Create, FileAccess.Write);
+            BinaryWriter binwriter = new BinaryWriter(outbin);
+            while (i < (ulong)(lastlineaddres + lastlinelen))
+            {
+                /*if (i > (ulong)(Convert.ToInt32(textBox2.Text, 16)))
+                    break;
+                if ((i >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (i < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))*/
+                binwriter.Write(free);
+                i++;
+            }
+            binwriter.Close();
+            return 0;
+        }
+        //=================================================================
+        byte new_write_data2bin()
+        {
+            string fpath;
+            UInt32 i = 0;
+
+            fpath = Path.GetDirectoryName(global_filepath);
+            FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Write);
+            BinaryWriter binwriter = new BinaryWriter(outbin);
+            while (i < lastlineaddres)
+            {
+                for (UInt32 j = 0; j < (long)datalen[i]; j++)
+                {
+                    binwriter.Seek((int)(lineaddress[i]+j), SeekOrigin.Begin);
+                    binwriter.Write(linedata[i, j]);
+                }
+                if (lineaddress[i] == lastlineaddres)
+                    break;
+                i++;
+            }
+            binwriter.Close();
+            return 1;
+        }
         //=================================================================
         private UInt16 CalcCRC16(int Size, byte[] pData)
         {
