@@ -19,13 +19,13 @@ namespace FConverter
         //byte[] frame = { 0x36, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };//4DD4
         string[] linetype = new string[20000];
         ulong[] linelen = new ulong[20000];
-        ulong[] datalen = new ulong[20000];
-        ulong[] lineaddress = new ulong[20000];
+        ulong[] datalen = new ulong[30000];
+        ulong[] lineaddress = new ulong[2000000];
         byte[,] linedata = new byte[20000, 300];
         string global_filepath;
         ulong[] difflen = new ulong[20000];
         ulong[] startindex = new ulong[10];
-        int linecnt = 0;
+        ulong linecnt = 0;
 
         public Form1()
         {
@@ -212,20 +212,29 @@ namespace FConverter
         bool write_data_2bin()
         {
             string fpath;
-            byte[] data = new byte[1000];
+            UInt32 i = 1;
+            //byte[] data = new byte[1000];
 
             fpath = Path.GetDirectoryName(global_filepath);
             FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Write);
             BinaryWriter binwriter = new BinaryWriter(outbin);
-            for (long i = 1; i < linecnt; i++)
+            //for (ulong i = 1; i < linecnt; i++)
+            //i = (UInt32)(Convert.ToInt32(textBox1.Text, 16));
+            while (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))
             {
-                if (linetype[i] == "S1" || linetype[i] == "S2" || linetype[i] == "S3")
+                if ((lineaddress[i] >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
                 {
-                    for (int j = 0; j <= (long)datalen[i]; j++)
+                    if (linetype[i] == "S1" || linetype[i] == "S2" || linetype[i] == "S3")
                     {
-                        binwriter.Write(linedata[i, j]);
+                        for (int j = 0; j <= (long)datalen[i]; j++)
+                        {
+                            binwriter.Write(linedata[i, j]);
+                        }
                     }
                 }
+                if (lineaddress[i] == startindex[1])
+                    break;
+                i++;
             }
             binwriter.Close();
             return true;
@@ -239,7 +248,7 @@ namespace FConverter
             ulong ul = 0;
             uint flashblock = 0;
 
-            if (textBox3.Text != string.Empty)
+            /*if (textBox3.Text != string.Empty)
                 flashblock = uint.Parse(textBox3.Text, System.Globalization.NumberStyles.HexNumber);
             ul = (startindex[1] + startindex[2]) % flashblock;
             if (ul == 0)
@@ -249,13 +258,17 @@ namespace FConverter
             else
             {
                 endaddress = (((startindex[1] + startindex[2]) / flashblock) + 1) * flashblock;
-            }
+            }*/
+            i = (ulong)(Convert.ToInt32(textBox1.Text, 16));
             fpath = Path.GetDirectoryName(global_filepath);
             FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Create, FileAccess.Write);
             BinaryWriter binwriter = new BinaryWriter(outbin);
-            while (i <= endaddress)
+            while (i <= (ulong)(Convert.ToInt32(textBox2.Text, 16)))
             {
-                binwriter.Write(free);
+                if (i > (ulong)(Convert.ToInt32(textBox2.Text, 16)))
+                    break;
+                if ((i >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (i < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
+                    binwriter.Write(free);
                 i++;
             }
             binwriter.Close();
@@ -287,7 +300,12 @@ namespace FConverter
                     S1 = S1 + linedata[i, j].ToString("X2");
                 }
                 if (linetype[i] != "S0" && linetype[i] != "S9")
-                    File.AppendAllText(fpath + "\\1.txt", S1 + "\r\n");
+                {
+                    if (lineaddress[i] > (ulong)(Convert.ToInt32(textBox2.Text, 16)))
+                        break;
+                    if ((lineaddress[i] >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
+                        File.AppendAllText(fpath + "\\1.txt", S1 + "\r\n");
+                }
                 S1 = "";
                 i++;
             }
