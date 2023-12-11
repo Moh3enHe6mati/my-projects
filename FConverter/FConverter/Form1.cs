@@ -48,11 +48,11 @@ namespace FConverter
             if (N != null && N != string.Empty)
             {
                 load_file(N);
-                creat_newbinfile();
-                new_write_data2bin();
+                //creat_newbinfile();
+                //new_write_data2bin();
                 //write_txt_file();
-                //create_FFbin();
-                //write_data_2bin();
+                create_FFbin();
+                write_data_2bin();
                 read_bin_file();
                 lblshowresult.BackColor = Color.LightGreen;
                 lblshowresult.Text = "Success";
@@ -74,7 +74,6 @@ namespace FConverter
             ulong crc = 0;
             int x = 0;
             string str = null, allcrc = null;
-
 
             x = Convert.ToInt32(textBox4.Text, 16) - 3;
             siz = (int)(Convert.ToInt32(textBox2.Text, 16) - Convert.ToInt32(textBox1.Text, 16));
@@ -233,15 +232,34 @@ namespace FConverter
         bool write_data_2bin()
         {
             string fpath;
-            UInt32 i = 1;
+            UInt32 i = 0, x = 0, y = 0;
             //byte[] data = new byte[1000];
 
             fpath = Path.GetDirectoryName(global_filepath);
             FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Write);
             BinaryWriter binwriter = new BinaryWriter(outbin);
-            //for (ulong i = 1; i < linecnt; i++)
-            //i = (UInt32)(Convert.ToInt32(textBox1.Text, 16));
-            while (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))
+            x = (UInt32)(Convert.ToInt32(textBox1.Text, 16));
+            while (i < lastlineaddres)
+            {
+                if ((int)(lineaddress[i]) >= (UInt32)(Convert.ToInt32(textBox1.Text, 16)))
+                {
+                    if (i == (int)(lineaddress[x]))
+                    {
+                        for (UInt32 j = 0; j < (long)datalen[x]; j++)
+                        {
+                            binwriter.Seek((int)(lineaddress[x] + j), SeekOrigin.Begin);
+                            binwriter.Write(linedata[x, j]);
+                        }
+                        if (lineaddress[x] == lastlineaddres)
+                            break;
+                        x++;
+                    }
+                }
+                i++;
+            }
+            binwriter.Close();
+            
+            /*while (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))
             {
                 if ((lineaddress[i] >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
                 {
@@ -257,7 +275,7 @@ namespace FConverter
                     break;
                 i++;
             }
-            binwriter.Close();
+            binwriter.Close();*/
             return true;
         }
         //=================================================================
