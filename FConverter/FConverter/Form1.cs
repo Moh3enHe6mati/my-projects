@@ -48,11 +48,11 @@ namespace FConverter
             if (N != null && N != string.Empty)
             {
                 load_file(N);
-                //creat_newbinfile();
-                //new_write_data2bin();
+                creat_newbinfile();
+                new_write_data2bin();
                 //write_txt_file();
-                create_FFbin();
-                write_data_2bin();
+                //create_FFbin();
+                //write_data_2bin();
                 read_bin_file();
                 lblshowresult.BackColor = Color.LightGreen;
                 lblshowresult.Text = "Success";
@@ -83,7 +83,8 @@ namespace FConverter
             BinaryReader binreader = new BinaryReader(inbin);
             FileStream outfram = new FileStream(fpath + "\\final.txt", FileMode.Create, FileAccess.Write);
             StreamWriter framWriter = new StreamWriter(outfram);
-
+            binreader.ReadBytes(Convert.ToInt32(textBox1.Text, 16));
+            siz -= Convert.ToInt32(textBox1.Text, 16);
             while (siz > x)
             {
                 byte[] byt = binreader.ReadBytes(x);
@@ -93,7 +94,7 @@ namespace FConverter
 
                 str = textBox5.Text + str;
                 byte[] log = str2BytArry(str);
-                crc = Nccitt(log);
+                crc = CalcCRC16(log.Length, log);
                 crc1 = (byte)(crc & 0xFF);
                 crc2 = (byte)((crc >> 8) & 0xFF);
                 len0 = (byte)((x + 3) / 256);
@@ -109,7 +110,7 @@ namespace FConverter
                 allcrc = allcrc + str;
                 str = textBox5.Text + str;
                 byte[] log = str2BytArry(str);
-                crc = Nccitt(log);
+                crc = CalcCRC16(log.Length, log);
                 str = str + crc.ToString("X4");
                 len0 = (byte)((siz + 3) / 256);
                 len1 = (byte)((siz + 3) % 256);
@@ -232,30 +233,32 @@ namespace FConverter
         bool write_data_2bin()
         {
             string fpath;
-            UInt32 i = 0, x = 0, y = 0;
+            UInt32 i = 0, x = 0;
+            bool flg = false;
             //byte[] data = new byte[1000];
 
             fpath = Path.GetDirectoryName(global_filepath);
             FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Write);
             BinaryWriter binwriter = new BinaryWriter(outbin);
-            x = (UInt32)(Convert.ToInt32(textBox1.Text, 16));
+            //x = (UInt32)(Convert.ToInt32(textBox1.Text, 16));
             while (i < lastlineaddres)
             {
-                if ((int)(lineaddress[i]) >= (UInt32)(Convert.ToInt32(textBox1.Text, 16)))
+                if ((int)(lineaddress[x]) > (UInt32)(Convert.ToInt32(textBox1.Text, 16)))
                 {
-                    if (i == (int)(lineaddress[x]))
+                    for (UInt32 j = 0; j < (long)datalen[x]; j++)
                     {
-                        for (UInt32 j = 0; j < (long)datalen[x]; j++)
-                        {
-                            binwriter.Seek((int)(lineaddress[x] + j), SeekOrigin.Begin);
-                            binwriter.Write(linedata[x, j]);
-                        }
-                        if (lineaddress[x] == lastlineaddres)
-                            break;
-                        x++;
+                        binwriter.Seek((int)(lineaddress[x] + j), SeekOrigin.Begin);
+                        binwriter.Write(linedata[x, j]);
                     }
+                    if (lineaddress[x] == lastlineaddres)
+                        break;
+                    x++;
+                    flg = true;
                 }
                 i++;
+                if (flg == false)
+                    x = i;
+                
             }
             binwriter.Close();
             
