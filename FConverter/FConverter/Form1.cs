@@ -65,6 +65,43 @@ namespace FConverter
 
         }
         //=================================================================
+        private void Calccrc_Click(object sender, EventArgs e)
+        {
+            string fpath = null, sout = null;
+            int i = 0, siz = 0, cs = 0;
+            byte[] areab;
+
+            Calccrc.Cursor = Cursors.WaitCursor;
+            Calccrc.Enabled = false;
+            OpenFileDialog Openn = new OpenFileDialog();
+            Openn.Title = "انتخاب فایل";
+            Openn.Filter = "bin|*.bin|hex|*.hex";
+            if (Openn.ShowDialog() == DialogResult.OK)
+            {
+                fpath = Openn.FileName.ToString();
+            }
+            Calccrc.Cursor = Cursors.Default;
+            Calccrc.Enabled = true;
+            if (fpath != null && fpath != string.Empty)
+            {
+                FileStream inbin = new FileStream(fpath, FileMode.Open, FileAccess.Read);
+                BinaryReader binreader = new BinaryReader(inbin);
+                siz = (int)(Convert.ToInt32(textBox7.Text, 16) - Convert.ToInt32(textBox6.Text, 16));
+                binreader.ReadBytes(Convert.ToInt32(textBox6.Text, 16));
+                areab = binreader.ReadBytes(siz);
+                while (i < (int)(Convert.ToInt32(textBox7.Text, 16)))
+                {
+                    cs += areab[i];
+                    i++;
+                }
+                sout = sout + "cs   :  " + cs.ToString("X2") + "\n\n";
+                sout = sout + "CalcCRC16    :   " + CalcCRC16(siz, areab).ToString("X2") + "\n\n";
+                sout = sout + "CalcCRC32    :   " + CalcCRC32(siz, areab).ToString("X2") + "\n\n";
+                sout = sout + "Nccitt   :   " + Nccitt(areab).ToString("X2") + "\n\n";
+                MessageBox.Show(sout);
+            }
+        }
+        //=================================================================
         byte read_bin_file()
         {
             string fpath;
@@ -374,6 +411,8 @@ namespace FConverter
             return fileName;
         }
         //=================================================================
+
+        //=================================================================
         bool clear_allvalue()
         {
             global_filepath = "";
@@ -500,5 +539,7 @@ namespace FConverter
             }
             return (ushort)(num ^ 0xffff);
         }
+
+        
     }
 }

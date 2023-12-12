@@ -45,9 +45,19 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lblshowresult = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.Calccrc = new System.Windows.Forms.Button();
+            this.lblsaddress = new System.Windows.Forms.Label();
+            this.lbleaddress = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGo
@@ -172,6 +182,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(4, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -187,17 +198,18 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(337, 238);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "1";
+            this.tabPage1.Text = "s19*s28";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(337, 238);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "2";
+            this.tabPage2.Text = "bin*hex";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // lblshowresult
@@ -210,6 +222,81 @@
             this.lblshowresult.TabIndex = 3;
             this.lblshowresult.Text = "Show result";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(6, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(325, 51);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "groupBox2";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.lbleaddress);
+            this.tabPage3.Controls.Add(this.lblsaddress);
+            this.tabPage3.Controls.Add(this.Calccrc);
+            this.tabPage3.Controls.Add(this.textBox8);
+            this.tabPage3.Controls.Add(this.textBox7);
+            this.tabPage3.Controls.Add(this.textBox6);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(337, 238);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "cs*crc";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(69, 5);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(105, 20);
+            this.textBox6.TabIndex = 0;
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(70, 31);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(105, 20);
+            this.textBox7.TabIndex = 1;
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(6, 58);
+            this.textBox8.Multiline = true;
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(325, 174);
+            this.textBox8.TabIndex = 2;
+            // 
+            // Calccrc
+            // 
+            this.Calccrc.Location = new System.Drawing.Point(256, 17);
+            this.Calccrc.Name = "Calccrc";
+            this.Calccrc.Size = new System.Drawing.Size(75, 23);
+            this.Calccrc.TabIndex = 3;
+            this.Calccrc.Text = "Calc";
+            this.Calccrc.UseVisualStyleBackColor = true;
+            this.Calccrc.Click += new System.EventHandler(this.Calccrc_Click);
+            // 
+            // lblsaddress
+            // 
+            this.lblsaddress.AutoSize = true;
+            this.lblsaddress.Location = new System.Drawing.Point(11, 8);
+            this.lblsaddress.Name = "lblsaddress";
+            this.lblsaddress.Size = new System.Drawing.Size(52, 13);
+            this.lblsaddress.TabIndex = 4;
+            this.lblsaddress.Text = "s address";
+            // 
+            // lbleaddress
+            // 
+            this.lbleaddress.AutoSize = true;
+            this.lbleaddress.Location = new System.Drawing.Point(11, 34);
+            this.lbleaddress.Name = "lbleaddress";
+            this.lbleaddress.Size = new System.Drawing.Size(53, 13);
+            this.lbleaddress.TabIndex = 5;
+            this.lbleaddress.Text = "e address";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -218,11 +305,14 @@
             this.Controls.Add(this.lblshowresult);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
-            this.Text = "FConverter.v.1.00";
+            this.Text = "FConverter.v.1.01";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -247,6 +337,14 @@
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label lbldownsid;
         private System.Windows.Forms.Label lblshowresult;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Label lbleaddress;
+        private System.Windows.Forms.Label lblsaddress;
+        private System.Windows.Forms.Button Calccrc;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textBox6;
     }
 }
 
