@@ -1,0 +1,9 @@
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\bin\Debug\IKCO Codification.exe.config
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\bin\Debug\IKCO Codification.exe
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\bin\Debug\IKCO Codification.pdb
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\obj\Debug\IKCO_Codification.Form1.resources
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\obj\Debug\IKCO_Codification.Properties.Resources.resources
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\obj\Debug\IKCO Codification.csproj.GenerateResource.Cache
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\obj\Debug\IKCO Codification.exe
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\obj\Debug\IKCO Codification.pdb
+F:\Mehad C# Project\IKCO Codification\IKCO Codification\obj\Debug\IKCO Codification.csproj.ResolveComReference.cache
