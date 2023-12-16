@@ -115,7 +115,7 @@ namespace IKCO_Codification
                 finalresult = finalresult + "===================================================" + "///ODIS(25)(" + codiftextBox.Text.Substring(24, 1) + ")\r\n";
                 char_25(24);//mfd
                 finalresult = finalresult + "===================================================" + "///ODIS(26)(" + codiftextBox.Text.Substring(25, 1) + ")\r\n";
-                char_26(25);//rn(rear node)
+                char_26(25);//option_8
                 finalresult = finalresult + "===================================================" + "///ODIS(27)(" + codiftextBox.Text.Substring(26, 1) + ")\r\n";
                 char_27(26);//option_7
                 finalresult = finalresult + "===================================================" + "///ODIS(28)(" + codiftextBox.Text.Substring(27, 1) + ")\r\n";
@@ -203,7 +203,7 @@ namespace IKCO_Codification
                 finalresult = finalresult + "===================================================" + "///CONTIV(19)(" + codiftextBox.Text.Substring(18, 1) + ")\r\n";
                 char_29(18);//eps
                 finalresult = finalresult + "===================================================" + "///CONTIV(20)(" + codiftextBox.Text.Substring(19, 1) + ")\r\n";
-                contivchar_11(19);//electric windows
+                contivchar_11(19);//electrical windows
                 finalresult = finalresult + "===================================================" + "///CONTIV(21)(" + codiftextBox.Text.Substring(20, 1) + ")\r\n";
                 contivchar_10(20);//option_5
                 finalresult = finalresult + "===================================================" + "///CONTIV(22)(" + codiftextBox.Text.Substring(21, 1) + ")\r\n";
@@ -211,13 +211,13 @@ namespace IKCO_Codification
                 finalresult = finalresult + "===================================================" + "///CONTIV(23)(" + codiftextBox.Text.Substring(22, 1) + ")\r\n";
                 char_22(22);//fn(front node)
                 finalresult = finalresult + "===================================================" + "///CONTIV(24)(" + codiftextBox.Text.Substring(23, 1) + ")\r\n";
-                char_23(23);//dn(door node)
+                char_23(23);//doors
                 finalresult = finalresult + "===================================================" + "///CONTIV(25)(" + codiftextBox.Text.Substring(24, 1) + ")\r\n";
                 char_24(24);//ccn node
                 finalresult = finalresult + "===================================================" + "///CONTIV(26)(" + codiftextBox.Text.Substring(25, 1) + ")\r\n";
                 char_25(25);//mfd
                 finalresult = finalresult + "===================================================" + "///CONTIV(27)(" + codiftextBox.Text.Substring(26, 1) + ")\r\n";
-                char_26(26);//rn(rear node)
+                char_26(26);//option_6
                 textBox1.Text = finalresult;
                 showresult.BackColor = Color.GreenYellow;
                 showresult.Text = "Load File Complete.";
@@ -367,7 +367,7 @@ namespace IKCO_Codification
             showresult.Text = s1;
         }
         //=========================================================================================
-        public void char_5(int codeindex)//abs
+        public void char_5(int codeindex)//esc/abs
         {
             s1 = null;
             i1 = 0;
@@ -377,12 +377,12 @@ namespace IKCO_Codification
             {
                 s1 = readcell(i1, codeindex+2, sheet, filepath);
                 if ((s1 != null) && (s1 != string.Empty))
-                    finalresult = finalresult + "ABS: " + s1 + "\r\n";
+                    finalresult = finalresult + "ESC/ABS: " + s1 + "\r\n";
                 else
-                    finalresult = finalresult + "ABS: Invalid\r\n";
+                    finalresult = finalresult + "ESC/ABS: Invalid\r\n";
             }
             else
-                finalresult = finalresult + "ABS: Invalid\r\n";
+                finalresult = finalresult + "ESC/ABS: Invalid\r\n";
             showresult.BackColor = Color.Yellow;
             showresult.Text = s1;
         }
@@ -537,52 +537,52 @@ namespace IKCO_Codification
                 switch (codifbyte[codeindex])
                 {
                     case 0x30://0
-                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Option Lamp): Absent\r\nReserve: Absent\r\nReserve: Absent";
+                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Position Lamp): Absent\r\nReserve: Absent\r\nReserve: Absent";
                         break;
                     case 0x31://1
-                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Option Lamp): Absent\r\nReserve: Absent\r\nReserve: Present";
+                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Position Lamp): Absent\r\nReserve: Absent\r\nReserve: Present";
                         break;
                     case 0x32://2
-                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Option Lamp): Absent\r\nReserve: Present\r\nReserve: Absent";
+                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Position Lamp): Absent\r\nReserve: Present\r\nReserve: Absent";
                         break;
                     case 0x33://3
-                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Option Lamp): Absent\r\nReserve: Present\r\nReserve: Present";
+                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Position Lamp): Absent\r\nReserve: Present\r\nReserve: Present";
                         break;
                     case 0x34://4
-                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Option Lamp): Present\r\nReserve: Absent\r\nReserve: Absent";
+                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Position Lamp): Present\r\nReserve: Absent\r\nReserve: Absent";
                         break;
                     case 0x35://5
-                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Option Lamp): Present\r\nReserve: Absent\r\nReserve: Present";
+                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Position Lamp): Present\r\nReserve: Absent\r\nReserve: Present";
                         break;
                     case 0x36://6
-                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Option Lamp): Present\r\nReserve: Present\r\nReserve: Absent";
+                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Position Lamp): Present\r\nReserve: Present\r\nReserve: Absent";
                         break;
                     case 0x37://7
-                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Option Lamp): Present\r\nReserve: Present\r\nReserve: Present";
+                        s1 = "\r\nMulti Media: Absent\r\nRear Day Light(Position Lamp): Present\r\nReserve: Present\r\nReserve: Present";
                         break;
                     case 0x38://8
-                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Option Lamp): Absent\r\nReserve: Absent\r\nReserve: Absent";
+                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Position Lamp): Absent\r\nReserve: Absent\r\nReserve: Absent";
                         break;
                     case 0x39://9
-                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Option Lamp): Absent\r\nReserve: Absent\r\nReserve: Present";
+                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Position Lamp): Absent\r\nReserve: Absent\r\nReserve: Present";
                         break;
                     case 0x41://A
-                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Option Lamp): Absent\r\nReserve: Present\r\nReserve: Absent";
+                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Position Lamp): Absent\r\nReserve: Present\r\nReserve: Absent";
                         break;
                     case 0x42://B
-                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Option Lamp): Absent\r\nReserve: Present\r\nReserve: Present";
+                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Position Lamp): Absent\r\nReserve: Present\r\nReserve: Present";
                         break;
                     case 0x43://C
-                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Option Lamp): Present\r\nReserve: Absent\r\nReserve: Absent";
+                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Position Lamp): Present\r\nReserve: Absent\r\nReserve: Absent";
                         break;
                     case 0x44://D
-                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Option Lamp): Present\r\nReserve: Absent\r\nReserve: Present";
+                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Position Lamp): Present\r\nReserve: Absent\r\nReserve: Present";
                         break;
                     case 0x45://E
-                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Option Lamp): Present\r\nReserve: Present\r\nReserve: Absent";
+                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Position Lamp): Present\r\nReserve: Present\r\nReserve: Absent";
                         break;
                     case 0x46://F
-                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Option Lamp): Present\r\nReserve: Present\r\nReserve: Present";
+                        s1 = "\r\nMulti Media: Present\r\nRear Day Light(Position Lamp): Present\r\nReserve: Present\r\nReserve: Present";
                         break;
                     default:
                         s1 = "Invalid";
@@ -713,52 +713,52 @@ namespace IKCO_Codification
                 switch (codifbyte[codeindex])
                 {
                     case 0x30://0
-                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Revers Lamp: Non Active\r\nRight Revers Lamp: Non Active\r\nShock Sensor: Non Active";
+                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Reverse Lamp: Non Active\r\nRight Reverse Lamp: Non Active\r\nShock Sensor: Non Active";
                         break;
                     case 0x31://1
-                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Revers Lamp: Non Active\r\nRight Revers Lamp: Non Active\r\nShock Sensor: Active";
+                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Reverse Lamp: Non Active\r\nRight Reverse Lamp: Non Active\r\nShock Sensor: Active";
                         break;
                     case 0x32://2
-                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Revers Lamp: Non Active\r\nRight Revers Lamp: Active\r\nShock Sensor: Non Active";
+                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Reverse Lamp: Non Active\r\nRight Reverse Lamp: Active\r\nShock Sensor: Non Active";
                         break;
                     case 0x33://3
-                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Revers Lamp: Non Active\r\nRight Revers Lamp: Active\r\nShock Sensor: Active";
+                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Reverse Lamp: Non Active\r\nRight Reverse Lamp: Active\r\nShock Sensor: Active";
                         break;
                     case 0x34://4
-                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Revers Lamp: Active\r\nRight Revers Lamp: Non Active\r\nShock Sensor: Non Active";
+                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Reverse Lamp: Active\r\nRight Reverse Lamp: Non Active\r\nShock Sensor: Non Active";
                         break;
                     case 0x35://5
-                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Revers Lamp: Active\r\nRight Revers Lamp: Non Active\r\nShock Sensor: Active";
+                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Reverse Lamp: Active\r\nRight Reverse Lamp: Non Active\r\nShock Sensor: Active";
                         break;
                     case 0x36://6
-                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Revers Lamp: Active\r\nRight Revers Lamp: Active\r\nShock Sensor: Non Active";
+                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Reverse Lamp: Active\r\nRight Reverse Lamp: Active\r\nShock Sensor: Non Active";
                         break;
                     case 0x37://7
-                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Revers Lamp: Active\r\nRight Revers Lamp: Active\r\nShock Sensor: Active";
+                        s1 = "\r\nSpeed Locking: Non Active\r\nLeft Reverse Lamp: Active\r\nRight Reverse Lamp: Active\r\nShock Sensor: Active";
                         break;
                     case 0x38://8
-                        s1 = "\r\nSpeed Locking: Active\r\nLeft Revers Lamp: Non Active\r\nRight Revers Lamp: Non Active\r\nShock Sensor: Non Active";
+                        s1 = "\r\nSpeed Locking: Active\r\nLeft Reverse Lamp: Non Active\r\nRight Reverse Lamp: Non Active\r\nShock Sensor: Non Active";
                         break;
                     case 0x39://9
-                        s1 = "\r\nSpeed Locking: Active\r\nLeft Revers Lamp: Non Active\r\nRight Revers Lamp: Non Active\r\nShock Sensor: Active";
+                        s1 = "\r\nSpeed Locking: Active\r\nLeft Reverse Lamp: Non Active\r\nRight Reverse Lamp: Non Active\r\nShock Sensor: Active";
                         break;
                     case 0x41://A
-                        s1 = "\r\nSpeed Locking: Active\r\nLeft Revers Lamp: Non Active\r\nRight Revers Lamp: Active\r\nShock Sensor: Non Active";
+                        s1 = "\r\nSpeed Locking: Active\r\nLeft Reverse Lamp: Non Active\r\nRight Reverse Lamp: Active\r\nShock Sensor: Non Active";
                         break;
                     case 0x42://B
-                        s1 = "\r\nSpeed Locking: Active\r\nLeft Revers Lamp: Non Active\r\nRight Revers Lamp: Active\r\nShock Sensor: Active";
+                        s1 = "\r\nSpeed Locking: Active\r\nLeft Reverse Lamp: Non Active\r\nRight Reverse Lamp: Active\r\nShock Sensor: Active";
                         break;
                     case 0x43://C
-                        s1 = "\r\nSpeed Locking: Active\r\nLeft Revers Lamp: Active\r\nRight Revers Lamp: Non Active\r\nShock Sensor: Non Active";
+                        s1 = "\r\nSpeed Locking: Active\r\nLeft Reverse Lamp: Active\r\nRight Reverse Lamp: Non Active\r\nShock Sensor: Non Active";
                         break;
                     case 0x44://D
-                        s1 = "\r\nSpeed Locking: Active\r\nLeft Revers Lamp: Active\r\nRight Revers Lamp: Non Active\r\nShock Sensor: Active";
+                        s1 = "\r\nSpeed Locking: Active\r\nLeft Reverse Lamp: Active\r\nRight Reverse Lamp: Non Active\r\nShock Sensor: Active";
                         break;
                     case 0x45://E
-                        s1 = "\r\nSpeed Locking: Active\r\nLeft Revers Lamp: Active\r\nRight Revers Lamp: Active\r\nShock Sensor: Non Active";
+                        s1 = "\r\nSpeed Locking: Active\r\nLeft Reverse Lamp: Active\r\nRight Reverse Lamp: Active\r\nShock Sensor: Non Active";
                         break;
                     case 0x46://F
-                        s1 = "\r\nSpeed Locking: Active\r\nLeft Revers Lamp: Active\r\nRight Revers Lamp: Active\r\nShock Sensor: Active";
+                        s1 = "\r\nSpeed Locking: Active\r\nLeft Reverse Lamp: Active\r\nRight Reverse Lamp: Active\r\nShock Sensor: Active";
                         break;
                     default:
                         s1 = "Invalid";
@@ -1068,22 +1068,70 @@ namespace IKCO_Codification
             showresult.Text = s1;
         }
         //=========================================================================================
-        public void char_26(int codeindex)//rear node
+        public void char_26(int codeindex)//option_8
         {
             s1 = null;
-            i1 = 0;
 
-            i1 = rownum(codifbyte[codeindex]);
-            if (i1 != 200)
+            if (codifbyte[codeindex] <= 0x46)
             {
-                s1 = readcell(i1, codeindex+2, sheet, filepath);
-                if ((s1 != null) && (s1 != string.Empty))
-                    finalresult = finalresult + "Rear Node: " + s1 + "\r\n";
-                else
-                    finalresult = finalresult + "Rear Node: Invalid\r\n";
+                switch (codifbyte[codeindex])
+                {
+                    case 0x30://0
+                        s1 = "\r\nSAS: Absent\r\nReserve: Absent\r\nReserve: Absent\r\nReserve: Absent";
+                        break;
+                    case 0x31://1
+                        s1 = "\r\nSAS: Absent\r\nReserve: Absent\r\nReserve: Absent\r\nReserve: Present";
+                        break;
+                    case 0x32://2
+                        s1 = "\r\nSAS: Absent\r\nReserve: Absent\r\nReserve: Present\r\nReserve: Absent";
+                        break;
+                    case 0x33://3
+                        s1 = "\r\nSAS: Absent\r\nReserve: Absent\r\nReserve: Present\r\nReserve: Present";
+                        break;
+                    case 0x34://4
+                        s1 = "\r\nSAS: Absent\r\nReserve: Present\r\nReserve: Absent\r\nReserve: Absent";
+                        break;
+                    case 0x35://5
+                        s1 = "\r\nSAS: Absent\r\nReserve: Present\r\nReserve: Absent\r\nReserve: Present";
+                        break;
+                    case 0x36://6
+                        s1 = "\r\nSAS: Absent\r\nReserve: Present\r\nReserve: Present\r\nReserve: Absent";
+                        break;
+                    case 0x37://7
+                        s1 = "\r\nSAS: Absent\r\nReserve: Present\r\nReserve: Present\r\nReserve: Present";
+                        break;
+                    case 0x38://8
+                        s1 = "\r\nSAS: Present\r\nReserve: Absent\r\nReserve: Absent\r\nReserve: Absent";
+                        break;
+                    case 0x39://9
+                        s1 = "\r\nSAS: Present\r\nReserve: Absent\r\nReserve: Absent\r\nReserve: Present";
+                        break;
+                    case 0x41://A
+                        s1 = "\r\nSAS: Present\r\nReserve: Absent\r\nReserve: Present\r\nReserve: Absent";
+                        break;
+                    case 0x42://B
+                        s1 = "\r\nSAS: Present\r\nReserve: Absent\r\nReserve: Present\r\nReserve: Present";
+                        break;
+                    case 0x43://C
+                        s1 = "\r\nSAS: Present\r\nReserve: Present\r\nReserve: Absent\r\nReserve: Absent";
+                        break;
+                    case 0x44://D
+                        s1 = "\r\nSAS: Present\r\nReserve: Present\r\nReserve: Absent\r\nReserve: Present";
+                        break;
+                    case 0x45://E
+                        s1 = "\r\nSAS: Present\r\nReserve: Present\r\nReserve: Present\r\nReserve: Absent";
+                        break;
+                    case 0x46://F
+                        s1 = "\r\nSAS: Present\r\nReserve: Present\r\nReserve: Present\r\nReserve: Present";
+                        break;
+                    default:
+                        s1 = "Invalid";
+                        break;
+                }
+                finalresult = finalresult + "Option_8: " + s1 + "\r\n";
             }
             else
-                finalresult = finalresult + "Rear Node: Invalid\r\n";
+                finalresult = finalresult + "Option_8: Invalid\r\n";
             showresult.BackColor = Color.Yellow;
             showresult.Text = s1;
         }

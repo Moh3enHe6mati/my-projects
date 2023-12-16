@@ -96,7 +96,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 13);
             this.label1.TabIndex = 5;
-            this.label1.Text = "Updated To Ver_87";
+            this.label1.Text = "Updated To Ver_90";
             // 
             // Form1
             // 
@@ -115,7 +115,7 @@
             this.MaximumSize = new System.Drawing.Size(600, 450);
             this.MinimumSize = new System.Drawing.Size(600, 450);
             this.Name = "Form1";
-            this.Text = "IKCO Codification v1.04";
+            this.Text = "IKCO Codification v1.05";
             this.Load += new System.EventHandler(this.load_form);
             this.ResumeLayout(false);
             this.PerformLayout();
