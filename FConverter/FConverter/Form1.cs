@@ -50,7 +50,7 @@ namespace FConverter
                 load_file(N);
                 creat_newbinfile();
                 new_write_data2bin();
-                //write_txt_file();
+                write_txt_file();
                 //create_FFbin();
                 //write_data_2bin();
                 read_bin_file();
@@ -68,10 +68,11 @@ namespace FConverter
         private void Calccrc_Click(object sender, EventArgs e)
         {
             string fpath = null, sout = null;
-            int i = 0, siz = 0, cs = 0;
+            int i = 0, siz = 0;
+            byte cs = 0;
             byte[] areab;
 
-            Calccrc.Cursor = Cursors.WaitCursor;
+            /*Calccrc.Cursor = Cursors.WaitCursor;
             Calccrc.Enabled = false;
             OpenFileDialog Openn = new OpenFileDialog();
             Openn.Title = "انتخاب فایل";
@@ -82,22 +83,32 @@ namespace FConverter
             }
             Calccrc.Cursor = Cursors.Default;
             Calccrc.Enabled = true;
+            lblshowresult.BackColor = Color.Yellow;
+            lblshowresult.Text = "please wait...";*/
+            fpath = file_path();
             if (fpath != null && fpath != string.Empty)
             {
-                FileStream inbin = new FileStream(fpath, FileMode.Open, FileAccess.Read);
+                load_file(fpath);
+                /*FileStream inbin = new FileStream(fpath, FileMode.Open, FileAccess.Read);
                 BinaryReader binreader = new BinaryReader(inbin);
                 siz = (int)(Convert.ToInt32(textBox7.Text, 16) - Convert.ToInt32(textBox6.Text, 16));
-                binreader.ReadBytes(Convert.ToInt32(textBox6.Text, 16));
-                areab = binreader.ReadBytes(siz);
-                while (i < (int)(Convert.ToInt32(textBox7.Text, 16)))
+                binreader.ReadBytes(Convert.ToInt32(textBox6.Text, 16));*/
+                //areab = binreader.ReadBytes(siz);
+                areab = get_byte_area();
+                while (i < areab.Length)
                 {
-                    cs += areab[i];
+                    cs = (byte)(cs + areab[i]);
                     i++;
+                    /*lblshowresult.Text = i.ToString();
+                    if(i%10000 ==0)
+                        Refresh();*/
                 }
                 sout = sout + "cs   :  " + cs.ToString("X2") + "\n\n";
-                sout = sout + "CalcCRC16    :   " + CalcCRC16(siz, areab).ToString("X2") + "\n\n";
-                sout = sout + "CalcCRC32    :   " + CalcCRC32(siz, areab).ToString("X2") + "\n\n";
+                sout = sout + "CalcCRC16    :   " + CalcCRC16(areab.Length, areab).ToString("X2") + "\n\n";
+                sout = sout + "CalcCRC32    :   " + CalcCRC32(areab.Length, areab).ToString("X2") + "\n\n";
                 sout = sout + "Nccitt   :   " + Nccitt(areab).ToString("X2") + "\n\n";
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "Success";
                 MessageBox.Show(sout);
             }
         }
@@ -349,6 +360,30 @@ namespace FConverter
 
             }
             return true;
+        }
+        //=================================================================
+        byte[] get_byte_area()
+        {
+            int i = 0, k = 0;
+            byte[] bt=new byte[10000000];
+
+            uint stadd = (uint)(Convert.ToInt32(textBox6.Text, 16));
+            uint enadd = (uint)(Convert.ToInt32(textBox7.Text, 16));
+            while (linelen[i] != 0)
+            {
+                if (lineaddress[i] >= stadd && lineaddress[i] <= enadd)
+                {
+                    for (int j = 0; j < (Int32)(linelen[i] - (Int32)difflen[i]); j++)
+                    {
+                        if (linelen[i] == 0)
+                            return bt;
+                        bt[k] = linedata[i, j];
+                        k++;
+                    }
+                }
+                i++;
+            }
+            return bt;
         }
         //=================================================================
         byte write_txt_file()
