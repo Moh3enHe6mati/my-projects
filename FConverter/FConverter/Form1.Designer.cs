@@ -44,15 +44,15 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.lblshowresult = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.Calccrc = new System.Windows.Forms.Button();
-            this.lblsaddress = new System.Windows.Forms.Label();
             this.lbleaddress = new System.Windows.Forms.Label();
+            this.lblsaddress = new System.Windows.Forms.Label();
+            this.Calccrc = new System.Windows.Forms.Button();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.lblshowresult = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -62,7 +62,7 @@
             // 
             // btnGo
             // 
-            this.btnGo.Location = new System.Drawing.Point(256, 208);
+            this.btnGo.Location = new System.Drawing.Point(293, 374);
             this.btnGo.Name = "btnGo";
             this.btnGo.Size = new System.Drawing.Size(75, 23);
             this.btnGo.TabIndex = 0;
@@ -86,7 +86,7 @@
             this.groupBox1.Controls.Add(this.textBox3);
             this.groupBox1.Controls.Add(this.textBox2);
             this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Location = new System.Drawing.Point(6, 6);
+            this.groupBox1.Location = new System.Drawing.Point(468, 6);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(194, 160);
             this.groupBox1.TabIndex = 1;
@@ -186,7 +186,7 @@
             this.tabControl1.Location = new System.Drawing.Point(4, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(345, 264);
+            this.tabControl1.Size = new System.Drawing.Size(676, 429);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -196,7 +196,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(337, 238);
+            this.tabPage1.Size = new System.Drawing.Size(668, 403);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "s19*s28";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -207,20 +207,10 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(337, 238);
+            this.tabPage2.Size = new System.Drawing.Size(668, 428);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "bin*hex";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // lblshowresult
-            // 
-            this.lblshowresult.AutoSize = true;
-            this.lblshowresult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.lblshowresult.Location = new System.Drawing.Point(8, 270);
-            this.lblshowresult.Name = "lblshowresult";
-            this.lblshowresult.Size = new System.Drawing.Size(62, 13);
-            this.lblshowresult.TabIndex = 3;
-            this.lblshowresult.Text = "Show result";
             // 
             // groupBox2
             // 
@@ -247,27 +237,23 @@
             this.tabPage3.Text = "cs*crc";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // textBox6
+            // lbleaddress
             // 
-            this.textBox6.Location = new System.Drawing.Point(69, 5);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(105, 20);
-            this.textBox6.TabIndex = 0;
+            this.lbleaddress.AutoSize = true;
+            this.lbleaddress.Location = new System.Drawing.Point(11, 34);
+            this.lbleaddress.Name = "lbleaddress";
+            this.lbleaddress.Size = new System.Drawing.Size(53, 13);
+            this.lbleaddress.TabIndex = 5;
+            this.lbleaddress.Text = "e address";
             // 
-            // textBox7
+            // lblsaddress
             // 
-            this.textBox7.Location = new System.Drawing.Point(70, 31);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(105, 20);
-            this.textBox7.TabIndex = 1;
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(6, 58);
-            this.textBox8.Multiline = true;
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(325, 174);
-            this.textBox8.TabIndex = 2;
+            this.lblsaddress.AutoSize = true;
+            this.lblsaddress.Location = new System.Drawing.Point(11, 8);
+            this.lblsaddress.Name = "lblsaddress";
+            this.lblsaddress.Size = new System.Drawing.Size(52, 13);
+            this.lblsaddress.TabIndex = 4;
+            this.lblsaddress.Text = "s address";
             // 
             // Calccrc
             // 
@@ -279,31 +265,48 @@
             this.Calccrc.UseVisualStyleBackColor = true;
             this.Calccrc.Click += new System.EventHandler(this.Calccrc_Click);
             // 
-            // lblsaddress
+            // textBox8
             // 
-            this.lblsaddress.AutoSize = true;
-            this.lblsaddress.Location = new System.Drawing.Point(11, 8);
-            this.lblsaddress.Name = "lblsaddress";
-            this.lblsaddress.Size = new System.Drawing.Size(52, 13);
-            this.lblsaddress.TabIndex = 4;
-            this.lblsaddress.Text = "s address";
+            this.textBox8.Location = new System.Drawing.Point(6, 58);
+            this.textBox8.Multiline = true;
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(325, 174);
+            this.textBox8.TabIndex = 2;
             // 
-            // lbleaddress
+            // textBox7
             // 
-            this.lbleaddress.AutoSize = true;
-            this.lbleaddress.Location = new System.Drawing.Point(11, 34);
-            this.lbleaddress.Name = "lbleaddress";
-            this.lbleaddress.Size = new System.Drawing.Size(53, 13);
-            this.lbleaddress.TabIndex = 5;
-            this.lbleaddress.Text = "e address";
+            this.textBox7.Location = new System.Drawing.Point(70, 31);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(105, 20);
+            this.textBox7.TabIndex = 1;
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(69, 5);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(105, 20);
+            this.textBox6.TabIndex = 0;
+            // 
+            // lblshowresult
+            // 
+            this.lblshowresult.AutoSize = true;
+            this.lblshowresult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.lblshowresult.Location = new System.Drawing.Point(11, 439);
+            this.lblshowresult.Name = "lblshowresult";
+            this.lblshowresult.Size = new System.Drawing.Size(62, 13);
+            this.lblshowresult.TabIndex = 3;
+            this.lblshowresult.Text = "Show result";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 291);
+            this.ClientSize = new System.Drawing.Size(684, 461);
             this.Controls.Add(this.lblshowresult);
             this.Controls.Add(this.tabControl1);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(700, 500);
+            this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "Form1";
             this.Text = "FConverter.v.1.01";
             this.groupBox1.ResumeLayout(false);

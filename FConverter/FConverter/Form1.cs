@@ -38,9 +38,9 @@ namespace FConverter
         {
 
             //MessageBox.Show(file_path());
-            //MessageBox.Show(CalcCRC16(0xE0, frame).ToString("X2"));
-            //MessageBox.Show(CalcCRC32(0xE0, frame).ToString("X2"));
-            //MessageBox.Show(Nccitt(frame).ToString("X2"));//this is true
+            //MessageBox.Show(calccrc16(0xE0, frame).ToString("X2"));
+            //MessageBox.Show(calccrc32(0xE0, frame).ToString("X2"));
+            //MessageBox.Show(nccitt(frame).ToString("X2"));//this is true
             lblshowresult.BackColor = Color.Yellow;
             lblshowresult.Text = "Show result";
             clear_allvalue();
@@ -51,9 +51,10 @@ namespace FConverter
                 creat_newbinfile();
                 new_write_data2bin();
                 write_txt_file();
+                downtxt_file();
                 //create_FFbin();
                 //write_data_2bin();
-                read_bin_file();
+                //read_bin_file();
                 lblshowresult.BackColor = Color.LightGreen;
                 lblshowresult.Text = "Success";
             }
@@ -63,124 +64,6 @@ namespace FConverter
                 lblshowresult.Text = "Show result";
             }
 
-        }
-        //=================================================================
-        private void Calccrc_Click(object sender, EventArgs e)
-        {
-            string fpath = null, sout = null;
-            int i = 0, siz = 0;
-            byte cs = 0;
-            byte[] areab;
-
-            /*Calccrc.Cursor = Cursors.WaitCursor;
-            Calccrc.Enabled = false;
-            OpenFileDialog Openn = new OpenFileDialog();
-            Openn.Title = "انتخاب فایل";
-            Openn.Filter = "bin|*.bin|hex|*.hex";
-            if (Openn.ShowDialog() == DialogResult.OK)
-            {
-                fpath = Openn.FileName.ToString();
-            }
-            Calccrc.Cursor = Cursors.Default;
-            Calccrc.Enabled = true;
-            lblshowresult.BackColor = Color.Yellow;
-            lblshowresult.Text = "please wait...";*/
-            fpath = file_path();
-            if (fpath != null && fpath != string.Empty)
-            {
-                load_file(fpath);
-                /*FileStream inbin = new FileStream(fpath, FileMode.Open, FileAccess.Read);
-                BinaryReader binreader = new BinaryReader(inbin);
-                siz = (int)(Convert.ToInt32(textBox7.Text, 16) - Convert.ToInt32(textBox6.Text, 16));
-                binreader.ReadBytes(Convert.ToInt32(textBox6.Text, 16));*/
-                //areab = binreader.ReadBytes(siz);
-                areab = get_byte_area();
-                while (i < areab.Length)
-                {
-                    cs = (byte)(cs + areab[i]);
-                    i++;
-                    /*lblshowresult.Text = i.ToString();
-                    if(i%10000 ==0)
-                        Refresh();*/
-                }
-                sout = sout + "cs   :  " + cs.ToString("X2") + "\n\n";
-                sout = sout + "CalcCRC16    :   " + CalcCRC16(areab.Length, areab).ToString("X2") + "\n\n";
-                sout = sout + "CalcCRC32    :   " + CalcCRC32(areab.Length, areab).ToString("X2") + "\n\n";
-                sout = sout + "Nccitt   :   " + Nccitt(areab).ToString("X2") + "\n\n";
-                lblshowresult.BackColor = Color.LightGreen;
-                lblshowresult.Text = "Success";
-                MessageBox.Show(sout);
-            }
-        }
-        //=================================================================
-        byte read_bin_file()
-        {
-            string fpath;
-            int siz = 0;
-            byte len0 = 0, len1 = 0;
-            byte crc1 = 0, crc2 = 0;
-            ulong crc = 0;
-            int x = 0;
-            string str = null, allcrc = null;
-
-            x = Convert.ToInt32(textBox4.Text, 16) - 3;
-            siz = (int)(Convert.ToInt32(textBox2.Text, 16) - Convert.ToInt32(textBox1.Text, 16));
-
-            fpath = Path.GetDirectoryName(global_filepath);
-            FileStream inbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Read);
-            BinaryReader binreader = new BinaryReader(inbin);
-            FileStream outfram = new FileStream(fpath + "\\final.txt", FileMode.Create, FileAccess.Write);
-            StreamWriter framWriter = new StreamWriter(outfram);
-            binreader.ReadBytes(Convert.ToInt32(textBox1.Text, 16));
-            siz -= Convert.ToInt32(textBox1.Text, 16);
-            while (siz > x)
-            {
-                byte[] byt = binreader.ReadBytes(x);
-                siz -= x;
-                str = BitConverter.ToString(byt);
-                str = str.Replace("-", "");
-
-                str = textBox5.Text + str;
-                byte[] log = str2BytArry(str);
-                crc = CalcCRC16(log.Length, log);
-                crc1 = (byte)(crc & 0xFF);
-                crc2 = (byte)((crc >> 8) & 0xFF);
-                len0 = (byte)((x + 3) / 256);
-                len1 = (byte)((x + 3) % 256);
-                str = len0.ToString("X2") + len1.ToString("X2") + str + crc2.ToString("X2") + crc1.ToString("X2");
-                framWriter.WriteLine(str);
-            }
-            if (siz > 0)
-            {
-                byte[] byt = binreader.ReadBytes((int)siz);
-                str = BitConverter.ToString(byt);
-                str = str.Replace("-", "");
-                allcrc = allcrc + str;
-                str = textBox5.Text + str;
-                byte[] log = str2BytArry(str);
-                crc = CalcCRC16(log.Length, log);
-                str = str + crc.ToString("X4");
-                len0 = (byte)((siz + 3) / 256);
-                len1 = (byte)((siz + 3) % 256);
-                str = len0.ToString("X2") + len1.ToString("X2") + str;
-                framWriter.WriteLine(str);
-            }
-            siz = 0;
-            x = 0;
-            str = null;
-            framWriter.Close();
-            outfram.Close();
-            inbin.Close();
-            return 1;
-        }
-        //=================================================================
-        private byte[] str2BytArry(string fix)
-        {
-            if ((fix.Length % 2) != 0)
-                fix = "0" + fix;
-            return Enumerable.Range(0, fix.Length)
-                .Where(x => x % 2 == 0)
-                .Select(x => Convert.ToByte(fix.Substring(x, 2), 16)).ToArray();
         }
         //=================================================================
         byte load_file(string S1)
@@ -278,6 +161,32 @@ namespace FConverter
             return 0;
         }
         //=================================================================
+        byte creat_newbinfile()
+        {
+            string fpath;
+            byte[] free = { 0xFF };
+            ulong i = 0;
+            try
+            {
+                i = (ulong)(Convert.ToInt32(textBox1.Text, 16));
+                fpath = Path.GetDirectoryName(global_filepath);
+                FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Create, FileAccess.Write);
+                BinaryWriter binwriter = new BinaryWriter(outbin);
+                while (i < (ulong)(lastlineaddres + lastlinelen))
+                {
+                    binwriter.Write(free);
+                    i++;
+                }
+                binwriter.Close();
+                return 1;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("creat_newbinfile fail!");
+                return 0;
+            }
+        }
+        //=================================================================
         bool write_data_2bin()
         {
             string fpath;
@@ -306,10 +215,10 @@ namespace FConverter
                 i++;
                 if (flg == false)
                     x = i;
-                
+
             }
             binwriter.Close();
-            
+
             /*while (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))
             {
                 if ((lineaddress[i] >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
@@ -329,6 +238,230 @@ namespace FConverter
             binwriter.Close();*/
             return true;
         }
+        //=================================================================
+        byte write_txt_file()
+        {
+            string fpath, S1 = "";
+            int i = 0;
+            try
+            {
+                fpath = Path.GetDirectoryName(global_filepath);
+                FileStream outfram = new FileStream(fpath + "\\1.txt", FileMode.Append, FileAccess.Write);
+                StreamWriter finaltxt = new StreamWriter(outfram);
+                while (linelen[i] != 0)
+                {
+                    for (int j = 0; j < (Int32)(linelen[i] - (Int32)difflen[i]); j++)
+                    {
+                        if (linelen[i] == 0)
+                            break;
+                        S1 = S1 + linedata[i, j].ToString("X2");
+                    }
+                    if (linetype[i] != "S0" && linetype[i] != "S9")
+                    {
+                        if (lineaddress[i] > (ulong)(Convert.ToInt32(textBox2.Text, 16)))
+                            break;
+                        if ((lineaddress[i] >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
+                            finaltxt.WriteLine(S1);
+                    }
+                    S1 = "";
+                    i++;
+                }
+                finaltxt.Close();
+                return 1;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("write_txt_file fail!");
+                return 0;
+            }
+        }
+        //=================================================================
+        byte downtxt_file()
+        {
+            string fpath, S1 = "", S2 = "", sfinal = "";
+            int i = 0,k = 0;
+
+            try
+            {
+                fpath = Path.GetDirectoryName(global_filepath);
+                FileStream outfram = new FileStream(fpath + "\\downtxt.txt", FileMode.Append, FileAccess.Write);
+                StreamWriter downtxt = new StreamWriter(outfram);
+                while (linelen[i] != 0)
+                {
+                    for (int j = 0; j < (Int32)(linelen[i] - (Int32)difflen[i]); j++)
+                    {
+                        if (linelen[i] == 0)
+                            break;
+                        S1 = S1 + linedata[i, j].ToString("X2");
+                    }
+                    if (linetype[i] != "S0" && linetype[i] != "S9")
+                    {
+                        if (lineaddress[i] > (ulong)(Convert.ToInt32(textBox2.Text, 16)))
+                            break;
+                        if ((lineaddress[i] < (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (lineaddress[i] > (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
+                            break;
+                    }
+                    i++;
+                }
+                i = 0;
+                UInt32 lenfrm = (UInt32)(Convert.ToInt32(textBox4.Text, 16));
+                UInt32 frlen = 0;
+                byte[] len = { 0, 0 };
+                while (i < ((S1.Length)))
+                {
+                    S2 = S2 + S1.Substring(i, 2) + " ";
+                    i += 2;
+                    frlen++;
+                    if (frlen == lenfrm)
+                    {
+                        len[0] = (byte)((frlen >> 8) & 0xFF);
+                        len[1] = (byte)(frlen & 0xFF);
+                        sfinal = sfinal + len[0].ToString("X2") + " " + len[1].ToString("X2") + " " + S2 + "\r\n";
+                        frlen = 0;
+                        S2 = "";
+                    }
+                }
+                if(frlen < lenfrm)
+                {
+                    len[0] = (byte)((frlen >> 8) & 0xFF);
+                    len[1] = (byte)(frlen & 0xFF);
+                    sfinal = sfinal + len[0].ToString("X2") + " " + len[1].ToString("X2") + " " + S2 + "\r\n";
+                    S2 = "";
+                    frlen = 0;
+                }
+                downtxt.WriteLine(sfinal);
+                downtxt.Close();
+                return 1;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("downtxt_file fail!");
+                return 0;
+            }
+        }
+
+        //=================================================================
+        //=================================================================
+        //=================================================================
+        //=================================================================
+        private void Calccrc_Click(object sender, EventArgs e)
+        {
+            string fpath = null, sout = null;
+            int i = 0, siz = 0;
+            byte cs = 0;
+            byte[] areab;
+
+            /*Calccrc.Cursor = Cursors.WaitCursor;
+            Calccrc.Enabled = false;
+            OpenFileDialog Openn = new OpenFileDialog();
+            Openn.Title = "انتخاب فایل";
+            Openn.Filter = "bin|*.bin|hex|*.hex";
+            if (Openn.ShowDialog() == DialogResult.OK)
+            {
+                fpath = Openn.FileName.ToString();
+            }
+            Calccrc.Cursor = Cursors.Default;
+            Calccrc.Enabled = true;
+            lblshowresult.BackColor = Color.Yellow;
+            lblshowresult.Text = "please wait...";*/
+            fpath = file_path();
+            if (fpath != null && fpath != string.Empty)
+            {
+                load_file(fpath);
+                /*FileStream inbin = new FileStream(fpath, FileMode.Open, FileAccess.Read);
+                BinaryReader binreader = new BinaryReader(inbin);
+                siz = (int)(Convert.ToInt32(textBox7.Text, 16) - Convert.ToInt32(textBox6.Text, 16));
+                binreader.ReadBytes(Convert.ToInt32(textBox6.Text, 16));*/
+                //areab = binreader.ReadBytes(siz);
+                areab = get_byte_area();
+                while (i < areab.Length)
+                {
+                    cs = (byte)(cs + areab[i]);
+                    i++;
+                    /*lblshowresult.Text = i.ToString();
+                    if(i%10000 ==0)
+                        Refresh();*/
+                }
+                sout = sout + "cs   :  " + cs.ToString("X2") + "\n\n";
+                sout = sout + "calccrc16    :   " + calccrc16(areab.Length, areab).ToString("X2") + "\n\n";
+                sout = sout + "calccrc32    :   " + calccrc32(areab.Length, areab).ToString("X2") + "\n\n";
+                sout = sout + "nccitt   :   " + nccitt(areab).ToString("X2") + "\n\n";
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "Success";
+                MessageBox.Show(sout);
+            }
+        }
+        //=================================================================
+        byte read_bin_file()
+        {
+            string fpath;
+            int siz = 0;
+            byte len0 = 0, len1 = 0;
+            byte crc1 = 0, crc2 = 0;
+            ulong crc = 0;
+            int x = 0;
+            string str = null, allcrc = null;
+
+            x = Convert.ToInt32(textBox4.Text, 16) - 3;
+            siz = (int)(Convert.ToInt32(textBox2.Text, 16) - Convert.ToInt32(textBox1.Text, 16));
+
+            fpath = Path.GetDirectoryName(global_filepath);
+            FileStream inbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Read);
+            BinaryReader binreader = new BinaryReader(inbin);
+            FileStream outfram = new FileStream(fpath + "\\final.txt", FileMode.Create, FileAccess.Write);
+            StreamWriter framWriter = new StreamWriter(outfram);
+            binreader.ReadBytes(Convert.ToInt32(textBox1.Text, 16));
+            siz -= Convert.ToInt32(textBox1.Text, 16);
+            while (siz > x)
+            {
+                byte[] byt = binreader.ReadBytes(x);
+                siz -= x;
+                str = BitConverter.ToString(byt);
+                str = str.Replace("-", "");
+
+                str = textBox5.Text + str;
+                byte[] log = str2BytArry(str);
+                crc = calccrc16(log.Length, log);
+                crc1 = (byte)(crc & 0xFF);
+                crc2 = (byte)((crc >> 8) & 0xFF);
+                len0 = (byte)((x + 3) / 256);
+                len1 = (byte)((x + 3) % 256);
+                str = len0.ToString("X2") + len1.ToString("X2") + str + crc2.ToString("X2") + crc1.ToString("X2");
+                framWriter.WriteLine(str);
+            }
+            if (siz > 0)
+            {
+                byte[] byt = binreader.ReadBytes((int)siz);
+                str = BitConverter.ToString(byt);
+                str = str.Replace("-", "");
+                allcrc = allcrc + str;
+                str = textBox5.Text + str;
+                byte[] log = str2BytArry(str);
+                crc = calccrc16(log.Length, log);
+                str = str + crc.ToString("X4");
+                len0 = (byte)((siz + 3) / 256);
+                len1 = (byte)((siz + 3) % 256);
+                str = len0.ToString("X2") + len1.ToString("X2") + str;
+                framWriter.WriteLine(str);
+            }
+            siz = 0;
+            x = 0;
+            str = null;
+            framWriter.Close();
+            outfram.Close();
+            inbin.Close();
+            return 1;
+        }
+        //=================================================================
+        private byte[] str2BytArry(string fix)
+        {
+            if ((fix.Length % 2) != 0)
+                fix = "0" + fix;
+            return Enumerable.Range(0, fix.Length)
+                .Where(x => x % 2 == 0)
+                .Select(x => Convert.ToByte(fix.Substring(x, 2), 16)).ToArray();
+        }
+        
         //=================================================================
         bool create_FFbin()
         {
@@ -385,36 +518,7 @@ namespace FConverter
             }
             return bt;
         }
-        //=================================================================
-        byte write_txt_file()
-        {
-            string fpath, S1 = "";
-            int i = 0;
-
-            fpath = Path.GetDirectoryName(global_filepath);
-            FileStream outfram = new FileStream(fpath + "\\1.txt", FileMode.Append, FileAccess.Write);
-            StreamWriter finaltxt = new StreamWriter(outfram);
-            while (linelen[i] != 0)
-            {
-                for (int j = 0; j < (Int32)(linelen[i] - (Int32)difflen[i]); j++)
-                {
-                    if (linelen[i] == 0)
-                        break;
-                    S1 = S1 + linedata[i, j].ToString("X2");
-                }
-                if (linetype[i] != "S0" && linetype[i] != "S9")
-                {
-                    if (lineaddress[i] > (ulong)(Convert.ToInt32(textBox2.Text, 16)))
-                        break;
-                    if ((lineaddress[i] >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (lineaddress[i] < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))
-                        finaltxt.WriteLine(S1);
-                }
-                S1 = "";
-                i++;
-            }
-            finaltxt.Close();
-            return 0;
-        }
+        
         //=================================================================
         public static byte[] strfrm2bytearray(string hex)
         {
@@ -462,54 +566,41 @@ namespace FConverter
 
             return true;
         }
-        //=================================================================
-        byte creat_newbinfile()
-        {
-
-            string fpath;
-            byte[] free = { 0xFF };
-            ulong i = 0;
-
-            i = (ulong)(Convert.ToInt32(textBox1.Text, 16));
-            fpath = Path.GetDirectoryName(global_filepath);
-            FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Create, FileAccess.Write);
-            BinaryWriter binwriter = new BinaryWriter(outbin);
-            while (i < (ulong)(lastlineaddres + lastlinelen))
-            {
-                /*if (i > (ulong)(Convert.ToInt32(textBox2.Text, 16)))
-                    break;
-                if ((i >= (ulong)(Convert.ToInt32(textBox1.Text, 16)) && (i < (ulong)(Convert.ToInt32(textBox2.Text, 16)))))*/
-                binwriter.Write(free);
-                i++;
-            }
-            binwriter.Close();
-            return 0;
-        }
+        
         //=================================================================
         byte new_write_data2bin()
         {
             string fpath;
             UInt32 i = 0;
-
-            fpath = Path.GetDirectoryName(global_filepath);
-            FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Write);
-            BinaryWriter binwriter = new BinaryWriter(outbin);
-            while (i < lastlineaddres)
+            try
             {
-                for (UInt32 j = 0; j < (long)datalen[i]; j++)
+                fpath = Path.GetDirectoryName(global_filepath);
+                FileStream outbin = new FileStream(fpath + "\\1.bin", FileMode.Open, FileAccess.Write);
+                BinaryWriter binwriter = new BinaryWriter(outbin);
+                while (i < lastlineaddres)
                 {
-                    binwriter.Seek((int)(lineaddress[i]+j), SeekOrigin.Begin);
-                    binwriter.Write(linedata[i, j]);
+                    for (UInt32 j = 0; j < (long)datalen[i]; j++)
+                    {
+                        binwriter.Seek((int)(lineaddress[i] + j), SeekOrigin.Begin);
+                        binwriter.Write(linedata[i, j]);
+                    }
+                    if (lineaddress[i] == lastlineaddres)
+                        break;
+                    i++;
                 }
-                if (lineaddress[i] == lastlineaddres)
-                    break;
-                i++;
+                binwriter.Close();
+                return 1;
             }
-            binwriter.Close();
-            return 1;
-        }
+            catch (Exception e)
+            {
+                MessageBox.Show("new_write_data2bin fail!");
+                return 0;
+            }
+}
         //=================================================================
-        private UInt16 CalcCRC16(int Size, byte[] pData)
+        //=================================================================
+        //=================================================================
+        private UInt16 calccrc16(int Size, byte[] pData)
         {
             UInt16 CRCbuffer = 0;
             UInt16 ByteCounter = 0;
@@ -532,7 +623,7 @@ namespace FConverter
             return CRCbuffer;
         }
         //=================================================================
-        ulong CalcCRC32(int Size, byte[] pData)
+        ulong calccrc32(int Size, byte[] pData)
         {
             UInt16 i;
             byte BitCounter;
@@ -552,7 +643,7 @@ namespace FConverter
             return Checksum32;
         }
         //=================================================================
-        private uint Nccitt(byte[] array)
+        private uint nccitt(byte[] array)
         {
             ushort num7 = 0x8408;
             ushort num8 = 0xffff;
@@ -574,7 +665,68 @@ namespace FConverter
             }
             return (ushort)(num ^ 0xffff);
         }
+        //=================================================================
+        private uint ccittold(byte[] array)
+        {
+            uint num = 0xffff;
+            uint num2 = 0x1021; //0x8404;//
+            uint length = (uint)array.Length;
+            byte[] buffer = new byte[2];
+            this.reverseBits(array);
+            for (uint i = 0; i < length; i++)
+            {
+                for (uint j = 0; j < 8; j++)
+                {
+                    byte num5 = (byte)(7 - j);
+                    num5 = (byte)(array[i] >> num5);
+                    num5 = (byte)(num5 & 1);
+                    byte num6 = (byte)(num >> 15);
+                    num6 = (byte)(num6 & 1);
+                    num = num << 1;
+                    if ((num6 ^ num5) != 0)
+                    {
+                        num ^= num2;
+                    }
+                }
+            }
+            num &= 0xffff;
+            buffer[0] = (byte)(num & 0xff);
+            buffer[1] = (byte)((num >> 8) & 0xff);
+            this.reverseBits(buffer);
+            buffer[0] = (byte)(buffer[0] ^ 0xff);
+            buffer[1] = (byte)(buffer[1] ^ 0xff);
+            this.reverseBits(array);
+            uint num8 = (uint)((buffer[1] << 8) + buffer[0]);
+            return num8;
+        }
+        //=================================================================
+        private void reverseBits(byte[] array)
+        {
+            uint length = (uint)array.Length;
+            for (uint i = 0; i < length; i++)
+            {
+                byte num3 = 0;
+                byte num4 = 1;
+                for (byte j = 0; j < 8; j++)
+                {
+                    if ((array[i] & num4) != 0)
+                    {
+                        num3 = (byte)(num3 | ((byte)(((int)1) << (7 - j))));
+                    }
+                    num4 = (byte)(num4 << 1);
+                }
+                array[i] = num3;
+            }
+        }
+        //=================================================================
+        private byte calccs()
+        {
 
-        
+            return 0;
+        }
+        //=================================================================
+        //=================================================================
+        //=================================================================
+
     }
 }

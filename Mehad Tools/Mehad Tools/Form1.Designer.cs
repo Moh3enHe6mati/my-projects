@@ -318,7 +318,7 @@
             this.groupBox4.Controls.Add(this.buttonsctosim);
             this.groupBox4.Location = new System.Drawing.Point(6, 6);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(129, 302);
+            this.groupBox4.Size = new System.Drawing.Size(129, 72);
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Sim";
@@ -335,9 +335,9 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Location = new System.Drawing.Point(141, 163);
+            this.groupBox3.Location = new System.Drawing.Point(9, 84);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(423, 145);
+            this.groupBox3.Size = new System.Drawing.Size(555, 224);
             this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "none";
@@ -349,10 +349,10 @@
             this.groupBox2.Controls.Add(this.logtoout);
             this.groupBox2.Location = new System.Drawing.Point(141, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(423, 151);
+            this.groupBox2.Size = new System.Drawing.Size(423, 72);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Convert Log";
+            this.groupBox2.Text = "Log Converter";
             // 
             // canid
             // 
@@ -367,16 +367,16 @@
             // 
             this.tBoxcanid.Location = new System.Drawing.Point(64, 16);
             this.tBoxcanid.Name = "tBoxcanid";
-            this.tBoxcanid.Size = new System.Drawing.Size(335, 20);
+            this.tBoxcanid.Size = new System.Drawing.Size(353, 20);
             this.tBoxcanid.TabIndex = 1;
             // 
             // logtoout
             // 
-            this.logtoout.Location = new System.Drawing.Point(324, 122);
+            this.logtoout.Location = new System.Drawing.Point(342, 42);
             this.logtoout.Name = "logtoout";
             this.logtoout.Size = new System.Drawing.Size(75, 23);
             this.logtoout.TabIndex = 0;
-            this.logtoout.Text = "LOG";
+            this.logtoout.Text = "Go";
             this.logtoout.UseVisualStyleBackColor = true;
             this.logtoout.Click += new System.EventHandler(this.logtoout_Click);
             // 
