@@ -18,7 +18,6 @@ C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FCo
 C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.pdb
 C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\bin\Debug\FConverter.exe
 C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\bin\Debug\FConverter.pdb
-<<<<<<< Updated upstream
 C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.Form1.resources
 C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.Properties.Resources.resources
 C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.csproj.GenerateResource.Cache
@@ -29,9 +28,3 @@ C:\Users\m.heshmati\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug
 C:\Users\m.heshmati\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.Properties.Resources.resources
 C:\Users\m.heshmati\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.csproj.GenerateResource.Cache
 C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.csprojResolveAssemblyReference.cache
-=======
-C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.csprojResolveAssemblyReference.cache
-C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.Form1.resources
-C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.Properties.Resources.resources
-C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.csproj.GenerateResource.Cache
->>>>>>> Stashed changes
