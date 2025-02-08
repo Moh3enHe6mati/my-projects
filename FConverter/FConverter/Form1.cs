@@ -44,7 +44,7 @@ namespace FConverter
             lblshowresult.BackColor = Color.Yellow;
             lblshowresult.Text = "Show result";
             clear_allvalue();
-            string N = file_path();
+            string N = file_path("S19|*.s19|S28|*.s28");
             if (N != null && N != string.Empty)
             {
                 load_file(N);
@@ -68,7 +68,19 @@ namespace FConverter
         //=================================================================
         private void hexbtn1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("1");
+
+            string N = file_path("HEX|*.hex");
+            byte[] fileBytes = File.ReadAllBytes(N);
+            string result = Encoding.UTF8.GetString(fileBytes);
+            //string hexString = BitConverter.ToString(fileBytes).Replace("-", " ");
+            //string fileExtension = Path.GetExtension(N);
+
+            string directoryPath = Path.GetDirectoryName(N);
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(N);
+            string newPath = Path.Combine(directoryPath, fileNameWithoutExtension);
+            File.WriteAllText(newPath + ".txt", result);
+            
+
         }
         //=================================================================
         byte load_file(string S1)
@@ -369,7 +381,7 @@ namespace FConverter
             Calccrc.Enabled = true;
             lblshowresult.BackColor = Color.Yellow;
             lblshowresult.Text = "please wait...";*/
-            fpath = file_path();
+            fpath = file_path("S19|*.s19|S28|*.s28|HEX|*.hex");
             if (fpath != null && fpath != string.Empty)
             {
                 load_file(fpath);
@@ -536,14 +548,14 @@ namespace FConverter
                                 .ToArray();
         }//convert hex string to byte array 
         //=================================================================
-        string file_path()
+        string file_path(string extend)
         {
             btnGo.Cursor = Cursors.WaitCursor;
             btnGo.Enabled = false;
             string fileName = null;
             OpenFileDialog Openn = new OpenFileDialog();
             Openn.Title = "انتخاب فایل";
-            Openn.Filter = "S19|*.s19|S28|*.s28";
+            Openn.Filter = extend;
             if (Openn.ShowDialog() == DialogResult.OK)
             {
                 fileName = Openn.FileName.ToString();
