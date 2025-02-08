@@ -53,6 +53,7 @@
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.lblshowresult = new System.Windows.Forms.Label();
+            this.hexbtn1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -203,11 +204,12 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.hexbtn1);
             this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(668, 428);
+            this.tabPage2.Size = new System.Drawing.Size(668, 403);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "bin*hex";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -216,7 +218,7 @@
             // 
             this.groupBox2.Location = new System.Drawing.Point(6, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(325, 51);
+            this.groupBox2.Size = new System.Drawing.Size(362, 160);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
@@ -232,7 +234,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(337, 238);
+            this.tabPage3.Size = new System.Drawing.Size(668, 403);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "cs*crc";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -297,6 +299,16 @@
             this.lblshowresult.TabIndex = 3;
             this.lblshowresult.Text = "Show result";
             // 
+            // hexbtn1
+            // 
+            this.hexbtn1.Location = new System.Drawing.Point(342, 345);
+            this.hexbtn1.Name = "hexbtn1";
+            this.hexbtn1.Size = new System.Drawing.Size(75, 23);
+            this.hexbtn1.TabIndex = 1;
+            this.hexbtn1.Text = "Go";
+            this.hexbtn1.UseVisualStyleBackColor = true;
+            this.hexbtn1.Click += new System.EventHandler(this.hexbtn1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -348,6 +360,7 @@
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Button hexbtn1;
     }
 }
 
