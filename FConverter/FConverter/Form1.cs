@@ -28,6 +28,7 @@ namespace FConverter
         UInt32 lastlineaddres = 0;
         ulong linecnt = 0;
         int lastlinelen = 0;
+        string globalterminal = null;
 
         public Form1()
         {
@@ -66,21 +67,12 @@ namespace FConverter
 
         }
         //=================================================================
-        private void hexbtn1_Click(object sender, EventArgs e)
+        
+        //=================================================================
+        private void btnterminal_Click(object sender, EventArgs e)
         {
-
-            string N = file_path("HEX|*.hex");
-            byte[] fileBytes = File.ReadAllBytes(N);
-            string result = Encoding.UTF8.GetString(fileBytes);
-            //string hexString = BitConverter.ToString(fileBytes).Replace("-", " ");
-            //string fileExtension = Path.GetExtension(N);
-
-            string directoryPath = Path.GetDirectoryName(N);
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(N);
-            string newPath = Path.Combine(directoryPath, fileNameWithoutExtension);
-            File.WriteAllText(newPath + ".txt", result);
-            
-
+            textBox9.Clear();
+            globalterminal = null;
         }
         //=================================================================
         byte load_file(string S1)
@@ -478,7 +470,6 @@ namespace FConverter
                 .Where(x => x % 2 == 0)
                 .Select(x => Convert.ToByte(fix.Substring(x, 2), 16)).ToArray();
         }
-        
         //=================================================================
         bool create_FFbin()
         {
@@ -535,7 +526,6 @@ namespace FConverter
             }
             return bt;
         }
-        
         //=================================================================
         public static byte[] strfrm2bytearray(string hex)
         {
@@ -547,27 +537,6 @@ namespace FConverter
                                 .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                                 .ToArray();
         }//convert hex string to byte array 
-        //=================================================================
-        string file_path(string extend)
-        {
-            btnGo.Cursor = Cursors.WaitCursor;
-            btnGo.Enabled = false;
-            string fileName = null;
-            OpenFileDialog Openn = new OpenFileDialog();
-            Openn.Title = "انتخاب فایل";
-            Openn.Filter = extend;
-            if (Openn.ShowDialog() == DialogResult.OK)
-            {
-                fileName = Openn.FileName.ToString();
-                //ecomux(fileName);
-            }
-            btnGo.Cursor = Cursors.Default;
-            btnGo.Enabled = true;
-            global_filepath = fileName;
-            return fileName;
-        }
-        //=================================================================
-
         //=================================================================
         bool clear_allvalue()
         {
@@ -583,7 +552,6 @@ namespace FConverter
 
             return true;
         }
-        
         //=================================================================
         byte new_write_data2bin()
         {
@@ -615,7 +583,451 @@ namespace FConverter
             }
 }
         //=================================================================
+        
+
+
+
         //=================================================================
+        // INPUT S19 FILE =================================================
+        //=================================================================
+        //=================================================================
+        //=================================================================
+
+        //=================================================================
+        // INPUT S28 FILE =================================================
+        //=================================================================
+        //=================================================================
+        //=================================================================
+
+        //=================================================================
+        // INPUT S37 FILE =================================================
+        //=================================================================
+        //=================================================================
+        //=================================================================
+
+
+
+        //=================================================================
+        // INPUT HEX FILE =================================================
+        //=================================================================
+        private void hexbtn1_Click(object sender, EventArgs e)
+        {
+            UInt32 lastadd = 0;
+            List<uint> addlin = new List<uint>();
+            string dataline = null;
+            int txtnamcnt = 0, i = 0;
+            string terminal = null;
+            /*string N = file_path("HEX|*.hex");
+            byte[] fileBytes = File.ReadAllBytes(N);
+            string result = Encoding.UTF8.GetString(fileBytes);
+            //string hexString = BitConverter.ToString(fileBytes).Replace("-", " ");
+            //string fileExtension = Path.GetExtension(N);
+
+            string directoryPath = Path.GetDirectoryName(N);
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(N);
+            string newPath = Path.Combine(directoryPath, fileNameWithoutExtension);
+            File.WriteAllText(newPath + ".txt", result);
+            */
+
+            string hexfilepath = file_path("HEX|*.hex");
+            
+
+            read_hex_file(hexfilepath);
+            //print_add_terminal(hexfilepath);
+            hexfile_data(hexfilepath);
+            data_block_len(hexfilepath);
+            integrated_hexdata(hexfilepath);
+            integrated_hexfile(hexfilepath);
+            //delete_allfiles(hexfilepath);
+
+
+
+            /*string directoryPath = Path.GetDirectoryName(hexfilepath);
+            using (StreamReader reader = new StreamReader(hexfilepath))
+            using (StreamWriter writer = new StreamWriter(directoryPath + "\\file2.txt"))
+            {
+                string line;
+                string addline = "";
+                while ((line = reader.ReadLine()) != null)
+                {
+                    line = line.Replace(":", "");
+                    string lenline = line.Substring(0, 2);
+                    string ttline = line.Substring(6, 2);
+                    if (ttline == "00")
+                        addline = line.Substring(2, 4);
+                    else if (ttline == "04")
+                        addline = line.Substring(8, 4);
+                    addlin.Add(Convert.ToUInt32(addline, 16));
+                    if (ttline == "00")
+                    {
+                        dataline = dataline + line.Substring(8, (line.Length - 10));
+                        //writer.WriteLine(dataline);
+                    }
+                    else if (ttline == "01")
+                    {
+                        writer.WriteLine(dataline);
+                        terminal = terminal + "0x" + calccs(dataline).ToString("X8") + "\r\n" + line + "\r\n";
+                        //textBox9.Text = terminal;
+                        this.Refresh();
+                        dataline = null;
+                    }
+                    else if (ttline == "04")
+                    {
+
+                        if (i > 1 && addlin[i - 1] == 0xFFF0)
+                        {
+                            if (lastadd == addlin[i] - 1)
+                            {
+                                //writer.WriteLine(dataline);
+                                //dataline = null;
+                            }
+                            else
+                            {
+                                writer.WriteLine(dataline + "");
+                                terminal = terminal + "0x" + calccs(dataline).ToString("X8") + "\r\n" + line + "\r\n";
+                                //textBox9.Text = terminal;
+                                this.Refresh();
+                                dataline = null;
+                            }
+
+                        }
+                        else
+                        {
+                            writer.WriteLine(dataline);
+                            terminal = terminal + "0x" + calccs(dataline).ToString("X8") + "\r\n" + line + "\r\n";
+                            //textBox9.Text = terminal;
+                            this.Refresh();
+                            dataline = null;
+                        }
+                        lastadd = Convert.ToUInt32(line.Substring(8, 4), 16);
+                    }
+                    else if (ttline == "05")
+                    {
+
+                    }
+                    i++;
+                }
+            }*/
+
+        }
+
+
+
+
+        private void read_hex_file(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                byte[] fileBytes = File.ReadAllBytes(hexpath);
+                string hexdata = Encoding.UTF8.GetString(fileBytes);
+
+                string directoryPath = Path.GetDirectoryName(hexpath);
+                hexdata = hexdata.Replace(":", "");
+                File.WriteAllText(directoryPath + "\\file1.txt", hexdata);
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "read hex file done";
+            }
+            catch (Exception e)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "read hex file error";
+            }
+        }
+        private void hexfile_data(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string line = "";
+                string hexdata = "", hexdata2="";
+                bool enterflag = false;
+                string directoryPath = Path.GetDirectoryName(hexpath);
+
+                StreamReader reader = new StreamReader(hexpath);
+                while ((line = reader.ReadLine()) != null)
+                {
+                    line = line.Replace(":", "");
+                    byte ttline = byte.Parse(line.Substring(6, 2));
+                    if (ttline == 0)
+                    {
+                        hexdata = hexdata + line.Substring(8, (line.Length - 10));
+                        enterflag = true;
+                    }
+                    else if (ttline == 4 && enterflag == true)
+                    {
+                        hexdata2 = hexdata2 + hexdata + "\r\n";
+                        hexdata = null;
+                    }
+                    else if (ttline == 1)
+                    {
+                        hexdata2 = hexdata2 + hexdata;
+                        File.WriteAllText(directoryPath + "\\file2.txt", hexdata2);
+                    }
+                }
+                reader.Dispose();
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "write data in file done";
+                this.Refresh();
+            }
+            catch (Exception e)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "write data in file error";
+            }
+        }
+        private void data_block_len(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string line = "";
+                string calclen = "";
+                string directoryPath = Path.GetDirectoryName(hexpath);
+                StreamReader reader = new StreamReader(directoryPath + "\\file2.txt");
+                while ((line = reader.ReadLine()) != null)
+                {
+                    calclen = calclen + "0x" + (line.Length / 2).ToString("X2") + "\r\n" + line + "\r\n";
+                }
+                File.WriteAllText(directoryPath + "\\file3.txt", calclen);
+                reader.Dispose();
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "write data block len in file done";
+                this.Refresh();
+            }
+            catch (Exception e)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "write data block len in file error";
+            }
+        }
+        private void integrated_hexdata(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string line = "";
+                string line_1 = "";
+                string hexdata = "", hexdata2 = "";
+
+                string directoryPath = Path.GetDirectoryName(hexpath);
+                StreamReader reader = new StreamReader(hexpath);
+                while ((line = reader.ReadLine()) != null)
+                {
+                    line = line.Replace(":", "");
+                    byte ttline = byte.Parse(line.Substring(6, 2));
+                    if (ttline == 0)
+                    {
+                        hexdata = hexdata + line.Substring(8, (line.Length - 10));
+                        line_1 = line;
+                    }
+                    else if (ttline == 4)
+                    {
+                        if(hexdata != "")
+                            hexdata2 = hexdata2 + hexdata + "\r\n::" + line_1 + "\r\n::" + line + "\r\n";
+                        else
+                            hexdata2 = "::" + line + "\r\n";
+                        hexdata = null;
+                    }
+                    else if (ttline == 1)
+                    {
+                        hexdata2 = hexdata2 + hexdata + "\r\n::" + line_1 + "\r\n::" + line + "\r\n";
+                        File.WriteAllText(directoryPath + "\\file4.txt", hexdata2);
+                    }
+                }
+                reader.Dispose();
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "write integrated hex data in file done";
+                this.Refresh();
+            }
+            catch (Exception e)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "write integrated hex data in file error";
+            }
+        }
+        private void integrated_hexfile(string hexpath)
+        {
+            try
+            {
+                string line = "";
+                string lineid = "";
+                string hexdata = "", hexdata2 = "";
+                UInt32 Hadd = 0, Ladd = 0;
+                string calclen = "";
+
+                string directoryPath = Path.GetDirectoryName(hexpath);
+                StreamReader reader = new StreamReader(directoryPath + "\\file4.txt");
+                while ((line = reader.ReadLine()) != null)
+                {
+                    //line = line.Replace(":", "");
+                    byte ttline = byte.Parse(line.Substring(8, 2));
+                    lineid = line.Substring(0, 2);
+                    if (lineid == "::")
+                    {
+                        if(ttline == 1)
+                        {
+                            hexdata2 = hexdata2 + hexdata;
+                            File.WriteAllText(directoryPath + "\\file5.txt", hexdata2);
+                            break;
+                        }
+                        if (Hadd + 1 == Convert.ToUInt32(line.Substring(10, 4), 16) && Ladd == 0xFFF0)
+                        {
+                            hexdata2 = hexdata2 + hexdata;
+                        }
+                        else if(hexdata2 != "")
+                        {
+                            hexdata2 = hexdata2 +  hexdata + "\r\n";
+                        }
+                        Hadd = Convert.ToUInt32(line.Substring(10, 4),16);
+                        hexdata = reader.ReadLine();
+                        line = reader.ReadLine();
+                        Ladd = Convert.ToUInt32(line.Substring(4, 4), 16);
+                    }
+                }
+                reader.Dispose();
+                StreamReader reader5 = new StreamReader(directoryPath + "\\file5.txt");
+                while ((line = reader5.ReadLine()) != null)
+                {
+                    calclen = calclen + "0x" + (line.Length / 2).ToString("X2") + "\r\n" + line + "\r\n";
+                }
+                reader5.Dispose();
+                File.Delete(directoryPath + "\\file5.txt");
+                File.WriteAllText(directoryPath + "\\file5.txt", calclen);
+
+
+
+
+
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "write integrated hex file done";
+                this.Refresh();
+            }
+            catch (Exception e)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "write integrated hex file error";
+            }
+        }
+
+
+
+        private void print_add_terminal(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            string terminal = null;
+            try
+            {
+                StreamReader reader = new StreamReader(hexpath);
+                string line;
+                string beforettline = null;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    line = line.Replace(":", "");
+                    string ttline = line.Substring(6, 2);
+                    if (ttline == "04" || ttline == "01" || ttline == "05")
+                    {
+                        terminal = terminal + beforettline + "\r\n\r\n" + line + "\r\n";
+                    }
+                    beforettline = null;
+                    if (ttline == "00")
+                        beforettline = line;
+                }
+                textBox9.Text = terminal;
+                reader.Dispose();
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "print in terminal done";
+                this.Refresh();
+            }
+            catch (Exception e)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "print in terminal error";
+            }
+        }
+        private void delete_allfiles(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string directoryPath = Path.GetDirectoryName(hexpath);
+                File.Delete(directoryPath + "\\file1.txt");
+                File.Delete(directoryPath + "\\file2.txt");
+                File.Delete(directoryPath + "\\file3.txt");
+
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "delete all files done";
+                this.Refresh();
+            }
+            catch (Exception e)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "delete all files error";
+            }
+        }
+        //=================================================================
+        //=================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //=================================================================
+        // GENERAL FUNCTION ===============================================
+        //=================================================================
+        string file_path(string extend)
+        {
+            btnGo.Cursor = Cursors.WaitCursor;
+            btnGo.Enabled = false;
+            string fileName = null;
+            OpenFileDialog Openn = new OpenFileDialog();
+            Openn.Title = "انتخاب فایل";
+            Openn.Filter = extend;
+            if (Openn.ShowDialog() == DialogResult.OK)
+            {
+                fileName = Openn.FileName.ToString();
+                //ecomux(fileName);
+            }
+            btnGo.Cursor = Cursors.Default;
+            btnGo.Enabled = true;
+            global_filepath = fileName;
+            return fileName;
+        }
+        //=================================================================
+        //=================================================================
+
+        //=================================================================
+        // CALC CRC =======================================================
+        //=================================================================
+        private uint Crc32(byte[] array)
+        {
+            uint crc = 0xFFFFFFFF;
+            uint i;
+            for (i = 0; i < array.Length; i++)
+            {
+                uint bite = array[i];
+                crc = crc ^ bite;
+                int j;
+                for (j = 7; j >= 0; j--)
+                {
+                    long mask = -(crc & 1);
+                    crc = (crc >> 1) ^ (0xEDB88320 & ((UInt32)mask));
+                }
+            }
+            return ~crc;
+        }
         //=================================================================
         private UInt16 calccrc16(int Size, byte[] pData)
         {
@@ -736,13 +1148,49 @@ namespace FConverter
             }
         }
         //=================================================================
-        private byte calccs()
+        static byte CalculateCRC8(byte[] data)
         {
+            byte crc = 0x00;
+            byte polynomial = 0x07;
 
-            return 0;
+            foreach (byte b in data)
+            {
+                crc ^= b;
+                for (int i = 0; i < 8; i++)
+                {
+                    if ((crc & 0x80) != 0)
+                    {
+                        crc = (byte)((crc << 1) ^ polynomial);
+                    }
+                    else
+                    {
+                        crc <<= 1;
+                    }
+                }
+            }
+
+            return crc;
         }
+        //=================================================================
+        private UInt32 calccs(string s1)
+        {
+            uint sum = 0;
 
-        
+            if (s1 != null)
+            {
+                byte[] byteArray = new byte[s1.Length / 2];
+                for (int k = 0; k < byteArray.Length; k++)
+                {
+                    string hexChar = s1.Substring(k * 2, 2);
+                    byteArray[k] = Convert.ToByte(hexChar, 16);
+                }
+                for (int p = 0; p < byteArray.Length; p++)
+                    sum = (uint)(sum + byteArray[p]);
+                //MessageBox.Show(sum.ToString("X2"));
+            }
+
+            return sum;
+        }
         //=================================================================
         //=================================================================
 

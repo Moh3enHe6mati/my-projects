@@ -44,7 +44,12 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.hexbtn1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.textBox10 = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.lbleaddress = new System.Windows.Forms.Label();
             this.lblsaddress = new System.Windows.Forms.Label();
@@ -53,17 +58,21 @@
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.lblshowresult = new System.Windows.Forms.Label();
-            this.hexbtn1 = new System.Windows.Forms.Button();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnterminal = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGo
             // 
-            this.btnGo.Location = new System.Drawing.Point(293, 374);
+            this.btnGo.Location = new System.Drawing.Point(28, 352);
             this.btnGo.Name = "btnGo";
             this.btnGo.Size = new System.Drawing.Size(75, 23);
             this.btnGo.TabIndex = 0;
@@ -87,7 +96,7 @@
             this.groupBox1.Controls.Add(this.textBox3);
             this.groupBox1.Controls.Add(this.textBox2);
             this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Location = new System.Drawing.Point(468, 6);
+            this.groupBox1.Location = new System.Drawing.Point(46, 6);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(194, 160);
             this.groupBox1.TabIndex = 1;
@@ -187,7 +196,7 @@
             this.tabControl1.Location = new System.Drawing.Point(4, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(676, 429);
+            this.tabControl1.Size = new System.Drawing.Size(350, 429);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -197,7 +206,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(668, 403);
+            this.tabPage1.Size = new System.Drawing.Size(342, 403);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "s19*s28";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -209,19 +218,65 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(668, 403);
+            this.tabPage2.Size = new System.Drawing.Size(342, 403);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "bin*hex";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // hexbtn1
+            // 
+            this.hexbtn1.Location = new System.Drawing.Point(35, 360);
+            this.hexbtn1.Name = "hexbtn1";
+            this.hexbtn1.Size = new System.Drawing.Size(75, 23);
+            this.hexbtn1.TabIndex = 1;
+            this.hexbtn1.Text = "Go";
+            this.hexbtn1.UseVisualStyleBackColor = true;
+            this.hexbtn1.Click += new System.EventHandler(this.hexbtn1_Click);
+            // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Controls.Add(this.textBox11);
+            this.groupBox2.Controls.Add(this.textBox10);
             this.groupBox2.Location = new System.Drawing.Point(6, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(362, 160);
+            this.groupBox2.Size = new System.Drawing.Size(180, 222);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 58);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "label2";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "frame len";
+            // 
+            // textBox11
+            // 
+            this.textBox11.Location = new System.Drawing.Point(73, 55);
+            this.textBox11.Name = "textBox11";
+            this.textBox11.Size = new System.Drawing.Size(91, 20);
+            this.textBox11.TabIndex = 1;
+            // 
+            // textBox10
+            // 
+            this.textBox10.Location = new System.Drawing.Point(73, 29);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.Size = new System.Drawing.Size(91, 20);
+            this.textBox10.TabIndex = 0;
             // 
             // tabPage3
             // 
@@ -234,7 +289,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(668, 403);
+            this.tabPage3.Size = new System.Drawing.Size(342, 403);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "cs*crc";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -299,35 +354,61 @@
             this.lblshowresult.TabIndex = 3;
             this.lblshowresult.Text = "Show result";
             // 
-            // hexbtn1
+            // textBox9
             // 
-            this.hexbtn1.Location = new System.Drawing.Point(342, 345);
-            this.hexbtn1.Name = "hexbtn1";
-            this.hexbtn1.Size = new System.Drawing.Size(75, 23);
-            this.hexbtn1.TabIndex = 1;
-            this.hexbtn1.Text = "Go";
-            this.hexbtn1.UseVisualStyleBackColor = true;
-            this.hexbtn1.Click += new System.EventHandler(this.hexbtn1_Click);
+            this.textBox9.Location = new System.Drawing.Point(6, 19);
+            this.textBox9.Multiline = true;
+            this.textBox9.Name = "textBox9";
+            this.textBox9.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox9.Size = new System.Drawing.Size(300, 359);
+            this.textBox9.TabIndex = 4;
+            this.textBox9.WordWrap = false;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnterminal);
+            this.groupBox3.Controls.Add(this.textBox9);
+            this.groupBox3.Location = new System.Drawing.Point(360, 25);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(312, 427);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "terminal";
+            // 
+            // btnterminal
+            // 
+            this.btnterminal.Location = new System.Drawing.Point(127, 398);
+            this.btnterminal.Name = "btnterminal";
+            this.btnterminal.Size = new System.Drawing.Size(75, 23);
+            this.btnterminal.TabIndex = 5;
+            this.btnterminal.Text = "Clear";
+            this.btnterminal.UseVisualStyleBackColor = true;
+            this.btnterminal.Click += new System.EventHandler(this.btnterminal_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 461);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.lblshowresult);
             this.Controls.Add(this.tabControl1);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(700, 500);
             this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "Form1";
-            this.Text = "FConverter.v.1.01";
+            this.Text = "FConverter.v.1.04";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -361,6 +442,13 @@
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Button hexbtn1;
+        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnterminal;
+        private System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.TextBox textBox10;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
 
