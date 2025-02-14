@@ -392,8 +392,8 @@ namespace FConverter
                         Refresh();*/
                 }
                 sout = sout + "cs   :  " + cs.ToString("X2") + "\n\n";
-                sout = sout + "calccrc16    :   " + calccrc16(areab.Length, areab).ToString("X2") + "\n\n";
-                sout = sout + "calccrc32    :   " + calccrc32(areab.Length, areab).ToString("X2") + "\n\n";
+                sout = sout + "calccrc16    :   " + calccrc16(areab).ToString("X2") + "\n\n";
+                sout = sout + "calccrc32    :   " + calccrc32(areab).ToString("X2") + "\n\n";
                 sout = sout + "nccitt   :   " + nccitt(areab).ToString("X2") + "\n\n";
                 lblshowresult.BackColor = Color.LightGreen;
                 lblshowresult.Text = "Success";
@@ -430,7 +430,7 @@ namespace FConverter
 
                 str = textBox5.Text + str;
                 byte[] log = str2BytArry(str);
-                crc = calccrc16(log.Length, log);
+                crc = calccrc16(log);
                 crc1 = (byte)(crc & 0xFF);
                 crc2 = (byte)((crc >> 8) & 0xFF);
                 len0 = (byte)((x + 3) / 256);
@@ -446,7 +446,7 @@ namespace FConverter
                 allcrc = allcrc + str;
                 str = textBox5.Text + str;
                 byte[] log = str2BytArry(str);
-                crc = calccrc16(log.Length, log);
+                crc = calccrc16(log);
                 str = str + crc.ToString("X4");
                 len0 = (byte)((siz + 3) / 256);
                 len1 = (byte)((siz + 3) % 256);
@@ -612,103 +612,18 @@ namespace FConverter
         //=================================================================
         private void hexbtn1_Click(object sender, EventArgs e)
         {
-            UInt32 lastadd = 0;
-            List<uint> addlin = new List<uint>();
-            string dataline = null;
-            int txtnamcnt = 0, i = 0;
-            string terminal = null;
-            /*string N = file_path("HEX|*.hex");
-            byte[] fileBytes = File.ReadAllBytes(N);
-            string result = Encoding.UTF8.GetString(fileBytes);
-            //string hexString = BitConverter.ToString(fileBytes).Replace("-", " ");
-            //string fileExtension = Path.GetExtension(N);
-
-            string directoryPath = Path.GetDirectoryName(N);
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(N);
-            string newPath = Path.Combine(directoryPath, fileNameWithoutExtension);
-            File.WriteAllText(newPath + ".txt", result);
-            */
-
-            string hexfilepath = file_path("HEX|*.hex");
             
-
+            string hexfilepath = file_path("HEX|*.hex");
             read_hex_file(hexfilepath);
             //print_add_terminal(hexfilepath);
             hexfile_data(hexfilepath);
             data_block_len(hexfilepath);
             integrated_hexdata(hexfilepath);
             integrated_hexfile(hexfilepath);
+            if(comboBox1.SelectedItem != null)
+                calc_allcrc(hexfilepath);
             //delete_allfiles(hexfilepath);
-
-
-
-            /*string directoryPath = Path.GetDirectoryName(hexfilepath);
-            using (StreamReader reader = new StreamReader(hexfilepath))
-            using (StreamWriter writer = new StreamWriter(directoryPath + "\\file2.txt"))
-            {
-                string line;
-                string addline = "";
-                while ((line = reader.ReadLine()) != null)
-                {
-                    line = line.Replace(":", "");
-                    string lenline = line.Substring(0, 2);
-                    string ttline = line.Substring(6, 2);
-                    if (ttline == "00")
-                        addline = line.Substring(2, 4);
-                    else if (ttline == "04")
-                        addline = line.Substring(8, 4);
-                    addlin.Add(Convert.ToUInt32(addline, 16));
-                    if (ttline == "00")
-                    {
-                        dataline = dataline + line.Substring(8, (line.Length - 10));
-                        //writer.WriteLine(dataline);
-                    }
-                    else if (ttline == "01")
-                    {
-                        writer.WriteLine(dataline);
-                        terminal = terminal + "0x" + calccs(dataline).ToString("X8") + "\r\n" + line + "\r\n";
-                        //textBox9.Text = terminal;
-                        this.Refresh();
-                        dataline = null;
-                    }
-                    else if (ttline == "04")
-                    {
-
-                        if (i > 1 && addlin[i - 1] == 0xFFF0)
-                        {
-                            if (lastadd == addlin[i] - 1)
-                            {
-                                //writer.WriteLine(dataline);
-                                //dataline = null;
-                            }
-                            else
-                            {
-                                writer.WriteLine(dataline + "");
-                                terminal = terminal + "0x" + calccs(dataline).ToString("X8") + "\r\n" + line + "\r\n";
-                                //textBox9.Text = terminal;
-                                this.Refresh();
-                                dataline = null;
-                            }
-
-                        }
-                        else
-                        {
-                            writer.WriteLine(dataline);
-                            terminal = terminal + "0x" + calccs(dataline).ToString("X8") + "\r\n" + line + "\r\n";
-                            //textBox9.Text = terminal;
-                            this.Refresh();
-                            dataline = null;
-                        }
-                        lastadd = Convert.ToUInt32(line.Substring(8, 4), 16);
-                    }
-                    else if (ttline == "05")
-                    {
-
-                    }
-                    i++;
-                }
-            }*/
-
+            
         }
 
 
@@ -911,6 +826,60 @@ namespace FConverter
         }
 
 
+        private void calc_allcrc(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string line = "";
+                UInt32 crc = 0;
+
+                string directoryPath = Path.GetDirectoryName(hexpath);
+                line = File.ReadAllText(directoryPath + "\\file2.txt");
+                line = line.Replace("\r\n","");
+                byte[] bytes = new byte[line.Length / 2];
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    bytes[i] = Convert.ToByte(line.Substring(i * 2, 2), 16);
+                }
+                switch (comboBox1.SelectedIndex)
+                {
+                    case 1://CHECKSUM
+                        crc = calccs(bytes);
+                        break;
+                    case 2://CRC8
+                        crc = CalculateCRC8(bytes);
+                        break;
+                    case 3://CRC16
+                        crc = calccrc16(bytes);
+                        break;
+                    case 4://CRC32(1)
+                        crc = Crc32(bytes);
+                        break;
+                    case 5://CRC32(2)
+                        crc = calccrc32(bytes);
+                        break;
+                    case 6://NCCITT
+                        crc = nccitt(bytes);
+                        break;
+                    case 7://CCITT
+                        crc = ccitt(bytes);
+                        break;
+                    default:
+                        break;
+                }
+                File.WriteAllText(directoryPath + "\\file6.txt", "0x" + crc.ToString("X8") + "\r\n" + line);
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "calculate all data crc done";
+                this.Refresh();
+            }
+            catch (Exception e)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "calculate all data crc error";
+            }
+        }
+
 
         private void print_add_terminal(string hexpath)
         {
@@ -971,18 +940,7 @@ namespace FConverter
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+            
 
         //=================================================================
         // GENERAL FUNCTION ===============================================
@@ -1029,7 +987,7 @@ namespace FConverter
             return ~crc;
         }
         //=================================================================
-        private UInt16 calccrc16(int Size, byte[] pData)
+        private UInt16 calccrc16(byte[] pData)
         {
             UInt16 CRCbuffer = 0;
             UInt16 ByteCounter = 0;
@@ -1037,7 +995,7 @@ namespace FConverter
 
             CRCbuffer = 0xFFFF;
 
-            for (ByteCounter = 0; ByteCounter < Size; ByteCounter++)
+            for (ByteCounter = 0; ByteCounter < pData.Length; ByteCounter++)
             {
                 for (BitCounter = 0; BitCounter < 8; BitCounter++)
                 {
@@ -1052,13 +1010,14 @@ namespace FConverter
             return CRCbuffer;
         }
         //=================================================================
-        ulong calccrc32(int Size, byte[] pData)
+        UInt32 calccrc32( byte[] pData)
         {
             UInt16 i;
             byte BitCounter;
-            ulong Checksum32 = 0xFFFFFFFF;
+            UInt32 Checksum32 = 0xFFFFFFFF;
 
-            for (i = 0; i < Size; i++)
+
+            for (i = 0; i < pData.Length; i++)
             {
                 for (BitCounter = 0; BitCounter < 8; BitCounter++)
                 {
@@ -1095,7 +1054,7 @@ namespace FConverter
             return (ushort)(num ^ 0xffff);
         }
         //=================================================================
-        private uint ccittold(byte[] array)
+        private uint ccitt(byte[] array)
         {
             uint num = 0xffff;
             uint num2 = 0x1021; //0x8404;//
@@ -1129,31 +1088,12 @@ namespace FConverter
             return num8;
         }
         //=================================================================
-        private void reverseBits(byte[] array)
-        {
-            uint length = (uint)array.Length;
-            for (uint i = 0; i < length; i++)
-            {
-                byte num3 = 0;
-                byte num4 = 1;
-                for (byte j = 0; j < 8; j++)
-                {
-                    if ((array[i] & num4) != 0)
-                    {
-                        num3 = (byte)(num3 | ((byte)(((int)1) << (7 - j))));
-                    }
-                    num4 = (byte)(num4 << 1);
-                }
-                array[i] = num3;
-            }
-        }
-        //=================================================================
-        static byte CalculateCRC8(byte[] data)
+        static byte CalculateCRC8(byte[] array)
         {
             byte crc = 0x00;
             byte polynomial = 0x07;
 
-            foreach (byte b in data)
+            foreach (byte b in array)
             {
                 crc ^= b;
                 for (int i = 0; i < 8; i++)
@@ -1172,27 +1112,39 @@ namespace FConverter
             return crc;
         }
         //=================================================================
-        private UInt32 calccs(string s1)
+        private UInt32 calccs(byte[] array)
         {
             uint sum = 0;
 
-            if (s1 != null)
+            foreach (byte value in array)
             {
-                byte[] byteArray = new byte[s1.Length / 2];
-                for (int k = 0; k < byteArray.Length; k++)
-                {
-                    string hexChar = s1.Substring(k * 2, 2);
-                    byteArray[k] = Convert.ToByte(hexChar, 16);
-                }
-                for (int p = 0; p < byteArray.Length; p++)
-                    sum = (uint)(sum + byteArray[p]);
-                //MessageBox.Show(sum.ToString("X2"));
+                sum += value;
             }
-
             return sum;
         }
         //=================================================================
         //=================================================================
+        //=================================================================
+        private void reverseBits(byte[] array)
+        {
+            uint length = (uint)array.Length;
+            for (uint i = 0; i < length; i++)
+            {
+                byte num3 = 0;
+                byte num4 = 1;
+                for (byte j = 0; j < 8; j++)
+                {
+                    if ((array[i] & num4) != 0)
+                    {
+                        num3 = (byte)(num3 | ((byte)(((int)1) << (7 - j))));
+                    }
+                    num4 = (byte)(num4 << 1);
+                }
+                array[i] = num3;
+            }
+        }
+
+
 
     }
 }

@@ -61,6 +61,8 @@
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnterminal = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -235,13 +237,15 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.textBox11);
             this.groupBox2.Controls.Add(this.textBox10);
             this.groupBox2.Location = new System.Drawing.Point(6, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(180, 222);
+            this.groupBox2.Size = new System.Drawing.Size(330, 222);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
@@ -268,14 +272,14 @@
             // 
             this.textBox11.Location = new System.Drawing.Point(73, 55);
             this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(91, 20);
+            this.textBox11.Size = new System.Drawing.Size(121, 20);
             this.textBox11.TabIndex = 1;
             // 
             // textBox10
             // 
             this.textBox10.Location = new System.Drawing.Point(73, 29);
             this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(91, 20);
+            this.textBox10.Size = new System.Drawing.Size(121, 20);
             this.textBox10.TabIndex = 0;
             // 
             // tabPage3
@@ -385,6 +389,32 @@
             this.btnterminal.UseVisualStyleBackColor = true;
             this.btnterminal.Click += new System.EventHandler(this.btnterminal_Click);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "NONE",
+            "CHECKSUM",
+            "CRC8",
+            "CRC16",
+            "CRC32(1)",
+            "CRC32(2)",
+            "NCCITT",
+            "CCITT"});
+            this.comboBox1.Location = new System.Drawing.Point(73, 81);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 84);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(45, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "crc type";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -397,7 +427,7 @@
             this.MaximumSize = new System.Drawing.Size(700, 500);
             this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "Form1";
-            this.Text = "FConverter.v.1.04";
+            this.Text = "FConverter.v.1.05";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -449,6 +479,8 @@
         private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label3;
     }
 }
 
