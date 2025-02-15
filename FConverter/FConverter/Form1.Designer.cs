@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnGo = new System.Windows.Forms.Button();
+            this.s19btn1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
@@ -43,9 +43,16 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.hexbtn1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox13 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox11 = new System.Windows.Forms.TextBox();
@@ -61,8 +68,6 @@
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnterminal = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -72,15 +77,15 @@
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnGo
+            // s19btn1
             // 
-            this.btnGo.Location = new System.Drawing.Point(28, 352);
-            this.btnGo.Name = "btnGo";
-            this.btnGo.Size = new System.Drawing.Size(75, 23);
-            this.btnGo.TabIndex = 0;
-            this.btnGo.Text = "Go";
-            this.btnGo.UseVisualStyleBackColor = true;
-            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
+            this.s19btn1.Location = new System.Drawing.Point(28, 352);
+            this.s19btn1.Name = "s19btn1";
+            this.s19btn1.Size = new System.Drawing.Size(75, 23);
+            this.s19btn1.TabIndex = 0;
+            this.s19btn1.Text = "Go";
+            this.s19btn1.UseVisualStyleBackColor = true;
+            this.s19btn1.Click += new System.EventHandler(this.s19btn1_Click);
             // 
             // openFileDialog1
             // 
@@ -98,12 +103,12 @@
             this.groupBox1.Controls.Add(this.textBox3);
             this.groupBox1.Controls.Add(this.textBox2);
             this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Location = new System.Drawing.Point(46, 6);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(194, 160);
+            this.groupBox1.Size = new System.Drawing.Size(234, 206);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "s19";
+            this.groupBox1.Text = "Out format";
             // 
             // textBox5
             // 
@@ -193,6 +198,7 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(4, 3);
@@ -204,14 +210,24 @@
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Controls.Add(this.btnGo);
+            this.tabPage1.Controls.Add(this.s19btn1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(342, 403);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "s19*s28";
+            this.tabPage1.Text = "S19";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(342, 403);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "S28";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -222,7 +238,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(342, 403);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "bin*hex";
+            this.tabPage2.Text = "HEX";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // hexbtn1
@@ -237,6 +253,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.textBox13);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.textBox12);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Controls.Add(this.label2);
@@ -248,39 +268,101 @@
             this.groupBox2.Size = new System.Drawing.Size(330, 222);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
+            this.groupBox2.Text = "Out format";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 110);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(105, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "NUM OF CRC BYTE";
+            // 
+            // textBox13
+            // 
+            this.textBox13.Location = new System.Drawing.Point(122, 107);
+            this.textBox13.Name = "textBox13";
+            this.textBox13.Size = new System.Drawing.Size(121, 20);
+            this.textBox13.TabIndex = 8;
+            this.textBox13.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 84);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(94, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "START FRM CNT";
+            // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(122, 81);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(121, 20);
+            this.textBox12.TabIndex = 6;
+            this.textBox12.Text = "1";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 136);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(60, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "CRC TYPE";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "NONE",
+            "CHECKSUM",
+            "CRC8",
+            "CRC16",
+            "CRC32(1)",
+            "CRC32(2)",
+            "NCCITT",
+            "CCITT"});
+            this.comboBox1.Location = new System.Drawing.Point(122, 133);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 4;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 58);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "label2";
+            this.label2.Text = "FRM SID";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 32);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "frame len";
+            this.label1.Text = "FRM LEN";
             // 
             // textBox11
             // 
-            this.textBox11.Location = new System.Drawing.Point(73, 55);
+            this.textBox11.Location = new System.Drawing.Point(122, 55);
             this.textBox11.Name = "textBox11";
             this.textBox11.Size = new System.Drawing.Size(121, 20);
             this.textBox11.TabIndex = 1;
+            this.textBox11.Text = "36";
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(73, 29);
+            this.textBox10.Location = new System.Drawing.Point(122, 29);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(121, 20);
             this.textBox10.TabIndex = 0;
+            this.textBox10.Text = "802";
             // 
             // tabPage3
             // 
@@ -295,7 +377,7 @@
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(342, 403);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "cs*crc";
+            this.tabPage3.Text = "CRC";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // lbleaddress
@@ -389,32 +471,6 @@
             this.btnterminal.UseVisualStyleBackColor = true;
             this.btnterminal.Click += new System.EventHandler(this.btnterminal_Click);
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "NONE",
-            "CHECKSUM",
-            "CRC8",
-            "CRC16",
-            "CRC32(1)",
-            "CRC32(2)",
-            "NCCITT",
-            "CCITT"});
-            this.comboBox1.Location = new System.Drawing.Point(73, 81);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 4;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 84);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(45, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "crc type";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -446,7 +502,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnGo;
+        private System.Windows.Forms.Button s19btn1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label lblBlocksize;
@@ -481,6 +537,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox13;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.TabPage tabPage4;
     }
 }
 

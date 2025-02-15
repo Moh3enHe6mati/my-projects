@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace FConverter
 {
@@ -35,37 +36,7 @@ namespace FConverter
             InitializeComponent();
         }
 
-        private void btnGo_Click(object sender, EventArgs e)
-        {
-
-            //MessageBox.Show(file_path());
-            //MessageBox.Show(calccrc16(0xE0, frame).ToString("X2"));
-            //MessageBox.Show(calccrc32(0xE0, frame).ToString("X2"));
-            //MessageBox.Show(nccitt(frame).ToString("X2"));//this is true
-            lblshowresult.BackColor = Color.Yellow;
-            lblshowresult.Text = "Show result";
-            clear_allvalue();
-            string N = file_path("S19|*.s19|S28|*.s28");
-            if (N != null && N != string.Empty)
-            {
-                load_file(N);
-                creat_newbinfile();
-                new_write_data2bin();
-                write_txt_file();
-                downtxt_file();
-                //create_FFbin();
-                //write_data_2bin();
-                //read_bin_file();
-                lblshowresult.BackColor = Color.LightGreen;
-                lblshowresult.Text = "Success";
-            }
-            else
-            {
-                lblshowresult.BackColor = Color.Yellow;
-                lblshowresult.Text = "Show result";
-            }
-
-        }
+        
         //=================================================================
         
         //=================================================================
@@ -189,7 +160,7 @@ namespace FConverter
                 binwriter.Close();
                 return 1;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 MessageBox.Show("creat_newbinfile fail!");
                 return 0;
@@ -278,7 +249,7 @@ namespace FConverter
                 finaltxt.Close();
                 return 1;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 MessageBox.Show("write_txt_file fail!");
                 return 0;
@@ -342,7 +313,7 @@ namespace FConverter
                 downtxt.Close();
                 return 1;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 MessageBox.Show("downtxt_file fail!");
                 return 0;
@@ -576,14 +547,14 @@ namespace FConverter
                 binwriter.Close();
                 return 1;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 MessageBox.Show("new_write_data2bin fail!");
                 return 0;
             }
 }
         //=================================================================
-        
+
 
 
 
@@ -592,7 +563,214 @@ namespace FConverter
         //=================================================================
         //=================================================================
         //=================================================================
+        private void s19btn1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+                string sfilepath = file_path("S19|*.s19");
 
+                s19_read_file(sfilepath);
+                s19_file_data(sfilepath);
+                s19_create_FFbin(sfilepath);
+                s19_write_tobin(sfilepath);
+                s19_check_block_add(sfilepath);
+                s19_bin_totxt(sfilepath);
+
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+        }
+
+        private void s19_read_file(string s19path)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                byte[] fileBytes = File.ReadAllBytes(s19path);
+                string s19data = Encoding.UTF8.GetString(fileBytes);
+
+                string directoryPath = Path.GetDirectoryName(s19path);
+                s19data = s19data.Replace(":", "");
+                File.WriteAllText(directoryPath + "\\file1.txt", s19data);
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "read s19 file done";
+            }
+            catch (Exception ex)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "read s19 file error";
+            }
+        }
+        private void s19_file_data(string s19path)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string line = "";
+                string data = "", data2 = "";
+                byte len = 0, len_1 = 0;
+                UInt32 add = 0, add_1 = 0;
+                int i = 0;
+                bool enterflag = false;
+
+                string directoryPath = Path.GetDirectoryName(s19path);
+                StreamReader reader = new StreamReader(s19path);
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string type = line.Substring(0, 2);
+                    if (type == "S0")// file info
+                    {
+                    }
+                    if (type == "S1")// 2byte address
+                    {
+                        //len = Convert.ToByte(line.Substring(2, 2), 16);
+                        add = Convert.ToUInt32(line.Substring(4, 4), 16);
+                        data = data + "0x" + add.ToString("X8") + "::" + line.Substring(8, (line.Length - 10)) + "\r\n";
+                    }
+                    else if (type == "S2")// 3byte address
+                    {
+                        //len = Convert.ToByte(line.Substring(2, 2), 16);
+                        add = Convert.ToUInt32(line.Substring(4, 6),16);
+                        data = data + "0x" + add.ToString("X8") + "::" + line.Substring(10, (line.Length - 12)) + "\r\n";
+                    }
+                    else if (type == "S3")// 4byte address
+                    {
+                        //len = Convert.ToByte(line.Substring(2, 2), 16);
+                        add = Convert.ToUInt32(line.Substring(4, 8), 16);
+                        data = data + "0x" + add.ToString("X8") + "::" + line.Substring(12, (line.Length - 14)) + "\r\n";
+                    }
+                    else if (type == "S5")// data counter
+                    {
+                    }
+                    else if (type == "S7" || type == "S8" || type == "S9")// end data
+                    {
+                    }
+                    /*data2 = data2 + data;
+                    data = "";*/
+
+                }
+                reader.Dispose();
+                File.WriteAllText(directoryPath + "\\file2.txt", data);
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "write data in file done";
+                this.Refresh();
+            }
+            catch (Exception ex)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "write data in file error";
+            }
+        }
+        private void s19_create_FFbin(string s19path)
+        {
+            byte[] free = { 0xFF };
+            ulong i = 0;
+
+            string directoryPath = Path.GetDirectoryName(s19path);
+            i = (ulong)(Convert.ToInt32(textBox1.Text, 16));
+            FileStream outbin = new FileStream(directoryPath + "\\binfile1.bin", FileMode.Create, FileAccess.Write);
+            BinaryWriter binwriter = new BinaryWriter(outbin);
+            while (i <= (ulong)(0xFFFFFF))
+            {
+                binwriter.Write(free);
+                i++;
+            }
+           binwriter.Close();
+        }
+        private void s19_write_tobin(string s19path)
+        {
+            try
+            {
+                int i = 0;
+                string line = "";
+
+                string directoryPath = Path.GetDirectoryName(s19path);
+                FileStream outbin = new FileStream(directoryPath + "\\binfile1.bin", FileMode.Open, FileAccess.Write);
+                BinaryWriter binwriter = new BinaryWriter(outbin);
+                StreamReader reader = new StreamReader(directoryPath + "\\file2.txt");
+                while ((line = reader.ReadLine()) != null)
+                {
+                    binwriter.Seek(Convert.ToInt32(line.Substring(2,8),16), SeekOrigin.Begin);
+                    line = line.Remove(0, 12);
+                    byte[] byteArray = HexStringToByteArray(line);
+                    binwriter.Write(byteArray);
+                }
+                binwriter.Close();
+                reader.Dispose();
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "write data to bin file done";
+            }
+            catch (Exception ex)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "write data to bin file error";
+            }
+        }
+        private void s19_check_block_add(string s19path)
+        {
+            try
+            {
+                int i = 0, j = 0, k = 0;
+                string line = "";
+                string data = "";
+                string add_1 = "";
+                UInt32[,] addbyte = new UInt32[2,50];
+                addbyte = null;
+                string directoryPath = Path.GetDirectoryName(s19path);
+                StreamReader reader = new StreamReader(directoryPath + "\\file2.txt");
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (line.Substring(7, 3) == "000" && k==0)
+                        data = data + line.Substring(2, 8);
+                    else if(line.Substring(7, 3) == "000")
+                    {
+                        data = data + "::" + add_1 + "\r\n" + line.Substring(2, 8);
+                    }
+                    add_1 = line.Substring(2, 8);
+                    k++;
+                }
+                data = data + "::" + add_1 + "\r\n";
+                reader.Dispose();
+                File.WriteAllText(directoryPath + "\\file3.txt", data);
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "write address in file done";
+                this.Refresh();
+            }
+            catch (Exception ex)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "write address in file error";
+            }
+        }
+        private void s19_bin_totxt(string s19path)
+        {
+            try
+            {
+                int i = 0;
+                string line = "";
+                int address = 0x10;
+                int length = 5;
+
+                string directoryPath = Path.GetDirectoryName(s19path);
+
+                using (FileStream fs = new FileStream(directoryPath + "\\binfile1.bin", FileMode.Open, FileAccess.Read))
+                {
+                    fs.Position = address;
+
+                    byte[] buffer = new byte[length];
+                    int bytesRead = fs.Read(buffer, 0, length);
+                    
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
         //=================================================================
         // INPUT S28 FILE =================================================
         //=================================================================
@@ -612,24 +790,30 @@ namespace FConverter
         //=================================================================
         private void hexbtn1_Click(object sender, EventArgs e)
         {
-            
-            string hexfilepath = file_path("HEX|*.hex");
-            read_hex_file(hexfilepath);
-            //print_add_terminal(hexfilepath);
-            hexfile_data(hexfilepath);
-            data_block_len(hexfilepath);
-            integrated_hexdata(hexfilepath);
-            integrated_hexfile(hexfilepath);
-            if(comboBox1.SelectedItem != null)
-                calc_allcrc(hexfilepath);
-            //delete_allfiles(hexfilepath);
-            
+            try
+            {
+                string hexfilepath = file_path("HEX|*.hex");
+                hex_read_file(hexfilepath);
+                //hex_print_terminal(hexfilepath);
+                hex_file_data(hexfilepath);
+                hex_data_block_len(hexfilepath);
+                hex_integrated_data(hexfilepath);
+                hex_integrated_file(hexfilepath);
+                if (comboBox1.SelectedItem != null)
+                    hex_calc_allcrc(hexfilepath);
+                hex_make_dataframe(hexfilepath);
+                hex_calc_blockcrc(hexfilepath);
+                //hex_delete_allfiles(hexfilepath);
+
+            }
+            catch(Exception ex)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "hex btn error";
+            }
+
         }
-
-
-
-
-        private void read_hex_file(string hexpath)
+        private void hex_read_file(string hexpath)
         {
             lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
             try
@@ -643,13 +827,13 @@ namespace FConverter
                 lblshowresult.BackColor = Color.LightGreen;
                 lblshowresult.Text = "read hex file done";
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "read hex file error";
             }
         }
-        private void hexfile_data(string hexpath)
+        private void hex_file_data(string hexpath)
         {
             lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
             try
@@ -685,13 +869,13 @@ namespace FConverter
                 lblshowresult.Text = "write data in file done";
                 this.Refresh();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "write data in file error";
             }
         }
-        private void data_block_len(string hexpath)
+        private void hex_data_block_len(string hexpath)
         {
             lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
             try
@@ -710,13 +894,13 @@ namespace FConverter
                 lblshowresult.Text = "write data block len in file done";
                 this.Refresh();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "write data block len in file error";
             }
         }
-        private void integrated_hexdata(string hexpath)
+        private void hex_integrated_data(string hexpath)
         {
             lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
             try
@@ -755,13 +939,13 @@ namespace FConverter
                 lblshowresult.Text = "write integrated hex data in file done";
                 this.Refresh();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "write integrated hex data in file error";
             }
         }
-        private void integrated_hexfile(string hexpath)
+        private void hex_integrated_file(string hexpath)
         {
             try
             {
@@ -775,7 +959,6 @@ namespace FConverter
                 StreamReader reader = new StreamReader(directoryPath + "\\file4.txt");
                 while ((line = reader.ReadLine()) != null)
                 {
-                    //line = line.Replace(":", "");
                     byte ttline = byte.Parse(line.Substring(8, 2));
                     lineid = line.Substring(0, 2);
                     if (lineid == "::")
@@ -818,15 +1001,113 @@ namespace FConverter
                 lblshowresult.Text = "write integrated hex file done";
                 this.Refresh();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "write integrated hex file error";
             }
         }
+        private void hex_make_dataframe(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string line = "";
+                string Linestart = "";
+                int i = 0, numofcrc = 0;
+                string frmhexdata = "", frmhexdata2 = "", frmhexdata3 = "";
 
+                string directoryPath = Path.GetDirectoryName(hexpath);
+                StreamReader reader = new StreamReader(directoryPath + "\\file5.txt");
+                short frmLen = (short)(Convert.ToInt16(textBox10.Text, 16)-1-numofcrc);
+                string SID = textBox11.Text;
+                byte frmcnt = Convert.ToByte(textBox12.Text);
 
-        private void calc_allcrc(string hexpath)
+                while ((line = reader.ReadLine()) != null)
+                {
+                    Linestart = line.Substring(0,2);
+                    if (Linestart != "0x")
+                    {
+                        while (line.Length >= frmLen)
+                        {
+                            frmhexdata = SID + frmcnt.ToString("X2") + line.Substring(0, (frmLen - 1) * 2);
+                            frmhexdata2 = frmhexdata2 + (frmhexdata.Length/2).ToString("X4") + frmhexdata + "\r\n";
+                            line = line.Remove(0, (frmLen - 1) * 2);
+                            frmcnt++;
+                        }
+                        if (line.Length < frmLen && line.Length != 0)
+                        {
+                            frmhexdata = SID + frmcnt.ToString("X2") + line;
+                            frmhexdata2 = frmhexdata2 + (frmhexdata.Length / 2).ToString("X4") + frmhexdata + "\r\n";
+                            line = "";
+                        }
+                        if(line.Length == 0)
+                            frmhexdata2 = frmhexdata2 + "\r\n\r\n";
+                        frmhexdata3 = frmhexdata3 + frmhexdata2;
+                        frmhexdata2 = "";
+                        frmcnt = Convert.ToByte(textBox12.Text);
+                    }
+                }
+                reader.Dispose();
+                File.WriteAllText(directoryPath + "\\file7.txt", frmhexdata3);
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "make data frame done";
+                this.Refresh();
+            }
+            catch (Exception ex)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "make data frame error";
+            }
+        }
+        private void hex_calc_blockcrc(string hexpath)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string line = "";
+                UInt32 crc = 0;
+                string datablockcrc = "";
+
+                string directoryPath = Path.GetDirectoryName(hexpath);
+                StreamReader reader = new StreamReader(directoryPath + "\\file5.txt");
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (line.Substring(0, 2) != "0x")
+                    {
+                        byte[] bytes = new byte[line.Length / 2];
+                        for (int i = 0; i < bytes.Length; i++)
+                        {
+                            bytes[i] = Convert.ToByte(line.Substring(i * 2, 2), 16);
+                        }
+                        switch (comboBox1.SelectedIndex)
+                        {
+                            case 1: crc = calccs(bytes); break;//CHECKSUM
+                            case 2: crc = CalculateCRC8(bytes); break;//CRC8
+                            case 3: crc = calccrc16(bytes); break;//CRC16
+                            case 4: crc = Crc32(bytes); break;//CRC32(1)
+                            case 5: crc = calccrc32(bytes); break;//CRC32(2)
+                            case 6: crc = nccitt(bytes); break;//NCCITT
+                            case 7: crc = ccitt(bytes); break;//CCITT
+                            default: break;
+                        }
+                        datablockcrc = datablockcrc + line + "\r\n0x" + crc.ToString("X8") + "\r\n";
+                        bytes = null;
+                    }
+                }
+                reader.Dispose();
+                File.WriteAllText(directoryPath + "\\file8.txt", datablockcrc);
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "calculate block data crc done";
+                this.Refresh();
+            }
+            catch (Exception ex)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "calculate block data crc error";
+            }
+        }
+        private void hex_calc_allcrc(string hexpath)
         {
             lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
             try
@@ -836,7 +1117,7 @@ namespace FConverter
 
                 string directoryPath = Path.GetDirectoryName(hexpath);
                 line = File.ReadAllText(directoryPath + "\\file2.txt");
-                line = line.Replace("\r\n","");
+                line = line.Replace("\r\n", "");
                 byte[] bytes = new byte[line.Length / 2];
                 for (int i = 0; i < bytes.Length; i++)
                 {
@@ -873,15 +1154,14 @@ namespace FConverter
                 lblshowresult.Text = "calculate all data crc done";
                 this.Refresh();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "calculate all data crc error";
             }
         }
 
-
-        private void print_add_terminal(string hexpath)
+        private void hex_print_terminal(string hexpath)
         {
             lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
             string terminal = null;
@@ -908,13 +1188,13 @@ namespace FConverter
                 lblshowresult.Text = "print in terminal done";
                 this.Refresh();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "print in terminal error";
             }
         }
-        private void delete_allfiles(string hexpath)
+        private void hex_delete_allfiles(string hexpath)
         {
             lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
             try
@@ -923,12 +1203,17 @@ namespace FConverter
                 File.Delete(directoryPath + "\\file1.txt");
                 File.Delete(directoryPath + "\\file2.txt");
                 File.Delete(directoryPath + "\\file3.txt");
+                File.Delete(directoryPath + "\\file4.txt");
+                File.Delete(directoryPath + "\\file5.txt");
+                File.Delete(directoryPath + "\\file6.txt");
+                File.Delete(directoryPath + "\\file7.txt");
+                File.Delete(directoryPath + "\\file8.txt");
 
                 lblshowresult.BackColor = Color.LightGreen;
                 lblshowresult.Text = "delete all files done";
                 this.Refresh();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "delete all files error";
@@ -947,8 +1232,8 @@ namespace FConverter
         //=================================================================
         string file_path(string extend)
         {
-            btnGo.Cursor = Cursors.WaitCursor;
-            btnGo.Enabled = false;
+            s19btn1.Cursor = Cursors.WaitCursor;
+            s19btn1.Enabled = false;
             string fileName = null;
             OpenFileDialog Openn = new OpenFileDialog();
             Openn.Title = "انتخاب فایل";
@@ -958,10 +1243,24 @@ namespace FConverter
                 fileName = Openn.FileName.ToString();
                 //ecomux(fileName);
             }
-            btnGo.Cursor = Cursors.Default;
-            btnGo.Enabled = true;
+            s19btn1.Cursor = Cursors.Default;
+            s19btn1.Enabled = true;
             global_filepath = fileName;
             return fileName;
+        }
+        static byte[] HexStringToByteArray(string hex)
+        {
+            if (hex.Length % 2 != 0)
+            {
+                throw new ArgumentException("طول رشته هگز باید زوج باشد.");
+            }
+
+            byte[] byteArray = new byte[hex.Length / 2];
+            for (int i = 0; i < hex.Length; i += 2)
+            {
+                byteArray[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+            return byteArray;
         }
         //=================================================================
         //=================================================================
@@ -1012,7 +1311,7 @@ namespace FConverter
         //=================================================================
         UInt32 calccrc32( byte[] pData)
         {
-            UInt16 i;
+            UInt32 i;
             byte BitCounter;
             UInt32 Checksum32 = 0xFFFFFFFF;
 
