@@ -324,7 +324,7 @@ namespace FConverter
         //=================================================================
         //=================================================================
         //=================================================================
-        private void Calccrc_Click(object sender, EventArgs e)
+        private void crcbtn1_Click(object sender, EventArgs e)
         {
             string fpath = null, sout = null;
             int i = 0, siz = 0;
@@ -571,11 +571,17 @@ namespace FConverter
                 string sfilepath = file_path("S19|*.s19");
 
                 s19_read_file(sfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("read file done");
                 s19_file_data(sfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("write data to txt done");
                 s19_create_FFbin(sfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("create FF bin done");
                 s19_write_tobin(sfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("write to bin done");
                 s19_check_block_add(sfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("check block address done");
                 s19_bin_totxt(sfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("bin to txt done");
 
             }
             catch(Exception ex)
@@ -752,24 +758,50 @@ namespace FConverter
             {
                 int i = 0;
                 string line = "";
-                int address = 0x10;
-                int length = 5;
+                int startadd = 0, endadd = 0;
+                string data = "",data2 = "";
 
                 string directoryPath = Path.GetDirectoryName(s19path);
-
-                using (FileStream fs = new FileStream(directoryPath + "\\binfile1.bin", FileMode.Open, FileAccess.Read))
+                StreamReader reader = new StreamReader(directoryPath + "\\file3.txt");
+                FileStream binreader = new FileStream(directoryPath + "\\binfile1.bin", FileMode.Open, FileAccess.Read);
+                while ((line = reader.ReadLine()) != null)
                 {
-                    fs.Position = address;
-
-                    byte[] buffer = new byte[length];
-                    int bytesRead = fs.Read(buffer, 0, length);
-                    
+                    startadd = Convert.ToInt32(line.Substring(0, 8), 16);
+                    endadd = Convert.ToInt32(line.Substring(10, 8), 16);
+                    int readlen = (endadd|0x000000FF) - startadd + 1;
+                    byte[] buffer = new byte[readlen];
+                    binreader.Position = startadd;
+                    binreader.Read(buffer, 0, readlen);
+                    data = ByteArrayToHexString(buffer);
+                    data2 = data2 + "::0x" + startadd.ToString("X8") + "\r\n" + data + "\r\n" + "::0x" + (endadd | 0x000000FF).ToString("X8") + "\r\n";
                 }
+                reader.Dispose();
+                binreader.Close();
+                File.WriteAllText(directoryPath + "\\file4.txt", data2);
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "read data from bin and write to txt done";
+                this.Refresh();
             }
             catch(Exception ex)
             {
-
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "read data from bin and write to txt error";
             }
+        }
+
+
+
+
+
+
+        static string ByteArrayToHexString(byte[] bytes)
+        {
+            StringBuilder hex = new StringBuilder(bytes.Length * 2);
+            foreach (byte b in bytes)
+            {
+                hex.AppendFormat("{0:X2}", b);
+            }
+            return hex.ToString();
         }
         //=================================================================
         // INPUT S28 FILE =================================================
@@ -794,19 +826,29 @@ namespace FConverter
             {
                 string hexfilepath = file_path("HEX|*.hex");
                 hex_read_file(hexfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("read file done");
                 //hex_print_terminal(hexfilepath);
+                //if (globalcheckbox1.Checked == true) MessageBox.Show("read file done");
                 hex_file_data(hexfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("write data to txt done");
                 hex_data_block_len(hexfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("data block len done");
                 hex_integrated_data(hexfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("integrated data done");
                 hex_integrated_file(hexfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("integrated file done");
                 if (comboBox1.SelectedItem != null)
                     hex_calc_allcrc(hexfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("calc all crc done");
                 hex_make_dataframe(hexfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("make data frame done");
                 hex_calc_blockcrc(hexfilepath);
+                if (globalcheckbox1.Checked == true) MessageBox.Show("calc block crc done");
                 //hex_delete_allfiles(hexfilepath);
+                //if (globalcheckbox1.Checked == true) MessageBox.Show("delete all files done");
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 lblshowresult.BackColor = Color.Red;
                 lblshowresult.Text = "hex btn error";
@@ -1089,6 +1131,7 @@ namespace FConverter
                             case 5: crc = calccrc32(bytes); break;//CRC32(2)
                             case 6: crc = nccitt(bytes); break;//NCCITT
                             case 7: crc = ccitt(bytes); break;//CCITT
+                            case 8: crc = crc16_ccitt_false(bytes); break;//CCITT FALSE
                             default: break;
                         }
                         datablockcrc = datablockcrc + line + "\r\n0x" + crc.ToString("X8") + "\r\n";
@@ -1125,29 +1168,15 @@ namespace FConverter
                 }
                 switch (comboBox1.SelectedIndex)
                 {
-                    case 1://CHECKSUM
-                        crc = calccs(bytes);
-                        break;
-                    case 2://CRC8
-                        crc = CalculateCRC8(bytes);
-                        break;
-                    case 3://CRC16
-                        crc = calccrc16(bytes);
-                        break;
-                    case 4://CRC32(1)
-                        crc = Crc32(bytes);
-                        break;
-                    case 5://CRC32(2)
-                        crc = calccrc32(bytes);
-                        break;
-                    case 6://NCCITT
-                        crc = nccitt(bytes);
-                        break;
-                    case 7://CCITT
-                        crc = ccitt(bytes);
-                        break;
-                    default:
-                        break;
+                    case 1: crc = calccs(bytes); break;//CHECKSUM
+                    case 2: crc = CalculateCRC8(bytes); break;//CRC8
+                    case 3: crc = calccrc16(bytes); break;//CRC16
+                    case 4: crc = Crc32(bytes); break;//CRC32(1)
+                    case 5: crc = calccrc32(bytes); break;//CRC32(2)
+                    case 6: crc = nccitt(bytes); break;//NCCITT
+                    case 7: crc = ccitt(bytes); break;//CCITT
+                    case 8: crc = crc16_ccitt_false(bytes); break;//CCITT FALSE
+                    default: break;
                 }
                 File.WriteAllText(directoryPath + "\\file6.txt", "0x" + crc.ToString("X8") + "\r\n" + line);
                 lblshowresult.BackColor = Color.LightGreen;
@@ -1387,6 +1416,23 @@ namespace FConverter
             return num8;
         }
         //=================================================================
+        public UInt16 crc16_ccitt_false(byte[] array)
+        {
+            ushort crc = 0xFFFF;
+            for (int i = 0; i < array.Length; i++)
+            {
+                crc ^= (ushort)(array[i] << 8);
+                for (int j = 0; j < 8; j++)
+                {
+                    if ((crc & 0x8000) > 0)
+                        crc = (ushort)((crc << 1) ^ 0x1021);
+                    else
+                        crc <<= 1;
+                }
+            }
+            return crc;
+        }
+        //=================================================================
         static byte CalculateCRC8(byte[] array)
         {
             byte crc = 0x00;
@@ -1443,7 +1489,45 @@ namespace FConverter
             }
         }
 
+        private void crcbtn2_Click(object sender, EventArgs e)
+        {
+            lblshowresult.BackColor = Color.Yellow; lblshowresult.Text = "plz wait..."; this.Refresh();
+            try
+            {
+                string line = "";
+                UInt32 crc = 0;
 
-
+                line = textBox8.Text;
+                line = line.Replace("0x", "");
+                line = line.Replace(" ", "");
+                byte[] bytes = new byte[line.Length / 2];
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    bytes[i] = Convert.ToByte(line.Substring(i * 2, 2), 16);
+                }
+                switch (comboBox2.SelectedIndex)
+                {
+                    case 1: crc = calccs(bytes); break;//CHECKSUM
+                    case 2: crc = CalculateCRC8(bytes); break;//CRC8
+                    case 3: crc = calccrc16(bytes); break;//CRC16
+                    case 4: crc = Crc32(bytes); break;//CRC32(1)
+                    case 5: crc = calccrc32(bytes); break;//CRC32(2)
+                    case 6: crc = nccitt(bytes); break;//NCCITT
+                    case 7: crc = ccitt(bytes); break;//CCITT
+                    case 8: crc = crc16_ccitt_false(bytes); break;//CCITT FALSE
+                    default: break;
+                }
+                //MessageBox.Show("0x" + crc.ToString("X8"));
+                textBox9.Text = "0x" + crc.ToString("X8");
+                lblshowresult.BackColor = Color.LightGreen;
+                lblshowresult.Text = "calculate txt data crc done";
+                this.Refresh();
+            }
+            catch (Exception ex)
+            {
+                lblshowresult.BackColor = Color.Red;
+                lblshowresult.Text = "calculate txt data crc error";
+            }
+        }
     }
 }

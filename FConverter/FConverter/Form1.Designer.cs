@@ -58,9 +58,11 @@
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.crcbtn2 = new System.Windows.Forms.Button();
             this.lbleaddress = new System.Windows.Forms.Label();
             this.lblsaddress = new System.Windows.Forms.Label();
-            this.Calccrc = new System.Windows.Forms.Button();
+            this.crcbtn1 = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
@@ -68,6 +70,7 @@
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnterminal = new System.Windows.Forms.Button();
+            this.globalcheckbox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -324,7 +327,8 @@
             "CRC32(1)",
             "CRC32(2)",
             "NCCITT",
-            "CCITT"});
+            "CCITT",
+            "CCITT FALSE"});
             this.comboBox1.Location = new System.Drawing.Point(122, 133);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
@@ -366,9 +370,11 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.comboBox2);
+            this.tabPage3.Controls.Add(this.crcbtn2);
             this.tabPage3.Controls.Add(this.lbleaddress);
             this.tabPage3.Controls.Add(this.lblsaddress);
-            this.tabPage3.Controls.Add(this.Calccrc);
+            this.tabPage3.Controls.Add(this.crcbtn1);
             this.tabPage3.Controls.Add(this.textBox8);
             this.tabPage3.Controls.Add(this.textBox7);
             this.tabPage3.Controls.Add(this.textBox6);
@@ -379,6 +385,34 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "CRC";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "NONE",
+            "CHECKSUM",
+            "CRC8",
+            "CRC16",
+            "CRC32(1)",
+            "CRC32(2)",
+            "NCCITT",
+            "CCITT",
+            "CCITT FALSE"});
+            this.comboBox2.Location = new System.Drawing.Point(70, 58);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(121, 21);
+            this.comboBox2.TabIndex = 7;
+            // 
+            // crcbtn2
+            // 
+            this.crcbtn2.Location = new System.Drawing.Point(256, 374);
+            this.crcbtn2.Name = "crcbtn2";
+            this.crcbtn2.Size = new System.Drawing.Size(75, 23);
+            this.crcbtn2.TabIndex = 6;
+            this.crcbtn2.Text = "Input text";
+            this.crcbtn2.UseVisualStyleBackColor = true;
+            this.crcbtn2.Click += new System.EventHandler(this.crcbtn2_Click);
             // 
             // lbleaddress
             // 
@@ -398,36 +432,36 @@
             this.lblsaddress.TabIndex = 4;
             this.lblsaddress.Text = "s address";
             // 
-            // Calccrc
+            // crcbtn1
             // 
-            this.Calccrc.Location = new System.Drawing.Point(256, 17);
-            this.Calccrc.Name = "Calccrc";
-            this.Calccrc.Size = new System.Drawing.Size(75, 23);
-            this.Calccrc.TabIndex = 3;
-            this.Calccrc.Text = "Calc";
-            this.Calccrc.UseVisualStyleBackColor = true;
-            this.Calccrc.Click += new System.EventHandler(this.Calccrc_Click);
+            this.crcbtn1.Location = new System.Drawing.Point(256, 17);
+            this.crcbtn1.Name = "crcbtn1";
+            this.crcbtn1.Size = new System.Drawing.Size(75, 23);
+            this.crcbtn1.TabIndex = 3;
+            this.crcbtn1.Text = "Input file";
+            this.crcbtn1.UseVisualStyleBackColor = true;
+            this.crcbtn1.Click += new System.EventHandler(this.crcbtn1_Click);
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(6, 58);
+            this.textBox8.Location = new System.Drawing.Point(6, 88);
             this.textBox8.Multiline = true;
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(325, 174);
+            this.textBox8.Size = new System.Drawing.Size(325, 280);
             this.textBox8.TabIndex = 2;
             // 
             // textBox7
             // 
             this.textBox7.Location = new System.Drawing.Point(70, 31);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(105, 20);
+            this.textBox7.Size = new System.Drawing.Size(121, 20);
             this.textBox7.TabIndex = 1;
             // 
             // textBox6
             // 
             this.textBox6.Location = new System.Drawing.Point(69, 5);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(105, 20);
+            this.textBox6.Size = new System.Drawing.Size(122, 20);
             this.textBox6.TabIndex = 0;
             // 
             // lblshowresult
@@ -442,11 +476,11 @@
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(6, 19);
+            this.textBox9.Location = new System.Drawing.Point(6, 25);
             this.textBox9.Multiline = true;
             this.textBox9.Name = "textBox9";
             this.textBox9.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox9.Size = new System.Drawing.Size(300, 359);
+            this.textBox9.Size = new System.Drawing.Size(300, 358);
             this.textBox9.TabIndex = 4;
             this.textBox9.WordWrap = false;
             // 
@@ -454,16 +488,16 @@
             // 
             this.groupBox3.Controls.Add(this.btnterminal);
             this.groupBox3.Controls.Add(this.textBox9);
-            this.groupBox3.Location = new System.Drawing.Point(360, 25);
+            this.groupBox3.Location = new System.Drawing.Point(360, 31);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(312, 427);
+            this.groupBox3.Size = new System.Drawing.Size(312, 418);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "terminal";
             // 
             // btnterminal
             // 
-            this.btnterminal.Location = new System.Drawing.Point(127, 398);
+            this.btnterminal.Location = new System.Drawing.Point(120, 389);
             this.btnterminal.Name = "btnterminal";
             this.btnterminal.Size = new System.Drawing.Size(75, 23);
             this.btnterminal.TabIndex = 5;
@@ -471,11 +505,22 @@
             this.btnterminal.UseVisualStyleBackColor = true;
             this.btnterminal.Click += new System.EventHandler(this.btnterminal_Click);
             // 
+            // globalcheckbox1
+            // 
+            this.globalcheckbox1.AutoSize = true;
+            this.globalcheckbox1.Location = new System.Drawing.Point(592, 12);
+            this.globalcheckbox1.Name = "globalcheckbox1";
+            this.globalcheckbox1.Size = new System.Drawing.Size(85, 17);
+            this.globalcheckbox1.TabIndex = 6;
+            this.globalcheckbox1.Text = "Step by step";
+            this.globalcheckbox1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 461);
+            this.Controls.Add(this.globalcheckbox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.lblshowresult);
             this.Controls.Add(this.tabControl1);
@@ -483,7 +528,7 @@
             this.MaximumSize = new System.Drawing.Size(700, 500);
             this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "Form1";
-            this.Text = "FConverter.v.1.05";
+            this.Text = "FConverter.v.1.07";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -523,7 +568,7 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Label lbleaddress;
         private System.Windows.Forms.Label lblsaddress;
-        private System.Windows.Forms.Button Calccrc;
+        private System.Windows.Forms.Button crcbtn1;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox6;
@@ -542,6 +587,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button crcbtn2;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.CheckBox globalcheckbox1;
     }
 }
 

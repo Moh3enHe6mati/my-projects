@@ -33,4 +33,3 @@ C:\Users\Doloop\Documents\GitHub\my-projects\New folder\FConverter\FConverter\ob
 C:\Users\Doloop\Documents\GitHub\my-projects\New folder\FConverter\FConverter\obj\Debug\FConverter.Form1.resources
 C:\Users\Doloop\Documents\GitHub\my-projects\New folder\FConverter\FConverter\obj\Debug\FConverter.Properties.Resources.resources
 C:\Users\Doloop\Documents\GitHub\my-projects\New folder\FConverter\FConverter\obj\Debug\FConverter.csproj.GenerateResource.Cache
-C:\Users\Doloop\Documents\GitHub\my-projects\FConverter\FConverter\obj\Debug\FConverter.csprojResolveAssemblyReference.cache
