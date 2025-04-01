@@ -1,0 +1,9 @@
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\bin\Debug\FileAnalyzer.exe.config
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\bin\Debug\FileAnalyzer.exe
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\bin\Debug\FileAnalyzer.pdb
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\obj\Debug\FileAnalyzer.Form1.resources
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\obj\Debug\FileAnalyzer.Properties.Resources.resources
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\obj\Debug\FileAnalyzer.csproj.GenerateResource.Cache
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\obj\Debug\FileAnalyzer.exe
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\obj\Debug\FileAnalyzer.pdb
+C:\Users\Doloop\Documents\GitHub\my-projects\File Analyzer\FileAnalyzer\obj\Debug\FileAnalyzer.csprojResolveAssemblyReference.cache
