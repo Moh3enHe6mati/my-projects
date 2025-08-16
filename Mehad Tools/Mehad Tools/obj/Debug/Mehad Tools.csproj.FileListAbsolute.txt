@@ -25,3 +25,21 @@ C:\Users\Doloop\Documents\GitHub\my-projects\Mehad Tools\Mehad Tools\obj\Debug\M
 C:\Users\Doloop\Documents\GitHub\my-projects\Mehad Tools\Mehad Tools\obj\Debug\Mehad_Tools.Form1.resources
 C:\Users\Doloop\Documents\GitHub\my-projects\Mehad Tools\Mehad Tools\obj\Debug\Mehad_Tools.Properties.Resources.resources
 C:\Users\Doloop\Documents\GitHub\my-projects\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.csproj.GenerateResource.Cache
+F:\Project\Visual Project\C#\Mehad Tools\Mehad Tools\bin\Debug\Mehad Tools.exe.config
+F:\Project\Visual Project\C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.exe
+F:\Project\Visual Project\C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.pdb
+F:\Project\Visual Project\C#\Mehad Tools\Mehad Tools\bin\Debug\Mehad Tools.exe
+F:\Project\Visual Project\C#\Mehad Tools\Mehad Tools\bin\Debug\Mehad Tools.pdb
+F:\Project\Visual Project\C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad_Tools.Form1.resources
+F:\Project\Visual Project\C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad_Tools.Properties.Resources.resources
+F:\Project\Visual Project\C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.csproj.GenerateResource.Cache
+D:\My C#\Mehad Tools\Mehad Tools\bin\Debug\Mehad Tools.exe.config
+D:\My C#\Mehad Tools\Mehad Tools\bin\Debug\Mehad Tools.exe
+D:\My C#\Mehad Tools\Mehad Tools\bin\Debug\Mehad Tools.pdb
+D:\My C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.csproj.AssemblyReference.cache
+D:\My C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad_Tools.Form1.resources
+D:\My C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad_Tools.Properties.Resources.resources
+D:\My C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.csproj.GenerateResource.cache
+D:\My C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.csproj.CoreCompileInputs.cache
+D:\My C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.exe
+D:\My C#\Mehad Tools\Mehad Tools\obj\Debug\Mehad Tools.pdb

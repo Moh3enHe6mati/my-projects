@@ -59,9 +59,34 @@
             this.tBoxcanid = new System.Windows.Forms.TextBox();
             this.logtoout = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.grpboxoutput = new System.Windows.Forms.GroupBox();
+            this.txtbshowdata = new System.Windows.Forms.TextBox();
+            this.grpboxinput = new System.Windows.Forms.GroupBox();
+            this.chboxhidefil = new System.Windows.Forms.CheckBox();
+            this.chboxshowfil = new System.Windows.Forms.CheckBox();
+            this.btnclearallfilter = new System.Windows.Forms.Button();
+            this.btnremovefilter = new System.Windows.Forms.Button();
+            this.btnlimitshow = new System.Windows.Forms.Button();
+            this.btnsetfilter = new System.Windows.Forms.Button();
+            this.btnloadfile = new System.Windows.Forms.Button();
+            this.listbadddata = new System.Windows.Forms.ListBox();
+            this.txtbinputdata = new System.Windows.Forms.TextBox();
+            this.tabp4dtc = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnfinddtc = new System.Windows.Forms.Button();
+            this.btnalldtc = new System.Windows.Forms.Button();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.btnFolderPath = new System.Windows.Forms.Button();
             this.resultlabel = new System.Windows.Forms.Label();
             this.folderBrowser1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
+            this.chBox1 = new System.Windows.Forms.CheckBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.cleargroupBox.SuspendLayout();
@@ -71,6 +96,12 @@
             this.tabPage2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.grpboxoutput.SuspendLayout();
+            this.grpboxinput.SuspendLayout();
+            this.tabp4dtc.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -78,11 +109,13 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabp4dtc);
             this.tabControl1.Location = new System.Drawing.Point(3, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(578, 340);
+            this.tabControl1.Size = new System.Drawing.Size(878, 555);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -93,7 +126,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(570, 314);
+            this.tabPage1.Size = new System.Drawing.Size(870, 529);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             // 
@@ -309,7 +342,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(570, 314);
+            this.tabPage2.Size = new System.Drawing.Size(870, 529);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Frame";
             // 
@@ -325,9 +358,9 @@
             // 
             // buttonsctosim
             // 
-            this.buttonsctosim.Location = new System.Drawing.Point(28, 19);
+            this.buttonsctosim.Location = new System.Drawing.Point(6, 19);
             this.buttonsctosim.Name = "buttonsctosim";
-            this.buttonsctosim.Size = new System.Drawing.Size(75, 23);
+            this.buttonsctosim.Size = new System.Drawing.Size(117, 36);
             this.buttonsctosim.TabIndex = 0;
             this.buttonsctosim.Text = "SC To SIM";
             this.buttonsctosim.UseVisualStyleBackColor = true;
@@ -383,12 +416,253 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.PaleTurquoise;
+            this.tabPage3.Controls.Add(this.grpboxoutput);
+            this.tabPage3.Controls.Add(this.grpboxinput);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(570, 314);
+            this.tabPage3.Size = new System.Drawing.Size(870, 529);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "File";
+            this.tabPage3.Text = "Filter";
+            // 
+            // grpboxoutput
+            // 
+            this.grpboxoutput.Controls.Add(this.txtbshowdata);
+            this.grpboxoutput.Location = new System.Drawing.Point(6, 110);
+            this.grpboxoutput.Name = "grpboxoutput";
+            this.grpboxoutput.Size = new System.Drawing.Size(858, 413);
+            this.grpboxoutput.TabIndex = 1;
+            this.grpboxoutput.TabStop = false;
+            this.grpboxoutput.Text = "Output Data";
+            // 
+            // txtbshowdata
+            // 
+            this.txtbshowdata.Location = new System.Drawing.Point(9, 19);
+            this.txtbshowdata.MaxLength = 999999999;
+            this.txtbshowdata.Multiline = true;
+            this.txtbshowdata.Name = "txtbshowdata";
+            this.txtbshowdata.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtbshowdata.Size = new System.Drawing.Size(840, 381);
+            this.txtbshowdata.TabIndex = 0;
+            // 
+            // grpboxinput
+            // 
+            this.grpboxinput.Controls.Add(this.chboxhidefil);
+            this.grpboxinput.Controls.Add(this.chboxshowfil);
+            this.grpboxinput.Controls.Add(this.btnclearallfilter);
+            this.grpboxinput.Controls.Add(this.btnremovefilter);
+            this.grpboxinput.Controls.Add(this.btnlimitshow);
+            this.grpboxinput.Controls.Add(this.btnsetfilter);
+            this.grpboxinput.Controls.Add(this.btnloadfile);
+            this.grpboxinput.Controls.Add(this.listbadddata);
+            this.grpboxinput.Controls.Add(this.txtbinputdata);
+            this.grpboxinput.Location = new System.Drawing.Point(6, 6);
+            this.grpboxinput.Name = "grpboxinput";
+            this.grpboxinput.Size = new System.Drawing.Size(858, 108);
+            this.grpboxinput.TabIndex = 0;
+            this.grpboxinput.TabStop = false;
+            this.grpboxinput.Text = "Input Data";
+            // 
+            // chboxhidefil
+            // 
+            this.chboxhidefil.AutoSize = true;
+            this.chboxhidefil.Location = new System.Drawing.Point(363, 86);
+            this.chboxhidefil.Name = "chboxhidefil";
+            this.chboxhidefil.Size = new System.Drawing.Size(15, 14);
+            this.chboxhidefil.TabIndex = 8;
+            this.chboxhidefil.UseVisualStyleBackColor = true;
+            this.chboxhidefil.CheckedChanged += new System.EventHandler(this.chboxhidefil_CheckedChanged);
+            // 
+            // chboxshowfil
+            // 
+            this.chboxshowfil.AutoSize = true;
+            this.chboxshowfil.Location = new System.Drawing.Point(363, 57);
+            this.chboxshowfil.Name = "chboxshowfil";
+            this.chboxshowfil.Size = new System.Drawing.Size(15, 14);
+            this.chboxshowfil.TabIndex = 7;
+            this.chboxshowfil.UseVisualStyleBackColor = true;
+            this.chboxshowfil.CheckedChanged += new System.EventHandler(this.chboxshowfil_CheckedChanged);
+            // 
+            // btnclearallfilter
+            // 
+            this.btnclearallfilter.Location = new System.Drawing.Point(775, 71);
+            this.btnclearallfilter.Name = "btnclearallfilter";
+            this.btnclearallfilter.Size = new System.Drawing.Size(77, 23);
+            this.btnclearallfilter.TabIndex = 6;
+            this.btnclearallfilter.Text = "Clear All";
+            this.btnclearallfilter.UseVisualStyleBackColor = true;
+            this.btnclearallfilter.Click += new System.EventHandler(this.btnclearallfilter_Click);
+            // 
+            // btnremovefilter
+            // 
+            this.btnremovefilter.Location = new System.Drawing.Point(775, 20);
+            this.btnremovefilter.Name = "btnremovefilter";
+            this.btnremovefilter.Size = new System.Drawing.Size(77, 23);
+            this.btnremovefilter.TabIndex = 5;
+            this.btnremovefilter.Text = "Clear Filter";
+            this.btnremovefilter.UseVisualStyleBackColor = true;
+            this.btnremovefilter.Click += new System.EventHandler(this.btnremovefilter_Click);
+            // 
+            // btnlimitshow
+            // 
+            this.btnlimitshow.Location = new System.Drawing.Point(384, 81);
+            this.btnlimitshow.Name = "btnlimitshow";
+            this.btnlimitshow.Size = new System.Drawing.Size(99, 23);
+            this.btnlimitshow.TabIndex = 4;
+            this.btnlimitshow.Text = "Hide Filter";
+            this.btnlimitshow.UseVisualStyleBackColor = true;
+            this.btnlimitshow.Click += new System.EventHandler(this.btnlimitshow_Click);
+            // 
+            // btnsetfilter
+            // 
+            this.btnsetfilter.Location = new System.Drawing.Point(384, 52);
+            this.btnsetfilter.Name = "btnsetfilter";
+            this.btnsetfilter.Size = new System.Drawing.Size(99, 23);
+            this.btnsetfilter.TabIndex = 3;
+            this.btnsetfilter.Text = "Show Filter";
+            this.btnsetfilter.UseVisualStyleBackColor = true;
+            this.btnsetfilter.Click += new System.EventHandler(this.btnsetfilter_Click);
+            // 
+            // btnloadfile
+            // 
+            this.btnloadfile.Location = new System.Drawing.Point(384, 11);
+            this.btnloadfile.Name = "btnloadfile";
+            this.btnloadfile.Size = new System.Drawing.Size(99, 23);
+            this.btnloadfile.TabIndex = 2;
+            this.btnloadfile.Text = "Load File";
+            this.btnloadfile.UseVisualStyleBackColor = true;
+            this.btnloadfile.Click += new System.EventHandler(this.btnloadfile_Click);
+            // 
+            // listbadddata
+            // 
+            this.listbadddata.FormattingEnabled = true;
+            this.listbadddata.Location = new System.Drawing.Point(499, 11);
+            this.listbadddata.Name = "listbadddata";
+            this.listbadddata.Size = new System.Drawing.Size(270, 95);
+            this.listbadddata.TabIndex = 1;
+            // 
+            // txtbinputdata
+            // 
+            this.txtbinputdata.Location = new System.Drawing.Point(9, 20);
+            this.txtbinputdata.Multiline = true;
+            this.txtbinputdata.Name = "txtbinputdata";
+            this.txtbinputdata.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtbinputdata.Size = new System.Drawing.Size(344, 83);
+            this.txtbinputdata.TabIndex = 0;
+            // 
+            // tabp4dtc
+            // 
+            this.tabp4dtc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.tabp4dtc.Controls.Add(this.groupBox6);
+            this.tabp4dtc.Controls.Add(this.groupBox5);
+            this.tabp4dtc.Location = new System.Drawing.Point(4, 22);
+            this.tabp4dtc.Name = "tabp4dtc";
+            this.tabp4dtc.Padding = new System.Windows.Forms.Padding(3);
+            this.tabp4dtc.Size = new System.Drawing.Size(870, 529);
+            this.tabp4dtc.TabIndex = 3;
+            this.tabp4dtc.Text = "DTC";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textBox2);
+            this.groupBox6.Controls.Add(this.textBox1);
+            this.groupBox6.Location = new System.Drawing.Point(6, 94);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(858, 429);
+            this.groupBox6.TabIndex = 1;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Output Data";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(449, 19);
+            this.textBox2.Multiline = true;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox2.Size = new System.Drawing.Size(403, 404);
+            this.textBox2.TabIndex = 1;
+            this.textBox2.WordWrap = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 19);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox1.Size = new System.Drawing.Size(437, 404);
+            this.textBox1.TabIndex = 0;
+            this.textBox1.WordWrap = false;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.textBox5);
+            this.groupBox5.Controls.Add(this.chBox1);
+            this.groupBox5.Controls.Add(this.textBox4);
+            this.groupBox5.Controls.Add(this.label1);
+            this.groupBox5.Controls.Add(this.btnfinddtc);
+            this.groupBox5.Controls.Add(this.btnalldtc);
+            this.groupBox5.Controls.Add(this.textBox3);
+            this.groupBox5.Controls.Add(this.btnFolderPath);
+            this.groupBox5.Location = new System.Drawing.Point(9, 6);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(855, 82);
+            this.groupBox5.TabIndex = 0;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Input Data";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(6, 20);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(133, 20);
+            this.textBox4.TabIndex = 5;
+            this.textBox4.Text = "fault.jc";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(217, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(47, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Search :";
+            // 
+            // btnfinddtc
+            // 
+            this.btnfinddtc.Location = new System.Drawing.Point(270, 53);
+            this.btnfinddtc.Name = "btnfinddtc";
+            this.btnfinddtc.Size = new System.Drawing.Size(94, 23);
+            this.btnfinddtc.TabIndex = 3;
+            this.btnfinddtc.Text = "Search";
+            this.btnfinddtc.UseVisualStyleBackColor = true;
+            this.btnfinddtc.Click += new System.EventHandler(this.btnfinddtc_Click);
+            // 
+            // btnalldtc
+            // 
+            this.btnalldtc.Location = new System.Drawing.Point(737, 53);
+            this.btnalldtc.Name = "btnalldtc";
+            this.btnalldtc.Size = new System.Drawing.Size(112, 23);
+            this.btnalldtc.TabIndex = 2;
+            this.btnalldtc.Text = "Show All DTC";
+            this.btnalldtc.UseVisualStyleBackColor = true;
+            this.btnalldtc.Click += new System.EventHandler(this.btnalldtc_Click);
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(270, 19);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(579, 20);
+            this.textBox3.TabIndex = 1;
+            // 
+            // btnFolderPath
+            // 
+            this.btnFolderPath.Location = new System.Drawing.Point(6, 53);
+            this.btnFolderPath.Name = "btnFolderPath";
+            this.btnFolderPath.Size = new System.Drawing.Size(94, 23);
+            this.btnFolderPath.TabIndex = 0;
+            this.btnFolderPath.Text = "Script Path";
+            this.btnFolderPath.UseVisualStyleBackColor = true;
+            this.btnFolderPath.Click += new System.EventHandler(this.btnFolderPath_Click);
             // 
             // resultlabel
             // 
@@ -403,20 +677,37 @@
             // 
             this.openFile1.FileName = "openFile1";
             // 
+            // chBox1
+            // 
+            this.chBox1.AutoSize = true;
+            this.chBox1.Location = new System.Drawing.Point(371, 57);
+            this.chBox1.Name = "chBox1";
+            this.chBox1.Size = new System.Drawing.Size(69, 17);
+            this.chBox1.TabIndex = 6;
+            this.chBox1.Text = "MakeFile";
+            this.chBox1.UseVisualStyleBackColor = true;
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(446, 55);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(59, 20);
+            this.textBox5.TabIndex = 7;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.ClientSize = new System.Drawing.Size(584, 361);
+            this.ClientSize = new System.Drawing.Size(884, 561);
             this.Controls.Add(this.resultlabel);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(600, 400);
+            this.MaximumSize = new System.Drawing.Size(900, 600);
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "Form1";
-            this.Text = "Mehad Tools v1.03";
+            this.Text = "Mehad Tools v1.45";
             this.Load += new System.EventHandler(this.First_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -431,6 +722,16 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.grpboxoutput.ResumeLayout(false);
+            this.grpboxoutput.PerformLayout();
+            this.grpboxinput.ResumeLayout(false);
+            this.grpboxinput.PerformLayout();
+            this.tabp4dtc.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -471,6 +772,31 @@
         public System.Windows.Forms.Label canid;
         public System.Windows.Forms.TextBox tBoxcanid;
         public System.Windows.Forms.Button getdanacode;
+        private System.Windows.Forms.GroupBox grpboxoutput;
+        private System.Windows.Forms.TextBox txtbshowdata;
+        private System.Windows.Forms.GroupBox grpboxinput;
+        private System.Windows.Forms.CheckBox chboxhidefil;
+        private System.Windows.Forms.CheckBox chboxshowfil;
+        private System.Windows.Forms.Button btnclearallfilter;
+        private System.Windows.Forms.Button btnremovefilter;
+        private System.Windows.Forms.Button btnlimitshow;
+        private System.Windows.Forms.Button btnsetfilter;
+        private System.Windows.Forms.Button btnloadfile;
+        private System.Windows.Forms.ListBox listbadddata;
+        private System.Windows.Forms.TextBox txtbinputdata;
+        private System.Windows.Forms.TabPage tabp4dtc;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button btnFolderPath;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Button btnalldtc;
+        private System.Windows.Forms.Button btnfinddtc;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.CheckBox chBox1;
+        private System.Windows.Forms.TextBox textBox5;
     }
 }
 

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 
 namespace Mehad_Tools
 {
@@ -97,7 +98,7 @@ namespace Mehad_Tools
             }
         }//get dana code
         //=========================================================================================
-
+        //=========================================================================================
         //=========================================================================================
         public byte log_kwp(string path)
         {
@@ -142,7 +143,7 @@ namespace Mehad_Tools
                 }
             }
             mt.resultlabel.BackColor = Color.GreenYellow;
-            mt.resultlabel.Text = "Convert Log CAN29 Complete";
+            mt.resultlabel.Text = "Convert Log KWP Complete";
 
             return 1;
         }
@@ -1038,10 +1039,10 @@ namespace Mehad_Tools
         {
             int i = 0;
             byte protocoltype = 0;
-            string s1 = "", s2 = "";
-            string outf = "", out1 = "";
             string str = "";
             //-----------------------------------
+            if(info != null)
+                Array.Clear(info, 0, info.Length);
             try
             {
                 for (i = 0; i < uniqueList.Count; i++)
@@ -1063,6 +1064,8 @@ namespace Mehad_Tools
                             baudrate[1] = info[25];
                         }
                     }
+                    if (i == 0x2C)
+                        continue;
                 }
                 for (i = 0; i <= uniqueList.Count - 1; i++)
                 {
@@ -1072,11 +1075,15 @@ namespace Mehad_Tools
                     else
                     {
                         protocoltype = detect_protocol(info);
-                        if (protocoltype == 0x00)//KWP1
+                        if (protocoltype == 0x00)//KWP0
+                        {
+                            str = str + kwp0_response_lib(info);
+                        }
+                        else if (protocoltype == 0x01)//KWP1
                         {
                             str = str + kwp1_response_lib(info);
                         }
-                        else if (protocoltype == 0x01)//KWP2
+                        else if (protocoltype == 0x02)//KWP2
                         {
                             str = str + kwp2_response_lib(info);
                         }
@@ -1127,6 +1134,7 @@ namespace Mehad_Tools
             }
             catch
             {
+                MessageBox.Show("make_sim_from_sc");
                 return false;
             }
         }
@@ -1134,10 +1142,9 @@ namespace Mehad_Tools
         public static byte[] strfrm2bytearray(string hex)
         {
             byte[] b1 = { 0, 0, 0, 0, 0, 0, 0 };
-            string s1;
-            int j = 0, k = 0;
-            //hex = hex.Replace(",",string.Empty);
             hex = hex.Replace("0x", string.Empty);
+            if (hex.Length % 2 == 1)
+                hex = "0" + hex;
 
             return Enumerable.Range(0, hex.Length)
                                 .Where(x => x % 2 == 0)
@@ -1404,7 +1411,7 @@ namespace Mehad_Tools
             int a = 0;
             byte protocoltype = 0xFF;
             //-----------------------------------
-            if (ba[0] >= 0x80)
+            if (ba[0] >= 0x80)//KWP TYPE 1
             {
                 if (ba[0] > 0x80)
                 {
@@ -1414,6 +1421,10 @@ namespace Mehad_Tools
                 {
                     protocoltype = 0x01;
                 }
+            }
+            else if (ba[0] > 0x00)//KWP TYPE 2
+            {
+                protocoltype = 0x02;
             }
             else if ((address[0] == 0x00) && (address[1] == 0x00))//CAN11
             {
@@ -1460,7 +1471,7 @@ namespace Mehad_Tools
             return true;
         }//show message at the bottom of the form
         //=========================================================================================
-        public string kwp1_response_lib(byte[] ba)
+        public string kwp0_response_lib(byte[] ba)
         {
             byte[] f21 = { 0xBE, 0x00, 0x00, 0x61, 0x00, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x00 };
             byte[] f22XX = { 0x87, 0x00, 0x00, 0x62, 0x00, 0x00, 0x34, 0x35, 0x36, 0x37, 0x00 };
@@ -1471,6 +1482,7 @@ namespace Mehad_Tools
             byte[] f2701 = { 0x86, 0x00, 0x00, 0x67, 0x00, 0x01, 0x02, 0x03, 0x04, 0x00 };
             byte[] f2702 = { 0x82, 0x00, 0x00, 0x67, 0x00, 0x00 };
             byte[] general = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] f81 = { 0x84, 0x00, 0x00, 0xC1, 0xDF, 0x8F, 0xFF, 0x00 };
             string sout = "";
             int a = 0,i=0;
             //-----------------------------------
@@ -1487,6 +1499,19 @@ namespace Mehad_Tools
                     f21[f21.Length - 1] = (byte)(f21[f21.Length - 1] + f21[i]);
                 }
                 sout = sout + "R={" + BitConverter.ToString(f21).Replace("-", ",") + "};\r\n\r\n";
+            }
+            else if ((ba[0] == 0x81) && (ba[3] == 0x81))
+            {
+                //f81[0] = 0x84;//len
+                f81[2] = ba[1];
+                f81[1] = ba[2];
+                f81[3] = Convert.ToByte(ba[3] + 0x40);
+                //f81[4] = ba[4];
+                for (i = 0; i < f81.Length - 1; i++)
+                {
+                    f81[f81.Length - 1] = (byte)(f81[f81.Length - 1] + f81[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f81).Replace("-", ",") + "};\r\n\r\n";
             }
             else if ((ba[3] == 0x22) && (ba[4] == 0xF1))
             {
@@ -1586,7 +1611,7 @@ namespace Mehad_Tools
             return sout;
         }//create kwp1 response frame for sim
         //=========================================================================================
-        public string kwp2_response_lib(byte[] ba)
+        public string kwp1_response_lib(byte[] ba)
         {
             byte[] f21 = { 0x80, 0x00, 0x00, 0x3E, 0x61, 0x00, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x00 };
             byte[] f22XX = { 0x80, 0x00, 0x00, 0x07, 0x62, 0x00, 0x00, 0x34, 0x35, 0x36, 0x37, 0x00 };
@@ -1597,6 +1622,7 @@ namespace Mehad_Tools
             byte[] f2701 = { 0x80, 0x00, 0x00, 0x06, 0x67, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             byte[] f2702 = { 0x80, 0x00, 0x00, 0x02, 0x67, 0x00, 0x00 };
             byte[] general = { 0x80, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] f81 = { 0x80, 0x00, 0x00, 0x04, 0xC1, 0xDF, 0x8F, 0xFF, 0x00 };
             string sout = "";
             int a = 0, i = 0;
             //-----------------------------------
@@ -1612,6 +1638,18 @@ namespace Mehad_Tools
                     f21[f21.Length - 1] = (byte)(f21[f21.Length - 1] + f21[i]);
                 }
                 sout = sout + "R={" + BitConverter.ToString(f21).Replace("-", ",") + "};\r\n\r\n";
+            }
+            else if ((ba[0] == 0x80) && (ba[4] == 0x81))
+            {
+                f81[2] = ba[1];
+                f81[1] = ba[2];
+                f81[4] = Convert.ToByte(ba[4] + 0x40);
+                //f81[5] = ba[5];
+                for (i = 0; i < f81.Length - 1; i++)
+                {
+                    f81[f81.Length - 1] = (byte)(f81[f81.Length - 1] + f81[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f81).Replace("-", ",") + "};\r\n\r\n";
             }
             else if ((ba[4] == 0x22) && (ba[5] == 0xF1))
             {
@@ -1709,6 +1747,132 @@ namespace Mehad_Tools
                 ba[1] = general[1];
                 ba[2] = general[2];
                 ba[4] = Convert.ToByte(ba[4] + 0x40);
+                for (i = 0; i < ba.Length - 1; i++)
+                {
+                    ba[ba.Length - 1] = (byte)(ba[ba.Length - 1] + ba[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(ba).Replace("-", ",") + "};\r\n\r\n";
+            }
+
+            return sout;
+        }//create kwp1 response frame for sim
+        //=========================================================================================
+        public string kwp2_response_lib(byte[] ba)
+        {
+            byte[] f21 = { 0x00, 0x00, 0x00, 0x00, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x00 };
+            byte[] f22XX = { 0x08, 0x00, 0x00, 0x00, 0x00, 0x34, 0x35, 0x36, 0x37, 0x00 };
+            byte[] f31 = { 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] f22F1 = { 0x15, 0x00, 0x00, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x00 };
+            byte[] f2E3B = { 0x04, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] f3436 = { 0x03, 0x00, 0x00, 0x00, 0x00 };
+            byte[] f2701 = { 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] f2702 = { 0x03, 0x00, 0x00, 0x00, 0x00 };
+            byte[] general = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] f81 = { 0x80, 0x00, 0x00, 0x04, 0xC1, 0xDF, 0x8F, 0xFF, 0x00 };
+            string sout = "";
+            int a = 0, i = 0;
+            //-----------------------------------
+            sout = "C={" + BitConverter.ToString(ba).Replace("-", ",") + "};\r\n";
+            if (ba[1] == 0x21)
+            {
+                f21[1] = Convert.ToByte(ba[1] + 0x40);
+                f21[2] = ba[2];
+                for (i = 0; i < f21.Length - 1; i++)
+                {
+                    f21[f21.Length - 1] = (byte)(f21[f21.Length - 1] + f21[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f21).Replace("-", ",") + "};\r\n\r\n";
+            }
+            /*else if ((ba[0] == 0x80) && (ba[4] == 0x81))
+            {
+                f81[2] = ba[1];
+                f81[1] = ba[2];
+                f81[4] = Convert.ToByte(ba[4] + 0x40);
+                //f81[5] = ba[5];
+                for (i = 0; i < f81.Length - 1; i++)
+                {
+                    f81[f81.Length - 1] = (byte)(f81[f81.Length - 1] + f81[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f81).Replace("-", ",") + "};\r\n\r\n";
+            }*/
+            else if ((ba[1] == 0x22) && (ba[5] == 0xF1))
+            {
+                f22F1[1] = Convert.ToByte(ba[1] + 0x40);
+                f22F1[2] = ba[2];
+                for (i = 0; i < f22F1.Length - 1; i++)
+                {
+                    f22F1[f22F1.Length - 1] = (byte)(f22F1[f22F1.Length - 1] + f22F1[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f22F1).Replace("-", ",") + "};\r\n\r\n";
+            }
+            else if (ba[1] == 0x1A)
+            {
+                f22F1[1] = Convert.ToByte(ba[1] + 0x40);
+                f22F1[2] = ba[2];
+                for (i = 0; i < f22F1.Length - 1; i++)
+                {
+                    f22F1[f22F1.Length - 1] = (byte)(f22F1[f22F1.Length - 1] + f22F1[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f22F1).Replace("-", ",") + "};\r\n\r\n";
+            }
+            else if (ba[1] == 0x22)
+            {
+                f22XX[1] = Convert.ToByte(ba[1] + 0x40);
+                f22XX[2] = ba[2];
+                for (i = 0; i < f22XX.Length - 1; i++)
+                {
+                    f22XX[f22XX.Length - 1] = (byte)(f22XX[f22XX.Length - 1] + f22XX[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f22XX).Replace("-", ",") + "};\r\n\r\n";
+            }
+            else if ((ba[1] == 0x2E) || (ba[1] == 0x3B))
+            {
+                f2E3B[1] = Convert.ToByte(ba[1] + 0x40);
+                f2E3B[2] = ba[2];
+                f2E3B[3] = ba[3];
+                for (i = 0; i < f2E3B.Length - 1; i++)
+                {
+                    f2E3B[f2E3B.Length - 1] = (byte)(f2E3B[f2E3B.Length - 1] + f2E3B[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f2E3B).Replace("-", ",") + "};\r\n";
+                sout = sout + "X={5};\r\n\r\n";
+            }
+            else if ((ba[1] == 0x34) || (ba[1] == 0x36))
+            {
+                f3436[1] = Convert.ToByte(ba[1] + 0x40);
+                f3436[2] = ba[2];
+                f3436[3] = ba[3];
+                for (i = 0; i < f3436.Length - 1; i++)
+                {
+                    f3436[f3436.Length - 1] = (byte)(f3436[f3436.Length - 1] + f3436[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f3436).Replace("-", ",") + "};\r\n";
+                sout = sout + "X={5};\r\n\r\n";
+            }
+            else if ((ba[1] == 0x27) && ((ba[2] == 0x01) || (ba[2] == 0x03) || (ba[2] == 0x05) || (ba[2] == 0x07) || (ba[2] == 0x09)))
+            {
+                f2701[1] = Convert.ToByte(ba[1] + 0x40);
+                f2701[2] = ba[2];
+                for (i = 0; i < f2701.Length - 1; i++)
+                {
+                    f2701[f2701.Length - 1] = (byte)(f2701[f2701.Length - 1] + f2701[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f2701).Replace("-", ",") + "};\r\n\r\n";
+            }
+            else if ((ba[1] == 0x27) && ((ba[2] == 0x02) || (ba[2] == 0x04) || (ba[2] == 0x06) || (ba[2] == 0x08) || (ba[2] == 0x0A)))
+            {
+                f2702[1] = Convert.ToByte(ba[1] + 0x40);
+                f2702[2] = ba[2];
+                for (i = 0; i < f2702.Length - 1; i++)
+                {
+                    f2702[f2702.Length - 1] = (byte)(f2702[f2702.Length - 1] + f2702[i]);
+                }
+                sout = sout + "R={" + BitConverter.ToString(f2702).Replace("-", ",") + "};\r\n";
+                sout = sout + "X={5};\r\n\r\n";
+            }
+            else
+            {
+                ba[1] = Convert.ToByte(ba[1] + 0x40);
                 for (i = 0; i < ba.Length - 1; i++)
                 {
                     ba[ba.Length - 1] = (byte)(ba[ba.Length - 1] + ba[i]);
