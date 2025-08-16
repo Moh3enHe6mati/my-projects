@@ -37,10 +37,6 @@ namespace FConverter
         public Form1()
         {
             InitializeComponent();
-            //this.BackColor = Color.Black; // زمینه فرم
-            //this.ForeColor = Color.Red;    // رنگ متن
-            
-
         }
 
         //=================================================================
