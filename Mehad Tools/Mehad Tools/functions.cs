@@ -264,6 +264,54 @@ namespace Mehad_Tools
                 return 0;
         }
         //=========================================================================================
+        public void clearout()
+        {
+            int i = 0;
+            string Out = @"C:\\MehadCo\\DiagLab\\Out";
+            string S1 = @"C:\\MehadCo\\DiagLab\\Out\\English";
+            string S2 = @"C:\\MehadCo\\DiagLab\\Out\\Farsi";
+            string S3 = @"C:\\MehadCo\\DiagLab\\Out\\Merged";
+            List<string> fs1 = new List<string>();
+            //string Out = @"C:\\MehadCo\\DiagLab\\Out";
+            try
+            {
+                for (i = 0; i < fs1.Count; i++)
+                    File.SetAttributes(fs1[i], File.GetAttributes(fs1[i]) & ~FileAttributes.ReadOnly);
+                while (Directory.Exists(Out) == true)
+                {
+                    Directory.Delete(Out, true);
+                    while (Directory.Exists(Out) == true) ;
+                }
+                while (Directory.Exists(Out) == false)
+                {
+                    Directory.CreateDirectory(Out);
+                    while (Directory.Exists(Out) == false) ;
+                }
+                while (Directory.Exists(S1) == false)
+                {
+                    Directory.CreateDirectory(S1);
+                    while (Directory.Exists(S1) == false) ;
+                }
+                while (Directory.Exists(S2) == false)
+                {
+                    Directory.CreateDirectory(S2);
+                    while (Directory.Exists(S2) == false) ;
+                }
+                while (Directory.Exists(S3) == false)
+                {
+                    Directory.CreateDirectory(S3);
+                    while (Directory.Exists(S3) == false) ;
+                }
+                mt.resultlabel.BackColor = Color.GreenYellow;
+                mt.resultlabel.Text = "Clear Temp/Out Complete";
+            }
+            catch
+            {
+                mt.resultlabel.BackColor = Color.Red;
+                mt.resultlabel.Text = "Could Not Find File Path";
+            }
+        }//clear out content
+        //=========================================================================================
         public void cleartemp()
         {
             int i = 0;
@@ -289,7 +337,7 @@ namespace Mehad_Tools
                     while (Directory.Exists(Temp) == false) ;
                 }
                 mt.resultlabel.BackColor = Color.GreenYellow;
-                mt.resultlabel.Text = "Clear Temp Complete";
+                mt.resultlabel.Text = "Clear Temp/Out Complete";
             }
             catch
             {

@@ -20,22 +20,27 @@ namespace Mehad_Tools
         string globalPath = null;
         string globalFolderPath = null;
         private HashSet<string> addedItems = new HashSet<string>();
+        private List<string> filePathsArray = new List<string>(); // آرایه ذخیره مسیر فایل‌ها
         //=========================================================================================
         public Form1()
         {
             InitializeComponent();
         }
+        
+
+
         //=========================================================================================
         private void First_Load(object sender, EventArgs e)
         {
             f = new functions(this);
-            btnsetfilter.Enabled = false;
-            btnlimitshow.Enabled = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.Width = 600;
             this.Height = 400;
             tabControl1.Width = 576;
             tabControl1.Height = 340;
+            
+            // تنظیم double click event برای listBox1
+            listBox1.DoubleClick += ListBox1_DoubleClick;
         }//first load form
         //=========================================================================================
         private void cleartemp_Click(object sender, EventArgs e)
@@ -44,6 +49,7 @@ namespace Mehad_Tools
             resultlabel.BackColor = Color.Red;
             this.Refresh();
             f.cleartemp();
+            f.clearout();
         }//clear temp content
         //=========================================================================================
         private void ChangeDics_Click_Click(object sender, EventArgs e)
@@ -214,14 +220,6 @@ namespace Mehad_Tools
 
         private void btnsetfilter_Click(object sender, EventArgs e)
         {
-            /*string input = txtbinputdata.Text.Trim();
-
-            if (!string.IsNullOrEmpty(input))
-            {
-                listbadddata.Items.Add(input);
-                txtbinputdata.Clear();
-                txtbinputdata.Focus();
-            }*/
             if (!string.IsNullOrEmpty(txtbinputdata.Text))
             {
                 string[] lines = txtbinputdata.Text.Split(new char[] { '\n' }, StringSplitOptions.None);
@@ -245,7 +243,8 @@ namespace Mehad_Tools
             }
             if (EnsureFileSelected())
             {
-                PerformSearch(globalPath);
+                // بررسی وضعیت چک‌باکس‌ها و اعمال عملکرد مناسب
+                ApplyCurrentFilter();
             }
         }
 
@@ -253,7 +252,9 @@ namespace Mehad_Tools
         {
             if (listbadddata.SelectedItem != null)
             {
+                string selectedItem = listbadddata.SelectedItem.ToString();
                 listbadddata.Items.Remove(listbadddata.SelectedItem);
+                addedItems.Remove(selectedItem); // حذف از HashSet برای امکان اضافه کردن مجدد
 
                 // دوباره جستجو کن و نتایج رو به‌روز کن
                 if (chboxshowfil.Checked && !string.IsNullOrEmpty(globalPath))
@@ -415,6 +416,7 @@ namespace Mehad_Tools
             if (listbadddata.Items.Count > 0)
             {
                 listbadddata.Items.Clear();
+                addedItems.Clear(); // پاک کردن HashSet برای امکان اضافه کردن مجدد آیتم‌ها
                 if (!string.IsNullOrEmpty(globalPath))
                 {
                     PerformSearch(globalPath);
@@ -430,18 +432,18 @@ namespace Mehad_Tools
         {
             if (chboxshowfil.Checked)
             {
+                // غیرفعال کردن چک‌باکس مخالف
                 chboxhidefil.Checked = false;
-                btnsetfilter.Enabled = true;
-                btnlimitshow.Enabled = false;
-                if (!string.IsNullOrEmpty(globalPath))
-                {
-                    PerformSearch(globalPath);
-                }
+                // اعمال فیلتر نمایش
+                ApplyCurrentFilter();
             }
             else
             {
-                btnsetfilter.Enabled = false;
-                btnlimitshow.Enabled = false;
+                // اگر هر دو چک‌باکس غیرفعال شدند، نمایش کل داده‌ها
+                if (!chboxhidefil.Checked)
+                {
+                    ShowAllData();
+                }
             }
         }
 
@@ -449,21 +451,70 @@ namespace Mehad_Tools
         {
             if (chboxhidefil.Checked)
             {
+                // غیرفعال کردن چک‌باکس مخالف
                 chboxshowfil.Checked = false;
-                btnlimitshow.Enabled = true;
-                btnsetfilter.Enabled = false;
-                if (!string.IsNullOrEmpty(globalPath))
-                {
-                    RemoveLinesWithPhrases(globalPath);
-                }
+                // اعمال فیلتر مخفی‌سازی
+                ApplyCurrentFilter();
             }
             else
             {
-                btnsetfilter.Enabled = false;
-                btnlimitshow.Enabled = false;
+                // اگر هر دو چک‌باکس غیرفعال شدند، نمایش کل داده‌ها
+                if (!chboxshowfil.Checked)
+                {
+                    ShowAllData();
+                }
             }
         }
 
+        private void ApplyCurrentFilter()
+        {
+            if (!string.IsNullOrEmpty(globalPath))
+            {
+                if (chboxshowfil.Checked)
+                {
+                    // نمایش فقط خطوط دارای فیلتر
+                    PerformSearch(globalPath);
+                }
+                else if (chboxhidefil.Checked)
+                {
+                    // مخفی کردن خطوط دارای فیلتر
+                    RemoveLinesWithPhrases(globalPath);
+                }
+                else
+                {
+                    // اگر هیچ چک‌باکسی فعال نیست، نمایش کل داده‌ها
+                    ShowAllData();
+                }
+            }
+        }
+
+        private void ShowAllData()
+        {
+            if (!string.IsNullOrEmpty(globalPath))
+            {
+                try
+                {
+                    txtbshowdata.Clear();
+                    txtbshowdata.Text = "Loading all data...";
+                    this.Refresh();
+                    
+                    // خواندن کل فایل بدون فیلتر
+                    var allLines = File.ReadAllLines(globalPath);
+                    List<string> allLinesWithNumber = new List<string>();
+
+                    for (int i = 0; i < allLines.Length; i++)
+                    {
+                        allLinesWithNumber.Add($"({i + 1})\t{allLines[i]}");
+                    }
+
+                    txtbshowdata.Lines = allLinesWithNumber.ToArray();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error loading all data: " + ex.Message);
+                }
+            }
+        }
 
         //=========================================================================================
         //===================================== FIND DTC ==========================================
@@ -477,7 +528,7 @@ namespace Mehad_Tools
                 SaveListToFile(jcfile_path, globalFolderPath);
                 SearchInFaultFiles(textBox3.Text, globalFolderPath);
                 File.Delete(globalFolderPath + "\\file01.txt");
-                ExportDTCsToFile(textBox1.Text);
+                ExportDTCsToFile();
             }
             else
             {
@@ -571,8 +622,8 @@ namespace Mehad_Tools
 
         public void SearchInFaultFiles(string searchText, string folderPath)
         {
-            textBox1.Text = "Plz wait...";
-            textBox2.Text = "Plz wait...";
+            listBox1.Items.Clear();
+            listBox1.Items.Add("Plz wait...");
             this.Refresh();
             if (string.IsNullOrEmpty(searchText))
             {
@@ -591,10 +642,12 @@ namespace Mehad_Tools
             try
             {
                 List<string> foundResults = new List<string>();
-                List<string> foundPaths = new List<string>();
                 string[] filePaths = File.ReadAllLines(file01Path);
                 int totalMatches = 0;
-                int pathCounter = 1;
+                
+                // پاک کردن لیست باکس و آرایه مسیرها
+                listBox1.Items.Clear();
+                filePathsArray.Clear();
 
                 foreach (string filePath in filePaths)
                 {
@@ -611,10 +664,9 @@ namespace Mehad_Tools
                     {
                         if (lines[i].IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                         {
-                            // اضافه کردن مسیر فایل برای هر خط پیدا شده
-                            foundPaths.Add($"({pathCounter}) {filePath}\r\n");
-                            pathCounter++;
-
+                            // اضافه کردن مسیر فایل به آرایه
+                            filePathsArray.Add(filePath);
+                            
                             if (!fileHasMatch)
                             {
                                 fileHasMatch = true;
@@ -636,13 +688,14 @@ namespace Mehad_Tools
 
                 if (foundResults.Count > 0)
                 {
-                    textBox1.Text = string.Join("\n", foundResults);
-                    textBox2.Text = string.Join("", foundPaths);
+                    // اضافه کردن نتایج مستقیماً به listBox1
+                    AddResultsToListBox(foundResults);
                 }
                 else
                 {
-                    textBox1.Text = "رشته مورد نظر در هیچ کدام از فایل‌ها یافت نشد.";
-                    textBox2.Text = "";
+                    listBox1.Items.Clear();
+                    listBox1.Items.Add("رشته مورد نظر در هیچ کدام از فایل‌ها یافت نشد.");
+                    filePathsArray.Clear();
                 }
             }
             catch (Exception ex)
@@ -653,16 +706,18 @@ namespace Mehad_Tools
 
         public void SearchAllDTC(string folderPath)
         {
-            textBox1.Text = "Plz wait...";
-            textBox2.Text = "Plz wait...";
+            listBox1.Items.Clear();
+            listBox1.Items.Add("Plz wait...");
             this.Refresh();
 
             try
             {
                 List<string> foundResults = new List<string>();
-                List<string> foundPaths = new List<string>();
                 int totalMatches = 0;
-                int pathCounter = 1;
+                
+                // پاک کردن لیست باکس و آرایه مسیرها
+                listBox1.Items.Clear();
+                filePathsArray.Clear();
 
                 // پیدا کردن تمام فایل‌های fault.jc
                 string[] faultFiles = Directory.GetFiles(folderPath, "fault.jc", SearchOption.AllDirectories);
@@ -721,9 +776,8 @@ namespace Mehad_Tools
                             !line.Contains(":\"E\"") &&
                             !line.Contains(":\"F\""))
                         {
-                            // اضافه کردن مسیر فایل برای هر خط پیدا شده
-                            foundPaths.Add($"({pathCounter}) {filePath}\r\n");
-                            pathCounter++;
+                            // اضافه کردن مسیر فایل به آرایه
+                            filePathsArray.Add(filePath);
 
                             if (!fileHasMatch)
                             {
@@ -747,13 +801,14 @@ namespace Mehad_Tools
 
                 if (foundResults.Count > 0)
                 {
-                    textBox1.Text = string.Join("\n", foundResults);
-                    textBox2.Text = string.Join("", foundPaths);
+                    // اضافه کردن نتایج مستقیماً به listBox1
+                    AddResultsToListBox(foundResults);
                 }
                 else
                 {
-                    textBox1.Text = "Can Not Find DTC";
-                    textBox2.Text = "";
+                    listBox1.Items.Clear();
+                    listBox1.Items.Add("Can Not Find DTC");
+                    filePathsArray.Clear();
                 }
             }
             catch (Exception ex)
@@ -777,7 +832,7 @@ namespace Mehad_Tools
         //=========================================================================================
         //=============================== EXPORT DTCs TO FILE ====================================
         //=========================================================================================
-        public void ExportDTCsToFile(string textBox1Content)
+        public void ExportDTCsToFile()
         {
             if (!chBox1.Checked) return;
             try
@@ -804,44 +859,40 @@ namespace Mehad_Tools
                     }
                 }
 
-                // Regex for 0x....: (2, 3, or 4 bytes)
-                var matches = Regex.Matches(textBox1Content, @"0x([0-9A-Fa-f]{4,8}):");
-                var dtc2 = new List<string>();
-                var dtc3 = new List<string>();
-                var dtc4 = new List<string>();
-
-                foreach (Match m in matches)
-                {
-                    string hex = m.Groups[1].Value;
-                    // Remove 0x, add suffix from textBox5
-                    string code = hex + suffix;
-                    
-                    // Calculate total length after adding suffix (each 2 hex chars = 1 byte)
-                    int totalBytes = code.Length / 2;
-                    
-                    if (totalBytes == 2)
-                        dtc2.Add(code);
-                    else if (totalBytes == 3)
-                        dtc3.Add(code);
-                    else if (totalBytes == 4)
-                        dtc4.Add(code);
-                }
-
+                // تحلیل فایل‌ها و استخراج کدهای خطا
                 var lines = new List<string>();
-                if (dtc2.Count > 0)
+                var processedFiles = new HashSet<string>(); // برای جلوگیری از تکرار فایل‌ها
+
+                // پردازش هر آیتم در لیست‌باکس
+                for (int i = 0; i < listBox1.Items.Count && i < filePathsArray.Count; i++)
                 {
-                    lines.Add("// EXPORT_DTC_CODE_2_BYTE");
-                    lines.Add(string.Join(",", dtc2));
+                    string currentFilePath = filePathsArray[i];
+                    
+                    // اگر این فایل قبلاً پردازش شده، رد کن
+                    if (processedFiles.Contains(currentFilePath))
+                        continue;
+                        
+                    // اضافه کردن به فایل‌های پردازش شده
+                    processedFiles.Add(currentFilePath);
+                    
+                    // تحلیل فایل و استخراج کدهای خطا
+                    var fileDTCs = AnalyzeFileForDTCs(currentFilePath, suffix);
+                    
+                    if (fileDTCs.Count > 0)
+                    {
+                        // ایجاد کامنت از مسیر کامل فایل
+                        lines.Add($"//{currentFilePath}");
+                        
+                        // اضافه کردن کدهای خطا در یک خط
+                        lines.Add(string.Join(",", fileDTCs));
+                        lines.Add(""); // خط خالی برای جداسازی
+                    }
                 }
-                if (dtc3.Count > 0)
+
+                // اگر هیچ کدی پیدا نشد
+                if (lines.Count == 0)
                 {
-                    lines.Add("// EXPORT_DTC_CODE_3_BYTE");
-                    lines.Add(string.Join(",", dtc3));
-                }
-                if (dtc4.Count > 0)
-                {
-                    lines.Add("// EXPORT_DTC_CODE_4_BYTE");
-                    lines.Add(string.Join(",", dtc4));
+                    lines.Add("// No DTC codes found in any files");
                 }
 
                 File.WriteAllLines(filePath, lines);
@@ -850,6 +901,236 @@ namespace Mehad_Tools
             catch (Exception ex)
             {
                 MessageBox.Show("خطا در ذخیره فایل DTC: " + ex.Message);
+            }
+        }
+
+        //=========================================================================================
+        //=============================== LISTBOX HELPER METHODS ===============================
+        //=========================================================================================
+        
+        private string GetListBoxContentAsString()
+        {
+            try
+            {
+                StringBuilder content = new StringBuilder();
+                
+                foreach (var item in listBox1.Items)
+                {
+                    content.AppendLine(item.ToString());
+                }
+                
+                return content.ToString();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private void AddResultsToListBox(List<string> foundResults)
+        {
+            try
+            {
+                // پاک کردن لیست باکس
+                listBox1.Items.Clear();
+                
+                // اضافه کردن هر نتیجه به listBox1
+                foreach (string result in foundResults)
+                {
+                    // تقسیم نتیجه به خطوط
+                    string[] lines = result.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    
+                    foreach (string line in lines)
+                    {
+                        if (!string.IsNullOrWhiteSpace(line))
+                        {
+                            listBox1.Items.Add(line.Trim());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding results to listBox: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private List<string> FormatDTCCodes(List<string> codes, int codesPerLine)
+        {
+            var formattedLines = new List<string>();
+            
+            try
+            {
+                for (int i = 0; i < codes.Count; i += codesPerLine)
+                {
+                    // گرفتن تا 50 کد (یا باقی‌مانده کدها)
+                    var chunk = codes.Skip(i).Take(codesPerLine);
+                    
+                    // ترکیب کدها با کاما
+                    string line = string.Join(",", chunk);
+                    
+                    formattedLines.Add(line);
+                }
+            }
+            catch (Exception ex)
+            {
+                // در صورت خطا، همه کدها را در یک خط قرار بده
+                formattedLines.Add(string.Join(",", codes));
+            }
+            
+            return formattedLines;
+        }
+
+        private List<string> AnalyzeFileForDTCs(string filePath, string suffix)
+        {
+            var dtcCodes = new List<string>();
+            
+            try
+            {
+                if (!File.Exists(filePath))
+                    return dtcCodes;
+
+                string[] lines = File.ReadAllLines(filePath);
+                
+                foreach (string line in lines)
+                {
+                    // جستجوی pattern کدهای خطا: 0x....:
+                    var matches = Regex.Matches(line, @"0x([0-9A-Fa-f]{4,8}):");
+                    
+                    foreach (Match match in matches)
+                    {
+                        string hex = match.Groups[1].Value;
+                        // اضافه کردن suffix اگر وجود دارد
+                        string code = hex + suffix;
+                        
+                        // اضافه کردن کد اگر تکراری نباشد
+                        if (!dtcCodes.Contains(code))
+                        {
+                            dtcCodes.Add(code);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // در صورت خطا، کدهای خالی برگردان
+                return new List<string>();
+            }
+            
+            return dtcCodes;
+        }
+
+
+
+        //=========================================================================================
+        //=============================== LISTBOX DOUBLE CLICK =================================
+        //=========================================================================================
+        
+
+
+        private void ListBox1_DoubleClick(object sender, EventArgs e)
+        {
+            try
+            {
+                // بررسی اینکه آیا آیتمی انتخاب شده یا نه
+                if (listBox1.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Please select an item first.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // گرفتن ایندکس آیتم انتخاب شده
+                int selectedIndex = listBox1.SelectedIndex;
+                
+                // بررسی اینکه آیا ایندکس در محدوده آرایه است
+                if (selectedIndex >= 0 && selectedIndex < filePathsArray.Count)
+                {
+                    string filePath = filePathsArray[selectedIndex];
+                    
+                    // بررسی وجود فایل
+                    if (File.Exists(filePath))
+                    {
+                        // باز کردن فایل در نوتپد
+                        OpenFileInNotepad(filePath);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"File not found:\n{filePath}", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid selection or no corresponding file path.", "Path Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening file:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+        private void OpenFileInNotepad(string filePath)
+        {
+            try
+            {
+                // اولویت اول: Notepad++ 
+                if (TryOpenWithNotepadPlusPlus(filePath))
+                {
+                    return; // اگر Notepad++ موفق بود، خروج
+                }
+                
+                // اولویت دوم: Notepad معمولی ویندوز
+                System.Diagnostics.Process.Start("notepad.exe", $"\"{filePath}\"");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not open file:\n{ex.Message}", "File Open Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private bool TryOpenWithNotepadPlusPlus(string filePath)
+        {
+            try
+            {
+                // مسیرهای احتمالی Notepad++
+                string[] possiblePaths = {
+                    @"C:\Program Files\Notepad++\notepad++.exe",
+                    @"C:\Program Files (x86)\Notepad++\notepad++.exe",
+                    @"C:\Users\" + Environment.UserName + @"\AppData\Local\Notepad++\notepad++.exe",
+                    "notepad++.exe" // اگر در PATH باشد
+                };
+
+                foreach (string path in possiblePaths)
+                {
+                    try
+                    {
+                        if (path == "notepad++.exe")
+                        {
+                            // تست اینکه آیا notepad++ در PATH است
+                            System.Diagnostics.Process.Start(path, $"\"{filePath}\"");
+                            return true;
+                        }
+                        else if (File.Exists(path))
+                        {
+                            // اگر فایل وجود دارد، اجرا کن
+                            System.Diagnostics.Process.Start(path, $"\"{filePath}\"");
+                            return true;
+                        }
+                    }
+                    catch
+                    {
+                        // اگر این مسیر کار نکرد، مسیر بعدی را امتحان کن
+                        continue;
+                    }
+                }
+                
+                return false; // هیچ مسیری کار نکرد
+            }
+            catch
+            {
+                return false; // خطا در تلاش برای باز کردن Notepad++
             }
         }
     }
