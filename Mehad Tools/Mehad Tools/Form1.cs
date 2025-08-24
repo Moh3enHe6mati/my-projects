@@ -3068,7 +3068,23 @@ namespace Mehad_Tools
                             !line.Contains(":\"A\"") &&
                             !line.Contains(":\"D\"") &&
                             !line.Contains(":\"E\"") &&
-                            !line.Contains(":\"F\""))
+                            !line.Contains(":\"F\"") &&
+                            !line.Contains("0x0000:\"P0\",") &&
+                            !line.Contains("0x0010:\"P1\",") &&
+                            !line.Contains("0x0020:\"P2\",") &&
+                            !line.Contains("0x0030:\"P3\",") &&
+                            !line.Contains("0x0040:\"C0\",") &&
+                            !line.Contains("0x0050:\"C1\",") &&
+                            !line.Contains("0x0060:\"C2\",") &&
+                            !line.Contains("0x0070:\"C3\",") &&
+                            !line.Contains("0x0080:\"B0\",") &&
+                            !line.Contains("0x0090:\"B1\",") &&
+                            !line.Contains("0x00A0:\"B2\",") &&
+                            !line.Contains("0x00B0:\"B3\",") &&
+                            !line.Contains("0x00C0:\"U0\",") &&
+                            !line.Contains("0x00D0:\"U1\",") &&
+                            !line.Contains("0x00E0:\"U2\",") &&
+                            !line.Contains("0x00F0:\"U3\""))
                         {
                             // اضافه کردن مسیر فایل به آرایه
                             filePathsArray.Add(filePath);
@@ -3282,8 +3298,11 @@ namespace Mehad_Tools
                 if (!File.Exists(filePath))
                     return dtcCodes;
 
-                string[] lines = File.ReadAllLines(filePath);
-                
+                //string[] lines = File.ReadAllLines(filePath);
+                string[] lines = File.ReadAllLines(filePath)
+                     .Select(l => new string(l.Where(ch => !char.IsWhiteSpace(ch)).ToArray()))
+                     .ToArray();
+
                 foreach (string line in lines)
                 {
                     // جستجوی pattern کدهای خطا: 0x....:

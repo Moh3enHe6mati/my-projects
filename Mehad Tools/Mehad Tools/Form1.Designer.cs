@@ -738,7 +738,7 @@
             this.MaximumSize = new System.Drawing.Size(900, 600);
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "Form1";
-            this.Text = "Mehad Tools v1.60";
+            this.Text = "Mehad Tools v1.61";
             this.Load += new System.EventHandler(this.First_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
