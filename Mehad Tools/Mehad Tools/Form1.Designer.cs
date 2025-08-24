@@ -62,6 +62,8 @@
             this.grpboxoutput = new System.Windows.Forms.GroupBox();
             this.txtbshowdata = new System.Windows.Forms.TextBox();
             this.grpboxinput = new System.Windows.Forms.GroupBox();
+            this.lblhide = new System.Windows.Forms.Label();
+            this.lblshow = new System.Windows.Forms.Label();
             this.chboxhidefil = new System.Windows.Forms.CheckBox();
             this.chboxshowfil = new System.Windows.Forms.CheckBox();
             this.btnclearallfilter = new System.Windows.Forms.Button();
@@ -72,24 +74,22 @@
             this.txtbinputdata = new System.Windows.Forms.TextBox();
             this.tabp4dtc = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.lbl3 = new System.Windows.Forms.Label();
+            this.lbl2 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.chBox1 = new System.Windows.Forms.CheckBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
+            this.btnFolderPath = new System.Windows.Forms.Button();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnfinddtc = new System.Windows.Forms.Button();
             this.btnalldtc = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.btnFolderPath = new System.Windows.Forms.Button();
             this.resultlabel = new System.Windows.Forms.Label();
             this.folderBrowser1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.lbl2 = new System.Windows.Forms.Label();
-            this.lbl3 = new System.Windows.Forms.Label();
-            this.lblshow = new System.Windows.Forms.Label();
-            this.lblhide = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.cleargroupBox.SuspendLayout();
@@ -213,7 +213,7 @@
             // hexradioButton
             // 
             this.hexradioButton.AutoSize = true;
-            this.hexradioButton.Location = new System.Drawing.Point(180, 10);
+            this.hexradioButton.Location = new System.Drawing.Point(26, 10);
             this.hexradioButton.Name = "hexradioButton";
             this.hexradioButton.Size = new System.Drawing.Size(42, 17);
             this.hexradioButton.TabIndex = 2;
@@ -224,7 +224,7 @@
             // binaryradioButton
             // 
             this.binaryradioButton.AutoSize = true;
-            this.binaryradioButton.Location = new System.Drawing.Point(280, 10);
+            this.binaryradioButton.Location = new System.Drawing.Point(126, 10);
             this.binaryradioButton.Name = "binaryradioButton";
             this.binaryradioButton.Size = new System.Drawing.Size(53, 17);
             this.binaryradioButton.TabIndex = 4;
@@ -235,7 +235,7 @@
             // asciiradioButton
             // 
             this.asciiradioButton.AutoSize = true;
-            this.asciiradioButton.Location = new System.Drawing.Point(228, 10);
+            this.asciiradioButton.Location = new System.Drawing.Point(74, 10);
             this.asciiradioButton.Name = "asciiradioButton";
             this.asciiradioButton.Size = new System.Drawing.Size(46, 17);
             this.asciiradioButton.TabIndex = 3;
@@ -245,7 +245,7 @@
             // 
             // convertbutton
             // 
-            this.convertbutton.Location = new System.Drawing.Point(75, 7);
+            this.convertbutton.Location = new System.Drawing.Point(255, 7);
             this.convertbutton.Name = "convertbutton";
             this.convertbutton.Size = new System.Drawing.Size(75, 23);
             this.convertbutton.TabIndex = 1;
@@ -467,6 +467,24 @@
             this.grpboxinput.TabStop = false;
             this.grpboxinput.Text = "Input Data";
             // 
+            // lblhide
+            // 
+            this.lblhide.AutoSize = true;
+            this.lblhide.Location = new System.Drawing.Point(451, 71);
+            this.lblhide.Name = "lblhide";
+            this.lblhide.Size = new System.Drawing.Size(27, 13);
+            this.lblhide.TabIndex = 10;
+            this.lblhide.Text = "hide";
+            // 
+            // lblshow
+            // 
+            this.lblshow.AutoSize = true;
+            this.lblshow.Location = new System.Drawing.Point(375, 71);
+            this.lblshow.Name = "lblshow";
+            this.lblshow.Size = new System.Drawing.Size(32, 13);
+            this.lblshow.TabIndex = 9;
+            this.lblshow.Text = "show";
+            // 
             // chboxhidefil
             // 
             this.chboxhidefil.AutoSize = true;
@@ -570,14 +588,15 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Output Data";
             // 
-            // textBox2
+            // listBox1
             // 
-            this.textBox2.Location = new System.Drawing.Point(6, 475);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox2.Size = new System.Drawing.Size(174, 20);
-            this.textBox2.TabIndex = 1;
-            this.textBox2.WordWrap = false;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.HorizontalScrollbar = true;
+            this.listBox1.Location = new System.Drawing.Point(6, 19);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.ScrollAlwaysVisible = true;
+            this.listBox1.Size = new System.Drawing.Size(641, 420);
+            this.listBox1.TabIndex = 2;
             // 
             // groupBox5
             // 
@@ -595,12 +614,39 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Input Data";
             // 
+            // lbl3
+            // 
+            this.lbl3.AutoSize = true;
+            this.lbl3.Location = new System.Drawing.Point(6, 127);
+            this.lbl3.Name = "lbl3";
+            this.lbl3.Size = new System.Drawing.Size(83, 13);
+            this.lbl3.TabIndex = 9;
+            this.lbl3.Text = "DTC Extra Byte:";
+            // 
+            // lbl2
+            // 
+            this.lbl2.AutoSize = true;
+            this.lbl2.Location = new System.Drawing.Point(6, 59);
+            this.lbl2.Name = "lbl2";
+            this.lbl2.Size = new System.Drawing.Size(54, 13);
+            this.lbl2.TabIndex = 8;
+            this.lbl2.Text = "FileName:";
+            // 
             // textBox5
             // 
             this.textBox5.Location = new System.Drawing.Point(92, 124);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(59, 20);
             this.textBox5.TabIndex = 7;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(6, 475);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox2.Size = new System.Drawing.Size(174, 20);
+            this.textBox2.TabIndex = 1;
+            this.textBox2.WordWrap = false;
             // 
             // chBox1
             // 
@@ -619,6 +665,23 @@
             this.textBox4.Size = new System.Drawing.Size(121, 20);
             this.textBox4.TabIndex = 5;
             this.textBox4.Text = "fault.jc";
+            // 
+            // btnFolderPath
+            // 
+            this.btnFolderPath.Location = new System.Drawing.Point(6, 19);
+            this.btnFolderPath.Name = "btnFolderPath";
+            this.btnFolderPath.Size = new System.Drawing.Size(181, 23);
+            this.btnFolderPath.TabIndex = 0;
+            this.btnFolderPath.Text = "Script Path";
+            this.btnFolderPath.UseVisualStyleBackColor = true;
+            this.btnFolderPath.Click += new System.EventHandler(this.btnFolderPath_Click);
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(261, 8);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(503, 20);
+            this.textBox3.TabIndex = 1;
             // 
             // label1
             // 
@@ -649,23 +712,6 @@
             this.btnalldtc.UseVisualStyleBackColor = true;
             this.btnalldtc.Click += new System.EventHandler(this.btnalldtc_Click);
             // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(261, 8);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(503, 20);
-            this.textBox3.TabIndex = 1;
-            // 
-            // btnFolderPath
-            // 
-            this.btnFolderPath.Location = new System.Drawing.Point(6, 19);
-            this.btnFolderPath.Name = "btnFolderPath";
-            this.btnFolderPath.Size = new System.Drawing.Size(181, 23);
-            this.btnFolderPath.TabIndex = 0;
-            this.btnFolderPath.Text = "Script Path";
-            this.btnFolderPath.UseVisualStyleBackColor = true;
-            this.btnFolderPath.Click += new System.EventHandler(this.btnFolderPath_Click);
-            // 
             // resultlabel
             // 
             this.resultlabel.AutoSize = true;
@@ -678,52 +724,6 @@
             // openFile1
             // 
             this.openFile1.FileName = "openFile1";
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.HorizontalScrollbar = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 19);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.ScrollAlwaysVisible = true;
-            this.listBox1.Size = new System.Drawing.Size(641, 420);
-            this.listBox1.TabIndex = 2;
-            // 
-            // lbl2
-            // 
-            this.lbl2.AutoSize = true;
-            this.lbl2.Location = new System.Drawing.Point(6, 59);
-            this.lbl2.Name = "lbl2";
-            this.lbl2.Size = new System.Drawing.Size(54, 13);
-            this.lbl2.TabIndex = 8;
-            this.lbl2.Text = "FileName:";
-            // 
-            // lbl3
-            // 
-            this.lbl3.AutoSize = true;
-            this.lbl3.Location = new System.Drawing.Point(6, 127);
-            this.lbl3.Name = "lbl3";
-            this.lbl3.Size = new System.Drawing.Size(83, 13);
-            this.lbl3.TabIndex = 9;
-            this.lbl3.Text = "DTC Extra Byte:";
-            // 
-            // lblshow
-            // 
-            this.lblshow.AutoSize = true;
-            this.lblshow.Location = new System.Drawing.Point(375, 71);
-            this.lblshow.Name = "lblshow";
-            this.lblshow.Size = new System.Drawing.Size(32, 13);
-            this.lblshow.TabIndex = 9;
-            this.lblshow.Text = "show";
-            // 
-            // lblhide
-            // 
-            this.lblhide.AutoSize = true;
-            this.lblhide.Location = new System.Drawing.Point(451, 71);
-            this.lblhide.Name = "lblhide";
-            this.lblhide.Size = new System.Drawing.Size(27, 13);
-            this.lblhide.TabIndex = 10;
-            this.lblhide.Text = "hide";
             // 
             // Form1
             // 
@@ -738,7 +738,7 @@
             this.MaximumSize = new System.Drawing.Size(900, 600);
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "Form1";
-            this.Text = "Mehad Tools v1.50";
+            this.Text = "Mehad Tools v1.60";
             this.Load += new System.EventHandler(this.First_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
