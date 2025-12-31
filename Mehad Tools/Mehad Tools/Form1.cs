@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,6 +23,7 @@ namespace Mehad_Tools
         string globalFolderPath = null;
         private HashSet<string> addedItems = new HashSet<string>();
         private List<string> filePathsArray = new List<string>(); // آرایه ذخیره مسیر فایل‌ها
+        private string[] cachedFileLines = null; // ذخیره داده‌های فایل در رم
         //=========================================================================================
         public Form1()
         {
@@ -2496,12 +2497,17 @@ namespace Mehad_Tools
             {
                 try
                 {
+                    // نمایش پیغام Loading و آپدیت فرم
+                    txtbshowdata.Text = "Loading Data...";
+                    this.Refresh();
+
                     globalPath = openFile1.FileName;
-                    var lines = File.ReadAllLines(globalPath);
+                    // ذخیره داده‌ها در رم
+                    cachedFileLines = File.ReadAllLines(globalPath);
                     StringBuilder contentWithLineNumbers = new StringBuilder();
-                    for (int i = 0; i < lines.Length; i++)
+                    for (int i = 0; i < cachedFileLines.Length; i++)
                     {
-                        contentWithLineNumbers.AppendLine($"({i + 1})\t{lines[i]}");
+                        contentWithLineNumbers.AppendLine($"({i + 1})\t{cachedFileLines[i]}");
                     }
                     txtbshowdata.Text = contentWithLineNumbers.ToString();
                 }
@@ -2584,88 +2590,14 @@ namespace Mehad_Tools
         }
         private void PerformSearch(string filePath)
         {
-            try
-            {
-                txtbshowdata.Clear();
-                txtbshowdata.Text = "plz wait...";
-                this.Refresh();
-                var allLines = File.ReadAllLines(filePath);
-                List<string> matchedLinesWithNumber = new List<string>();
-
-                if (listbadddata.Items.Count == 0)
-                {
-                    for (int i = 0; i < allLines.Length; i++)
-                    {
-                        matchedLinesWithNumber.Add($"({i + 1})\t{allLines[i]}");
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < allLines.Length; i++)
-                    {
-                        string line = allLines[i];
-
-                        foreach (string keyword in listbadddata.Items)
-                        {
-                            if (line.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
-                            {
-                                matchedLinesWithNumber.Add($"({i + 1})\t{line}");
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                txtbshowdata.Lines = matchedLinesWithNumber.ToArray();
-
-                if (matchedLinesWithNumber.Count == 0)
-                {
-                    txtbshowdata.Text = "No matching lines found.";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error reading file: " + ex.Message);
-            }
+            // استفاده از متد بهینه شده
+            PerformSearchOptimized();
         }
 
         private void RemoveLinesWithPhrases(string filePath)
         {
-            try
-            {
-                txtbshowdata.Clear();
-                txtbshowdata.Text = "Please wait...";
-                this.Refresh();
-                var allLines = File.ReadAllLines(filePath);
-                List<string> remainingLinesWithNumber = new List<string>();
-                for (int i = 0; i < allLines.Length; i++)
-                {
-                    string line = allLines[i];
-                    bool containsPhrase = false;
-                    foreach (string phrase in listbadddata.Items)
-                    {
-                        if (line.IndexOf(phrase.ToString(), StringComparison.OrdinalIgnoreCase) >= 0)
-                        {
-                            containsPhrase = true;
-                            break;
-                        }
-                    }
-                    if (!containsPhrase)
-                    {
-                        remainingLinesWithNumber.Add($"({i + 1})\t{line}");
-                    }
-                }
-                txtbshowdata.Lines = remainingLinesWithNumber.ToArray();
-
-                if (remainingLinesWithNumber.Count == 0)
-                {
-                    txtbshowdata.Text = "No lines left after removal.";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error processing file: " + ex.Message);
-            }
+            // استفاده از متد بهینه شده
+            RemoveLinesWithPhrasesOptimized();
         }
 
         private void btnlimitshow_Click(object sender, EventArgs e)
@@ -2760,6 +2692,15 @@ namespace Mehad_Tools
             }
         }
 
+        private void txtbrepeatfrm_TextChanged(object sender, EventArgs e)
+        {
+            // هر بار که مقدار txtbrepeatfrm تغییر کند، فیلتر را دوباره اعمال کن
+            if (!string.IsNullOrEmpty(globalPath) && cachedFileLines != null)
+            {
+                ApplyCurrentFilter();
+            }
+        }
+
         private void ApplyCurrentFilter()
         {
             if (!string.IsNullOrEmpty(globalPath))
@@ -2767,12 +2708,12 @@ namespace Mehad_Tools
                 if (chboxshowfil.Checked)
                 {
                     // نمایش فقط خطوط دارای فیلتر
-                    PerformSearch(globalPath);
+                    PerformSearchOptimized();
                 }
                 else if (chboxhidefil.Checked)
                 {
                     // مخفی کردن خطوط دارای فیلتر
-                    RemoveLinesWithPhrases(globalPath);
+                    RemoveLinesWithPhrasesOptimized();
                 }
                 else
                 {
@@ -2792,13 +2733,16 @@ namespace Mehad_Tools
                     txtbshowdata.Text = "Loading all data...";
                     this.Refresh();
                     
-                    // خواندن کل فایل بدون فیلتر
-                    var allLines = File.ReadAllLines(globalPath);
-                    List<string> allLinesWithNumber = new List<string>();
-
-                    for (int i = 0; i < allLines.Length; i++)
+                    // استفاده از داده‌های کش شده
+                    if (cachedFileLines == null)
                     {
-                        allLinesWithNumber.Add($"({i + 1})\t{allLines[i]}");
+                        cachedFileLines = File.ReadAllLines(globalPath);
+                    }
+                    
+                    List<string> allLinesWithNumber = new List<string>();
+                    for (int i = 0; i < cachedFileLines.Length; i++)
+                    {
+                        allLinesWithNumber.Add($"({i + 1})\t{cachedFileLines[i]}");
                     }
 
                     txtbshowdata.Lines = allLinesWithNumber.ToArray();
@@ -2808,6 +2752,232 @@ namespace Mehad_Tools
                     MessageBox.Show("Error loading all data: " + ex.Message);
                 }
             }
+        }
+
+        // متد بهینه شده برای جستجو با استفاده از cache
+        private void PerformSearchOptimized()
+        {
+            try
+            {
+                txtbshowdata.Clear();
+                txtbshowdata.Text = "Loading Data...";
+                this.Refresh();
+
+                // استفاده از داده‌های کش شده
+                if (cachedFileLines == null)
+                {
+                    cachedFileLines = File.ReadAllLines(globalPath);
+                }
+
+                List<string> matchedLinesWithNumber = new List<string>();
+
+                if (listbadddata.Items.Count == 0)
+                {
+                    for (int i = 0; i < cachedFileLines.Length; i++)
+                    {
+                        matchedLinesWithNumber.Add($"({i + 1})\t{cachedFileLines[i]}");
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < cachedFileLines.Length; i++)
+                    {
+                        string line = cachedFileLines[i];
+
+                        foreach (string keyword in listbadddata.Items)
+                        {
+                            if (line.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                matchedLinesWithNumber.Add($"({i + 1})\t{line}");
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // اعمال فیلتر repeat اگر مقدار معتبر وارد شده باشد
+                matchedLinesWithNumber = ApplyRepeatFilter(matchedLinesWithNumber);
+
+                txtbshowdata.Lines = matchedLinesWithNumber.ToArray();
+
+                if (matchedLinesWithNumber.Count == 0)
+                {
+                    txtbshowdata.Text = "No matching lines found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error reading file: " + ex.Message);
+            }
+        }
+
+        // متد بهینه شده برای حذف خطوط با استفاده از cache
+        private void RemoveLinesWithPhrasesOptimized()
+        {
+            try
+            {
+                txtbshowdata.Clear();
+                txtbshowdata.Text = "Loading Data...";
+                this.Refresh();
+
+                // استفاده از داده‌های کش شده
+                if (cachedFileLines == null)
+                {
+                    cachedFileLines = File.ReadAllLines(globalPath);
+                }
+
+                List<string> remainingLinesWithNumber = new List<string>();
+                for (int i = 0; i < cachedFileLines.Length; i++)
+                {
+                    string line = cachedFileLines[i];
+                    bool containsPhrase = false;
+                    foreach (string phrase in listbadddata.Items)
+                    {
+                        if (line.IndexOf(phrase.ToString(), StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            containsPhrase = true;
+                            break;
+                        }
+                    }
+                    if (!containsPhrase)
+                    {
+                        remainingLinesWithNumber.Add($"({i + 1})\t{line}");
+                    }
+                }
+
+                // اعمال فیلتر repeat اگر مقدار معتبر وارد شده باشد
+                remainingLinesWithNumber = ApplyRepeatFilter(remainingLinesWithNumber);
+
+                txtbshowdata.Lines = remainingLinesWithNumber.ToArray();
+
+                if (remainingLinesWithNumber.Count == 0)
+                {
+                    txtbshowdata.Text = "No lines left after removal.";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error processing file: " + ex.Message);
+            }
+        }
+
+        // متد اعمال فیلتر repeat - فیلتر بر اساس تعداد تکرار و چک‌باکس‌ها
+        private List<string> ApplyRepeatFilter(List<string> lines)
+        {
+            // بررسی اینکه آیا txtbrepeatfrm خالی است یا نه
+            if (string.IsNullOrWhiteSpace(txtbrepeatfrm.Text))
+            {
+                // اگر خالی است، همان لیست را برگردان
+                return lines;
+            }
+
+            // بررسی اینکه آیا مقدار وارد شده عدد است یا نه
+            if (!int.TryParse(txtbrepeatfrm.Text.Trim(), out int exactRepeatCount))
+            {
+                MessageBox.Show("مقدار ورودی repeat frm نادرست است. لطفا یک عدد صحیح وارد کنید.", 
+                    "خطای ورودی", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return lines;
+            }
+
+            // بررسی اینکه عدد مثبت باشد
+            if (exactRepeatCount <= 0)
+            {
+                MessageBox.Show("مقدار ورودی repeat frm باید بزرگتر از صفر باشد.", 
+                    "خطای ورودی", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return lines;
+            }
+
+            // شمارش تعداد تکرار هر خط از کل فایل اصلی
+            Dictionary<string, int> lineCountMap = new Dictionary<string, int>();
+            
+            // استفاده از cachedFileLines برای شمارش دقیق تکرار در کل فایل
+            if (cachedFileLines != null)
+            {
+                foreach (string line in cachedFileLines)
+                {
+                    // تمیز کردن خط (حذف فاصله‌های اضافی)
+                    string cleanedLine = line.Trim();
+                    
+                    if (lineCountMap.ContainsKey(cleanedLine))
+                    {
+                        lineCountMap[cleanedLine]++;
+                    }
+                    else
+                    {
+                        lineCountMap[cleanedLine] = 1;
+                    }
+                }
+            }
+
+            // فیلتر کردن خطوط بر اساس تعداد تکرار
+            List<string> filteredLines = new List<string>();
+            HashSet<string> processedLines = new HashSet<string>(); // برای جلوگیری از تکرار
+            
+            foreach (string lineWithNumber in lines)
+            {
+                string lineContent = ExtractLineContent(lineWithNumber).Trim();
+                
+                // اگر این خط قبلاً پردازش شده، رد کن
+                if (processedLines.Contains(lineContent))
+                {
+                    continue;
+                }
+                
+                // بررسی تعداد تکرار در کل فایل
+                if (lineCountMap.ContainsKey(lineContent))
+                {
+                    int count = lineCountMap[lineContent];
+                    
+                    bool shouldInclude = false;
+                    
+                    // تصمیم‌گیری بر اساس چک‌باکس‌ها
+                    if (chboxshowfil.Checked)
+                    {
+                        // نمایش فقط خطوطی که تعداد تکرارشان برابر با exactRepeatCount است
+                        shouldInclude = (count == exactRepeatCount);
+                    }
+                    else if (chboxhidefil.Checked)
+                    {
+                        // مخفی کردن خطوطی که تعداد تکرارشان برابر با exactRepeatCount است
+                        shouldInclude = (count != exactRepeatCount);
+                    }
+                    else
+                    {
+                        // اگر هیچ چک‌باکسی فعال نیست، فقط خطوطی با تعداد برابر نشان بده
+                        shouldInclude = (count == exactRepeatCount);
+                    }
+                    
+                    if (shouldInclude)
+                    {
+                        // اضافه کردن تمام نمونه‌های این خط
+                        foreach (string line in lines)
+                        {
+                            string content = ExtractLineContent(line).Trim();
+                            if (content == lineContent)
+                            {
+                                filteredLines.Add(line);
+                            }
+                        }
+                    }
+                    
+                    // علامت‌گذاری این خط به عنوان پردازش شده
+                    processedLines.Add(lineContent);
+                }
+            }
+
+            return filteredLines;
+        }
+
+        // متد استخراج محتوای خط (حذف شماره خط)
+        private string ExtractLineContent(string lineWithNumber)
+        {
+            // فرمت: (شماره)\tمحتوا
+            int tabIndex = lineWithNumber.IndexOf('\t');
+            if (tabIndex >= 0 && tabIndex < lineWithNumber.Length - 1)
+            {
+                return lineWithNumber.Substring(tabIndex + 1);
+            }
+            return lineWithNumber;
         }
 
         //=========================================================================================
@@ -2917,7 +3087,7 @@ namespace Mehad_Tools
         public void SearchInFaultFiles(string searchText, string folderPath)
         {
             listBox1.Items.Clear();
-            listBox1.Items.Add("Plz wait...");
+            listBox1.Items.Add("Loading Data...");
             this.Refresh();
             if (string.IsNullOrEmpty(searchText))
             {
@@ -3001,7 +3171,7 @@ namespace Mehad_Tools
         public void SearchAllDTC(string folderPath)
         {
             listBox1.Items.Clear();
-            listBox1.Items.Add("Plz wait...");
+            listBox1.Items.Add("Loading Data...");
             this.Refresh();
 
             try
@@ -3441,6 +3611,66 @@ namespace Mehad_Tools
             }
         }
 
+        private void btnoutfilter_Click(object sender, EventArgs e)
+        {
+            // بررسی اینکه آیا فایلی لود شده است یا نه
+            if (string.IsNullOrEmpty(globalPath))
+            {
+                MessageBox.Show("Please load a file first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
+            // بررسی اینکه آیا داده‌ای در txtbshowdata وجود دارد یا نه
+            if (string.IsNullOrEmpty(txtbshowdata.Text))
+            {
+                MessageBox.Show("No data to save.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                // استخراج مسیر پوشه و نام فایل اصلی
+                string directory = Path.GetDirectoryName(globalPath);
+                string originalFileName = Path.GetFileNameWithoutExtension(globalPath);
+                
+                // ساخت نام فایل جدید با پیشوند MT_
+                string newFileName = "MT_" + originalFileName + ".log";
+                string outputPath = Path.Combine(directory, newFileName);
+
+                // استخراج محتوای txtbshowdata و حذف شماره سطرها
+                string[] lines = txtbshowdata.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                List<string> outputLines = new List<string>();
+
+                foreach (string line in lines)
+                {
+                    if (string.IsNullOrEmpty(line))
+                        continue;
+
+                    // حذف شماره سطر از ابتدای خط
+                    // فرمت: (شماره)\tمحتوا
+                    int tabIndex = line.IndexOf('\t');
+                    if (tabIndex > 0)
+                    {
+                        // استخراج محتوا بعد از تب
+                        string content = line.Substring(tabIndex + 1);
+                        outputLines.Add(content);
+                    }
+                    else
+                    {
+                        // اگر تب پیدا نشد، کل خط را اضافه کن
+                        outputLines.Add(line);
+                    }
+                }
+
+                // ذخیره فایل
+                File.WriteAllLines(outputPath, outputLines);
+
+                MessageBox.Show($"File saved successfully:\n{outputPath}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving file:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

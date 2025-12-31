@@ -1,4 +1,4 @@
-﻿namespace Mehad_Tools
+namespace Mehad_Tools
 {
     partial class Form1
     {
@@ -62,6 +62,9 @@
             this.grpboxoutput = new System.Windows.Forms.GroupBox();
             this.txtbshowdata = new System.Windows.Forms.TextBox();
             this.grpboxinput = new System.Windows.Forms.GroupBox();
+            this.lblrepeatfrm = new System.Windows.Forms.Label();
+            this.txtbrepeatfrm = new System.Windows.Forms.TextBox();
+            this.btnoutfilter = new System.Windows.Forms.Button();
             this.lblhide = new System.Windows.Forms.Label();
             this.lblshow = new System.Windows.Forms.Label();
             this.chboxhidefil = new System.Windows.Forms.CheckBox();
@@ -450,6 +453,9 @@
             // 
             // grpboxinput
             // 
+            this.grpboxinput.Controls.Add(this.lblrepeatfrm);
+            this.grpboxinput.Controls.Add(this.txtbrepeatfrm);
+            this.grpboxinput.Controls.Add(this.btnoutfilter);
             this.grpboxinput.Controls.Add(this.lblhide);
             this.grpboxinput.Controls.Add(this.lblshow);
             this.grpboxinput.Controls.Add(this.chboxhidefil);
@@ -467,10 +473,37 @@
             this.grpboxinput.TabStop = false;
             this.grpboxinput.Text = "Input Data";
             // 
+            // lblrepeatfrm
+            // 
+            this.lblrepeatfrm.AutoSize = true;
+            this.lblrepeatfrm.Location = new System.Drawing.Point(689, 86);
+            this.lblrepeatfrm.Name = "lblrepeatfrm";
+            this.lblrepeatfrm.Size = new System.Drawing.Size(77, 13);
+            this.lblrepeatfrm.TabIndex = 13;
+            this.lblrepeatfrm.Text = "Repeat Frame:";
+            // 
+            // txtbrepeatfrm
+            // 
+            this.txtbrepeatfrm.Location = new System.Drawing.Point(772, 83);
+            this.txtbrepeatfrm.Name = "txtbrepeatfrm";
+            this.txtbrepeatfrm.Size = new System.Drawing.Size(77, 20);
+            this.txtbrepeatfrm.TabIndex = 12;
+            this.txtbrepeatfrm.TextChanged += new System.EventHandler(this.txtbrepeatfrm_TextChanged);
+            // 
+            // btnoutfilter
+            // 
+            this.btnoutfilter.Location = new System.Drawing.Point(772, 41);
+            this.btnoutfilter.Name = "btnoutfilter";
+            this.btnoutfilter.Size = new System.Drawing.Size(75, 23);
+            this.btnoutfilter.TabIndex = 11;
+            this.btnoutfilter.Text = "Make File";
+            this.btnoutfilter.UseVisualStyleBackColor = true;
+            this.btnoutfilter.Click += new System.EventHandler(this.btnoutfilter_Click);
+            // 
             // lblhide
             // 
             this.lblhide.AutoSize = true;
-            this.lblhide.Location = new System.Drawing.Point(451, 71);
+            this.lblhide.Location = new System.Drawing.Point(373, 71);
             this.lblhide.Name = "lblhide";
             this.lblhide.Size = new System.Drawing.Size(27, 13);
             this.lblhide.TabIndex = 10;
@@ -479,7 +512,7 @@
             // lblshow
             // 
             this.lblshow.AutoSize = true;
-            this.lblshow.Location = new System.Drawing.Point(375, 71);
+            this.lblshow.Location = new System.Drawing.Point(317, 71);
             this.lblshow.Name = "lblshow";
             this.lblshow.Size = new System.Drawing.Size(32, 13);
             this.lblshow.TabIndex = 9;
@@ -488,7 +521,7 @@
             // chboxhidefil
             // 
             this.chboxhidefil.AutoSize = true;
-            this.chboxhidefil.Location = new System.Drawing.Point(458, 89);
+            this.chboxhidefil.Location = new System.Drawing.Point(380, 89);
             this.chboxhidefil.Name = "chboxhidefil";
             this.chboxhidefil.Size = new System.Drawing.Size(15, 14);
             this.chboxhidefil.TabIndex = 8;
@@ -498,7 +531,7 @@
             // chboxshowfil
             // 
             this.chboxshowfil.AutoSize = true;
-            this.chboxshowfil.Location = new System.Drawing.Point(384, 89);
+            this.chboxshowfil.Location = new System.Drawing.Point(326, 89);
             this.chboxshowfil.Name = "chboxshowfil";
             this.chboxshowfil.Size = new System.Drawing.Size(15, 14);
             this.chboxshowfil.TabIndex = 7;
@@ -507,7 +540,7 @@
             // 
             // btnclearallfilter
             // 
-            this.btnclearallfilter.Location = new System.Drawing.Point(775, 71);
+            this.btnclearallfilter.Location = new System.Drawing.Point(772, 12);
             this.btnclearallfilter.Name = "btnclearallfilter";
             this.btnclearallfilter.Size = new System.Drawing.Size(77, 23);
             this.btnclearallfilter.TabIndex = 6;
@@ -517,7 +550,7 @@
             // 
             // btnremovefilter
             // 
-            this.btnremovefilter.Location = new System.Drawing.Point(775, 20);
+            this.btnremovefilter.Location = new System.Drawing.Point(688, 11);
             this.btnremovefilter.Name = "btnremovefilter";
             this.btnremovefilter.Size = new System.Drawing.Size(77, 23);
             this.btnremovefilter.TabIndex = 5;
@@ -527,9 +560,9 @@
             // 
             // btnsetfilter
             // 
-            this.btnsetfilter.Location = new System.Drawing.Point(359, 40);
+            this.btnsetfilter.Location = new System.Drawing.Point(313, 40);
             this.btnsetfilter.Name = "btnsetfilter";
-            this.btnsetfilter.Size = new System.Drawing.Size(134, 23);
+            this.btnsetfilter.Size = new System.Drawing.Size(86, 23);
             this.btnsetfilter.TabIndex = 3;
             this.btnsetfilter.Text = "Add Filter";
             this.btnsetfilter.UseVisualStyleBackColor = true;
@@ -537,9 +570,9 @@
             // 
             // btnloadfile
             // 
-            this.btnloadfile.Location = new System.Drawing.Point(359, 11);
+            this.btnloadfile.Location = new System.Drawing.Point(313, 11);
             this.btnloadfile.Name = "btnloadfile";
-            this.btnloadfile.Size = new System.Drawing.Size(134, 23);
+            this.btnloadfile.Size = new System.Drawing.Size(86, 23);
             this.btnloadfile.TabIndex = 2;
             this.btnloadfile.Text = "Load File";
             this.btnloadfile.UseVisualStyleBackColor = true;
@@ -548,18 +581,19 @@
             // listbadddata
             // 
             this.listbadddata.FormattingEnabled = true;
-            this.listbadddata.Location = new System.Drawing.Point(499, 11);
+            this.listbadddata.Location = new System.Drawing.Point(409, 11);
             this.listbadddata.Name = "listbadddata";
             this.listbadddata.Size = new System.Drawing.Size(270, 95);
             this.listbadddata.TabIndex = 1;
             // 
             // txtbinputdata
             // 
-            this.txtbinputdata.Location = new System.Drawing.Point(9, 20);
+            this.txtbinputdata.Location = new System.Drawing.Point(9, 14);
+            this.txtbinputdata.MaxLength = 999999999;
             this.txtbinputdata.Multiline = true;
             this.txtbinputdata.Name = "txtbinputdata";
             this.txtbinputdata.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtbinputdata.Size = new System.Drawing.Size(344, 83);
+            this.txtbinputdata.Size = new System.Drawing.Size(298, 89);
             this.txtbinputdata.TabIndex = 0;
             // 
             // tabp4dtc
@@ -738,7 +772,7 @@
             this.MaximumSize = new System.Drawing.Size(900, 600);
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "Form1";
-            this.Text = "Mehad Tools v1.61";
+            this.Text = "Mehad Tools v1.63";
             this.Load += new System.EventHandler(this.First_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -831,6 +865,9 @@
         private System.Windows.Forms.Label lbl3;
         private System.Windows.Forms.Label lblhide;
         private System.Windows.Forms.Label lblshow;
+        private System.Windows.Forms.Button btnoutfilter;
+        private System.Windows.Forms.TextBox txtbrepeatfrm;
+        private System.Windows.Forms.Label lblrepeatfrm;
     }
 }
 
